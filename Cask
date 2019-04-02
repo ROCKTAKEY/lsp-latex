@@ -2,4 +2,5 @@
 (source melpa)
 
 (package-file "lsp-latex.el")
-(depends-on "dash")
+
+(depends-on "lsp-mode")

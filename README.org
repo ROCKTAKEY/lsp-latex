@@ -12,6 +12,7 @@
 #+BEGIN_SRC emacs-lisp -n
   (add-to-list 'load-ppath "path/to/lsp-latex")
   (require 'lsp-latex)
+  (setq lsp-latex-texlab-jar-file "path/to/texlab.jar")
   (add-hook 'tex-mode 'lsp)
   (add-hook 'yatex-mode 'lsp)             ;If YaTeX was installed
 #+END_SRC

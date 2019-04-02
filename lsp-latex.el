@@ -63,8 +63,9 @@ You can install it from https://github.com/latex-lsp/texlab/releases/tag/v0.4.1 
    (cons
     lsp-latex-java-executable
     lsp-latex-java-argument-list)
-   lsp-latex-texlab-jar-file
-   lsp-latex-texlab-jar-argument-list))
+   (cons
+    lsp-latex-texlab-jar-file
+    lsp-latex-texlab-jar-argument-list)))
 
 (lsp-register-client
    (make-lsp-client :new-connection
