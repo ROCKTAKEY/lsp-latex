@@ -4,7 +4,7 @@ TESTEDFILES := lsp-latex.el
 CASK ?= cask
 
 test:
-	${CASK} exec ${EMACS} -batch -Q -L . -l ${TESTINGFILE} -f  ert-run-tests-batch-and-exit
+	${CASK} exec ${EMACS} -batch -Q -L . -l $(wildcard ${TESTINGFILE}) -f  ert-run-tests-batch-and-exit
 
 travis:
 	${MAKE} clean
