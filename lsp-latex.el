@@ -7,7 +7,7 @@
 
 ;; Version: 0.0.0
 
-;; Package-Requires: ((emacs "25.1") (lsp-mode 6.0))
+;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
