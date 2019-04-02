@@ -43,16 +43,18 @@ This is used with `lsp-latex-java-argument-list'."
   "List of arguments passed to `lsp-latex-java-executable'."
   :group 'lsp-latex
   :risky t
-  :type '(&rest string))
+  :type '(repeat string))
 
 (defcustom lsp-latex-texlab-jar-file "texlab.jar"
   "File named \"texlab.jar\".
 You can install it from https://github.com/latex-lsp/texlab/releases/tag/v0.4.1 ."
-  :group 'lsp-latex)
+  :group 'lsp-latex
+  :type 'string)
 
 (defcustom lsp-latex-texlab-jar-argument-list '()
   "List of arguments passed to `lsp-latex-texlab-jar-file'. "
-  :group 'lsp-latex)
+  :group 'lsp-latex
+  :type '(repeat string))
 
 
 
