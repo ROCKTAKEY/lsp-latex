@@ -74,7 +74,11 @@ You can install it from https://github.com/latex-lsp/texlab/releases/tag/v0.4.1 
                     (lsp-stdio-connection
                      #'lsp-latex-new-connection)
                     :major-modes '(tex-mode yatex-mode latex-mode)
-                    :server-id 'texlab))
+                    :server-id 'texlab
+                    :notification-handlers
+                    (lsp-ht
+                     ("window/progress"
+                      'lsp-clients--rust-window-progress))))
 
 (provide 'lsp-latex)
 ;;; lsp-latex.el ends here
