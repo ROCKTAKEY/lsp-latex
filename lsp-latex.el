@@ -69,6 +69,13 @@ You can install it from https://github.com/latex-lsp/texlab/releases/tag/v0.4.1 
     lsp-latex-texlab-jar-file
     lsp-latex-texlab-jar-argument-list)))
 
+;; Copied from `lsp-clients--rust-window-progress' in `lsp-rust'.
+(defun lsp-latex-window-progress (_workspace params)
+  "Progress report handling.
+PARAMS progress report notification data."
+  ;; Minimal implementation - we could show the progress as well.
+  (lsp-log (gethash "title" params)))
+
 (lsp-register-client
    (make-lsp-client :new-connection
                     (lsp-stdio-connection
@@ -78,7 +85,7 @@ You can install it from https://github.com/latex-lsp/texlab/releases/tag/v0.4.1 
                     :notification-handlers
                     (lsp-ht
                      ("window/progress"
-                      'lsp-clients--rust-window-progress))))
+                      'lsp-latex-window-progress))))
 
 (provide 'lsp-latex)
 ;;; lsp-latex.el ends here
