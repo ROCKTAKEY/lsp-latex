@@ -71,17 +71,10 @@ If `lsp-latex-texlab-jar-file' is the symbol search-from-exec-path, then search 
    ((stringp lsp-latex-texlab-jar-file)
     lsp-latex-texlab-jar-file)
    ((eq lsp-latex-texlab-jar-file 'search-from-exec-path)
-    (let* ((jar-filename "texlab.jar")
-           (jar-dir (or (seq-find (lambda (dir)
-                                    (let ((path (format "%s/%s"
-                                                        dir jar-filename)))
-                                      (when (file-exists-p path)
-                                        path)))
-                                  exec-path)
-                        (error (format "\"%s\" not found in `exec-path'"
-                                       jar-filename)))))
-      (format "%s/%s"
-              jar-dir jar-filename)))
+    (let ((jar-filename "texlab.jar"))
+      (or (locate-file jar-filename exec-path)
+          (error (format "\"%s\" not found in `exec-path'"
+                         jar-filename)))))
    (t (error "invalid value of `lsp-latex-texlab-jar-file'"))))
 
 (defun lsp-latex-new-connection ()
