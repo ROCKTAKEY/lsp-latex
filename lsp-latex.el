@@ -28,6 +28,7 @@
 
 ;;; Code:
 (require 'lsp-mode)
+(require 'seq)
 
 (defgroup lsp-latex nil
   "Language Server Protocol client for LaTeX."
@@ -45,11 +46,13 @@ This is used with `lsp-latex-java-argument-list'."
   :risky t
   :type '(repeat string))
 
-(defcustom lsp-latex-texlab-jar-file "texlab.jar"
+(defcustom lsp-latex-texlab-jar-file 'search-from-exec-path
   "File named \"texlab.jar\".
-You can install it from https://github.com/latex-lsp/texlab/releases/tag/v0.4.1 ."
+You can install it from https://github.com/latex-lsp/texlab/releases/tag/v0.4.1 .
+
+The value can be a string (path to \"texlab.jar\") or the symbol search-from-exec-path. See the docstring of `lsp-latex-get-texlab-jar-file'."
   :group 'lsp-latex
-  :type 'string)
+  :type '(choice string (const search-from-exec-path)))
 
 (defcustom lsp-latex-texlab-jar-argument-list '()
   "List of arguments passed to `lsp-latex-texlab-jar-file'. "
@@ -59,6 +62,28 @@ You can install it from https://github.com/latex-lsp/texlab/releases/tag/v0.4.1 
 
 
 
+(defun lsp-latex-get-texlab-jar-file ()
+  "Return the path to \"texlab.jar\".
+
+If `lsp-latex-texlab-jar-file' is a string, return it.
+If `lsp-latex-texlab-jar-file' is the symbol search-from-exec-path, then search a file named \"texlab.jar\" from `exec-path'."
+  (cond
+   ((stringp lsp-latex-texlab-jar-file)
+    lsp-latex-texlab-jar-file)
+   ((eq lsp-latex-texlab-jar-file 'search-from-exec-path)
+    (let* ((jar-filename "texlab.jar")
+           (jar-dir (or (seq-find (lambda (dir)
+                                    (let ((path (format "%s/%s"
+                                                        dir jar-filename)))
+                                      (when (file-exists-p path)
+                                        path)))
+                                  exec-path)
+                        (error (format "\"%s\" not found in `exec-path'"
+                                       jar-filename)))))
+      (format "%s/%s"
+              jar-dir jar-filename)))
+   (t (error "invalid value of `lsp-latex-texlab-jar-file'"))))
+
 (defun lsp-latex-new-connection ()
   ""
   (append
@@ -66,7 +91,7 @@ You can install it from https://github.com/latex-lsp/texlab/releases/tag/v0.4.1 
     lsp-latex-java-executable
     lsp-latex-java-argument-list)
    (cons
-    lsp-latex-texlab-jar-file
+    (lsp-latex-get-texlab-jar-file)
     lsp-latex-texlab-jar-argument-list)))
 
 ;; Copied from `lsp-clients--rust-window-progress' in `lsp-rust'.
