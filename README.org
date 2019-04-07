@@ -10,7 +10,7 @@
   - Now, you can use Language Server Protocol (LSP) on tex-mode or yatex-mode just to evaluate this:
 
 #+BEGIN_SRC emacs-lisp -n
-  (add-to-list 'load-path "path/to/lsp-latex")
+  (add-to-list 'load-path "/path/to/lsp-latex")
   (require 'lsp-latex)
   ;; "texlab.jar" must be located at a directory contained in `exec-path'
   (setq lsp-latex-texlab-jar-file 'search-from-exec-path)
@@ -22,7 +22,7 @@
    (add-hook 'tex-mode-hook 'lsp)
    (add-hook 'latex-mode-hook 'lsp))
 
-  ;; For YaYeX
+  ;; For YaTeX
   (with-eval-after-load "yatex"
    (add-hook 'yatex-mode-hook 'lsp))
 #+END_SRC
