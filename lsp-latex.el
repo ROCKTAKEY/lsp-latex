@@ -73,7 +73,7 @@ You can install it from https://github.com/latex-lsp/texlab/releases/tag/v0.4.1 
    (make-lsp-client :new-connection
                     (lsp-stdio-connection
                      #'lsp-latex-new-connection)
-                    :major-modes '(tex-mode yatex-mode)
+                    :major-modes '(tex-mode yatex-mode latex-mode)
                     :server-id 'texlab))
 
 (provide 'lsp-latex)
