@@ -51,7 +51,7 @@ You can install it from https://github.com/latex-lsp/texlab/releases/tag/v0.4.1 
 
 The value can be a string (path to \"texlab.jar\") or the symbol search-from-exec-path. See the docstring of `lsp-latex-get-texlab-jar-file'."
   :group 'lsp-latex
-  :type '(choice string symbol))
+  :type '(choice string (const search-from-exec-path)))
 
 (defcustom lsp-latex-texlab-jar-argument-list '()
   "List of arguments passed to `lsp-latex-texlab-jar-file'. "
