@@ -28,6 +28,7 @@
 
 ;;; Code:
 (require 'lsp-mode)
+(require 'seq)
 
 (defgroup lsp-latex nil
   "Language Server Protocol client for LaTeX."
