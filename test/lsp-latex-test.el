@@ -26,6 +26,9 @@
 
 ;;; Code:
 
+(require 'lsp-mode)
+(require 'lsp-latex)
+
 (ert-deftest lsp-latex-open ()
   "Test for lsp-latex."
   (find-file "/sample-for-latex/test.tex")
