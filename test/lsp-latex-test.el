@@ -26,8 +26,8 @@
 
 ;;; Code:
 
-(ert-deftest lsp-latex-open
-    "Test for lsp-latex."
+(ert-deftest lsp-latex-open ()
+  "Test for lsp-latex."
   (find-file "/sample-for-latex/test.tex")
   (lsp))
 
