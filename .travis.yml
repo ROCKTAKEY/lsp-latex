@@ -16,8 +16,8 @@ install:
   - export PATH="$HOME/.cask/bin:$PATH"
   - cask install
   # Git
-  - apt update
-  - apt install git
+  - sudo apt update
+  - sudo apt install git
   # Sample for test
   - cd ~/ && git clone https://github.com/ROCKTAKEY/sample-for-tex
 script:
