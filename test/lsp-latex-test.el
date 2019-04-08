@@ -32,7 +32,7 @@
 
 (ert-deftest lsp-latex-open ()
   "Test for lsp-latex."
-  (noflet ((lsp--completing-read (&rest _args) (expand-file-name "./")))
+  (noflet ((lsp--select-action (arg) (car arg)))
    (add-to-list 'exec-path "~/")
   (find-file "/sample-for-latex/test.tex")
   (lsp)))
