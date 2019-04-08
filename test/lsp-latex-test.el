@@ -35,8 +35,9 @@
   (noflet ((completing-read (a b c d) (message a)
                             (message (car b)) (car b)))
    (add-to-list 'exec-path "~/")
-  (find-file "/sample-for-latex/test.tex")
-  (lsp)))
+    (find-file "/sample-for-latex/test.tex")
+    (lsp)
+    (sleep-for 10)))
 
 (provide 'lsp-latex-test)
 ;;; lsp-latex-test.el ends here
