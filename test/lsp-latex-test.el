@@ -28,12 +28,14 @@
 
 (require 'lsp-mode)
 (require 'lsp-latex)
+(require 'noflet)
 
 (ert-deftest lsp-latex-open ()
   "Test for lsp-latex."
-  (add-to-list 'exec-path "~/")
+  (noflet ((lsp--completing-read (&rest _args) (expand-file-name "./")))
+   (add-to-list 'exec-path "~/")
   (find-file "/sample-for-latex/test.tex")
-  (lsp))
+  (lsp)))
 
 (provide 'lsp-latex-test)
 ;;; lsp-latex-test.el ends here
