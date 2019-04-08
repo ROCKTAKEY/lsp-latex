@@ -16,7 +16,7 @@ install:
   - export PATH="$HOME/.cask/bin:$PATH"
   - cask install
   # texlab
-  - curl -o /texlab.jar https://github.com/latex-lsp/texlab/releases/download/v0.4.1/texlab.jar
+  - curl -o ~/texlab.jar https://github.com/latex-lsp/texlab/releases/download/v0.4.1/texlab.jar
   # Sample for test
   - git clone https://github.com/ROCKTAKEY/sample-for-tex
 script:
