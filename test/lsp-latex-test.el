@@ -26,7 +26,10 @@
 
 ;;; Code:
 
-
+(ert-deftest lsp-latex-open
+    "Test for lsp-latex."
+  (find-file "/sample-for-latex/test.tex")
+  (lsp))
 
 (provide 'lsp-latex-test)
 ;;; lsp-latex-test.el ends here
