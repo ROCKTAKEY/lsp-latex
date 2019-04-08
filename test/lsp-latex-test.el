@@ -31,6 +31,7 @@
 
 (ert-deftest lsp-latex-open ()
   "Test for lsp-latex."
+  (add-to-list 'exec-path "/")
   (find-file "/sample-for-latex/test.tex")
   (lsp))
 
