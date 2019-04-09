@@ -32,14 +32,17 @@
 
 (ert-deftest lsp-latex-jar ()
   "Test detection of .jar file."
-  (let ((exec-path exec-path))
-    (add-to-list 'exec-path "~/")
-    (call-process
-     "java"
-     "./test/inputs"
-     nil nil
-     "-jar"
-     (lsp-latex-get-texlab-jar-file))))
+  (should
+   (equal
+    0
+    (let ((exec-path exec-path))
+      (add-to-list 'exec-path "~/")
+      (call-process
+       "java"
+       "./test/inputs"
+       nil nil
+       "-jar"
+       (lsp-latex-get-texlab-jar-file))))))
 
 ;; (ert-deftest lsp-latex-open ()
 ;;   "Test for lsp-latex."
