@@ -40,7 +40,9 @@
       0
       (call-process
        "java"
-       "./test/inputs"
+       (if noninteractive
+           (expand-file-name "test/inputs" command-line-default-directory)
+         "./inputs")
        nil nil
        "-jar"
        (lsp-latex-get-texlab-jar-file))))))
