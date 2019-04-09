@@ -10,6 +10,7 @@ ert:
 	-f  ert-run-tests-batch-and-exit
 
 travis:
+	${MAKE} latex
 	${MAKE} texlab
 	${MAKE} test-all
 
@@ -23,6 +24,9 @@ clean:
 texlab:
 	${CURL} -o ~/texlab.jar \
 	"https://github.com/latex-lsp/texlab/releases/download/v0.4.1/texlab.jar"
+
+latex:
+	sudo apt install -y texlive-lang-cjk xdvik-ja
 
 test-all:
 	${MAKE} clean
