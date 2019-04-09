@@ -1,5 +1,5 @@
 EMACS ?= emacs
-TESTINGFILE := test/*
+TESTINGFILE := test/*.el
 TESTEDFILES := lsp-latex.el
 CASK ?= cask
 CURL ?= curl
