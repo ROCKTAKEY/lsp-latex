@@ -35,4 +35,4 @@ test-all:
 	${MAKE} ert
 	${MAKE} clean
 
-.PHONY: easy-test test travis compile clean
+.PHONY: ert travis compile clean texlab latex test-all
