@@ -26,7 +26,7 @@ texlab:
 	"https://github.com/latex-lsp/texlab/releases/download/v0.4.1/texlab.jar"
 
 latex:
-	sudo apt install -y texlive-lang-cjk xdvik-ja
+	sudo apt install -y texlive-full
 
 test-all:
 	${MAKE} clean
