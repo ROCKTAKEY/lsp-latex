@@ -33,7 +33,7 @@
 (ert-deftest lsp-latex-jar ()
   "Test detection of .jar file."
   (let ((exec-path exec-path))
-    (add-to-list 'exec-path '("~/"))
+    (add-to-list 'exec-path "~/")
     (call-process
      "java"
      "./test/inputs"
