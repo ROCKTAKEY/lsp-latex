@@ -41,7 +41,8 @@ detect-jar:
 	${eval TEXLAB-JAR := \
 	$(shell ${CASK} exec ${EMACS} -batch -Q -L . -l $(wildcard ${TESTEDFILES}) \
 	--eval \
-	"(add-to-list 'exec-path \"~/\") (princ (lsp-latex-get-texlab-jar-file))")}
+	"(progn (add-to-list 'exec-path \"~/\") \
+	(princ (lsp-latex-get-texlab-jar-file)))")}
 	echo ${TEXLAB-JAR}
 	java -jar ${TEXLAB-JAR} < test/inputs
 
