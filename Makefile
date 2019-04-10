@@ -2,7 +2,7 @@ EMACS ?= emacs
 TESTINGFILE := test/*.el
 TESTEDFILES := lsp-latex.el
 CASK ?= cask
-CURL ?= curl
+WGET ?= wget
 GIT ?= git
 
 ert:
@@ -22,7 +22,7 @@ clean:
 	rm -f ${addsuffix c, ${TESTEDFILES}}
 
 texlab:
-	${CURL} -o ~/texlab.jar \
+	${WGET} -O ~/texlab.jar \
 	"https://github.com/latex-lsp/texlab/releases/download/v0.4.1/texlab.jar"
 
 latex:
@@ -46,4 +46,4 @@ detect-jar:
 	echo ${TEXLAB-JAR}
 	java -jar ${TEXLAB-JAR} < test/inputs
 
-.PHONY: ert travis compile clean texlab latex test-all
+.PHONY: ert travis compile clean texlab latex test-all detect-jar
