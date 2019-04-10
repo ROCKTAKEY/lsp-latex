@@ -30,10 +30,17 @@ latex:
 	sudo apt install -y texlive-full
 
 test-all:
+	${MAKE} detect-jar
 	${MAKE} clean
 	${MAKE} ert
 	${MAKE} compile
 	${MAKE} ert
 	${MAKE} clean
+
+detect-jar:
+	${eval TEXLAB-JAR := $(shell ${CASK} exec ${EMACS} -batch -Q -L .\
+	-f lsp-latex-get-texlab-jar-file)}
+	echo ${TEXLAB-JAR}
+	java -jar ${TEXLAB-JAR} < test/inputs
 
 .PHONY: ert travis compile clean texlab latex test-all
