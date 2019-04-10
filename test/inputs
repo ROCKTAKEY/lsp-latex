@@ -1,0 +1,3 @@
+Content-Length: 52
+
+{"jsonrpc":"2.0","method":"shutdown","params":null}

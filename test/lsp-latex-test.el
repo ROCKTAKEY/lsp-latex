@@ -26,7 +26,17 @@
 
 ;;; Code:
 
+(require 'lsp-mode)
+(require 'lsp-latex)
+(require 'noflet)
 
+(ert-deftest lsp-latex-open ()
+  "Test for lsp-latex."
+  (noflet ((completing-read (a b c d) (message a)
+                            (message (car b)) (car b)))
+    (add-to-list 'exec-path "~/")
+    (find-file "./test/test.tex")
+    (lsp)))
 
 (provide 'lsp-latex-test)
 ;;; lsp-latex-test.el ends here

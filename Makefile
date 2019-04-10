@@ -1,22 +1,49 @@
 EMACS ?= emacs
-TESTINGFILE := test/*
+TESTINGFILE := test/*.el
 TESTEDFILES := lsp-latex.el
 CASK ?= cask
+WGET ?= wget
+GIT ?= git
 
-test:
-	${CASK} exec ${EMACS} -batch -Q -L . -l $(wildcard ${TESTINGFILE}) -f  ert-run-tests-batch-and-exit
+ert:
+	${CASK} exec ${EMACS} -batch -Q -L . -l $(wildcard ${TESTINGFILE}) \
+	-f  ert-run-tests-batch-and-exit
 
 travis:
-	${MAKE} clean
-	${MAKE} test
-	${MAKE} compile
-	${MAKE} test
-	${MAKE} clean
+	${MAKE} latex
+	${MAKE} texlab
+	${MAKE} test-all
 
 compile:
-	${CASK} exec ${EMACS} -batch -Q -L . -eval "(batch-byte-compile)" ${TESTEDFILES}
+	${CASK} exec ${EMACS} -batch -Q -L . -eval "(batch-byte-compile)" \
+	${TESTEDFILES}
 
 clean:
 	rm -f ${addsuffix c, ${TESTEDFILES}}
 
-.PHONY: easy-test test travis compile clean
+texlab:
+	${WGET} -O ~/texlab.jar \
+	"https://github.com/latex-lsp/texlab/releases/download/v0.4.1/texlab.jar"
+
+latex:
+	sudo apt update
+	sudo apt install -y texlive-full
+
+test-all:
+	${MAKE} detect-jar
+	${MAKE} clean
+	${MAKE} ert
+	${MAKE} compile
+	${MAKE} ert
+	${MAKE} clean
+
+detect-jar:
+	${eval TEXLAB-JAR := \
+	$(shell ${CASK} exec ${EMACS} -batch -Q -L . -l $(wildcard ${TESTEDFILES}) \
+	--eval \
+	"(progn (add-to-list 'exec-path \"~/\") \
+	(princ (lsp-latex-get-texlab-jar-file)))")}
+	echo ${TEXLAB-JAR}
+	java -jar ${TEXLAB-JAR} < test/inputs
+
+.PHONY: ert travis compile clean texlab latex test-all detect-jar
