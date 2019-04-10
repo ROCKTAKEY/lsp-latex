@@ -39,7 +39,7 @@ test-all:
 
 detect-jar:
 	${eval TEXLAB-JAR := $(shell ${CASK} exec ${EMACS} -batch -Q -L .\
-	-f lsp-latex-get-texlab-jar-file)}
+	-l $(wildcard ${TESTEDFILES}) -f lsp-latex-get-texlab-jar-file)}
 	echo ${TEXLAB-JAR}
 	java -jar ${TEXLAB-JAR} < test/inputs
 
