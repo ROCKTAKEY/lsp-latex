@@ -76,7 +76,10 @@ If `lsp-latex-texlab-jar-file' is the symbol search-from-exec-path, then search 
 
 ;; texlab v1.0 or more
 
-(defcustom lsp-latex-texlab-executable "texlab.exe"
+(defcustom lsp-latex-texlab-executable
+  (cond ((eq system-type 'windows-nt)
+         "texlab.exe")
+        (t "texlab"))
   "Exeucutable command to run texlab.
 Runned with the arguments `lsp-latex-texlab-executable-argument-list'."
   :group 'lsp-latex
