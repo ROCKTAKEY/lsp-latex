@@ -33,6 +33,9 @@
   "Language Server Protocol client for LaTeX."
   :group 'lsp-mode)
 
+
+;; Under texlab v1.0
+
 (defcustom lsp-latex-java-executable "java"
   "Executable command to run Java.
 This is used with `lsp-latex-java-argument-list'."
@@ -58,9 +61,6 @@ The value can be a string (path to \"texlab.jar\") or the symbol search-from-exe
   :group 'lsp-latex
   :type '(repeat string))
 
-
-
-
 (defun lsp-latex-get-texlab-jar-file ()
   "Return the path to \"texlab.jar\".
 
@@ -70,21 +70,43 @@ If `lsp-latex-texlab-jar-file' is the symbol search-from-exec-path, then search 
    ((stringp lsp-latex-texlab-jar-file)
     lsp-latex-texlab-jar-file)
    ((eq lsp-latex-texlab-jar-file 'search-from-exec-path)
-    (let ((jar-filename "texlab.jar"))
-      (or (locate-file jar-filename exec-path)
-          (error (format "\"%s\" not found in `exec-path'"
-                         jar-filename)))))
+    (locate-file "texlab.jar" exec-path))
    (t (error "invalid value of `lsp-latex-texlab-jar-file'"))))
+
+
+;; texlab v1.0 or more
+
+(defcustom lsp-latex-texlab-executable "texlab.exe"
+  "Exeucutable command to run texlab.
+Runned with the arguments `lsp-latex-texlab-executable-argument-list'."
+  :group 'lsp-latex
+  :type 'string)
+
+(defcustom lsp-latex-texlab-executable-argument-list '()
+  "list of Arguments passed to `lsp-latex-texlab-executable'."
+  :group 'lsp-latex
+  :type '(repeat string))
+
+
+
 
 (defun lsp-latex-new-connection ()
   ""
-  (append
-   (cons
-    lsp-latex-java-executable
-    lsp-latex-java-argument-list)
-   (cons
-    (lsp-latex-get-texlab-jar-file)
-    lsp-latex-texlab-jar-argument-list)))
+  (let (jar-file)
+    (cond
+     ((locate-file lsp-latex-texlab-executable exec-path)
+      (cons lsp-latex-texlab-executable
+            lsp-latex-texlab-executable-argument-list))
+     ((setq jar-file (lsp-latex-get-texlab-jar-file))
+      (append
+       (cons
+        lsp-latex-java-executable
+        lsp-latex-java-argument-list)
+       (cons
+        jar-file
+        lsp-latex-texlab-jar-argument-list)))
+     (t
+      (error "No executable \"texlab\" file")))))
 
 ;; Copied from `lsp-clients--rust-window-progress' in `lsp-rust'.
 (defun lsp-latex-window-progress (_workspace params)
