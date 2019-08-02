@@ -92,6 +92,7 @@ Runned with the arguments `lsp-latex-texlab-executable-argument-list'."
 
 
 
+(add-to-list 'lsp-language-id-configuration '(".*\\.tex$" . "latex"))
 
 (defun lsp-latex-new-connection ()
   ""
