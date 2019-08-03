@@ -3,11 +3,10 @@
 [[https://travis-ci.org/ROCKTAKEY/lsp-latex/][https://img.shields.io/travis/ROCKTAKEY/lsp-latex/master.svg?style=flat-square]]
 * lsp-mode client for LaTeX.
 * How to Use?
-  - First, you have to install ~Java~ and ~texlab~.
-    Please install those [[https://www.oracle.com/technetwork/java/javase/downloads/jdk12-downloads-5295953.html][here]]
-    and [[https://github.com/latex-lsp/texlab/releases][here]].
+  - First, you have to install ~texlab~.
+    Please install this [[https://github.com/latex-lsp/texlab/releases][here]].
   - Next, you should make ~lsp-mode~ available. See [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]].
-  - Now, you can use Language Server Protocol (LSP) on tex-mode or yatex-mode just to evaluate this:
+  - Now, you can use Language Server Protocol (LSP) on (la)tex-mode or yatex-mode just to evaluate this:
 
 #+BEGIN_SRC emacs-lisp -n
   (add-to-list 'load-path "/path/to/lsp-latex")
