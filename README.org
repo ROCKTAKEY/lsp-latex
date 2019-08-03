@@ -26,4 +26,4 @@
 #+END_SRC
 
 * License
-This package is licensed by GPLv3. See [[file:LICENSE][LICENSE]].
+  This package is licensed by GPLv3. See [[file:LICENSE][LICENSE]].
