@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, extensions, tex
 
-;; Version: 0.0.0
+;; Version: 1.0.0
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 
