@@ -12,11 +12,10 @@
 #+BEGIN_SRC emacs-lisp -n
   (add-to-list 'load-path "/path/to/lsp-latex")
   (require 'lsp-latex)
-  ;; "texlab.jar" must be located at a directory contained in `exec-path'
-  (setq lsp-latex-texlab-jar-file 'search-from-exec-path)
-  ;; If you want to put "texlab.jar" somewhere else,
-  ;; you can specify the path to "texlab.jar" as follows:
-  ;; (setq lsp-latex-texlab-jar-file "/path/to/texlab.jar")
+  ;; "texlab" must be located at a directory contained in `exec-path'.
+  ;; If you want to put "texlab" somewhere else,
+  ;; you can specify the path to "texlab" as follows:
+  ;; (setq lsp-latex-texlab-executable "/path/to/texlab")
 
   (with-eval-after-load "tex-mode"
    (add-hook 'tex-mode-hook 'lsp)
