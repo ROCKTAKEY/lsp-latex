@@ -1,0 +1,24 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        emacs_version:
+          - '24.5'
+          - '25.3'
+          - '26.1'
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1.1.1
+      - uses: purcell/setup-emacs@master
+        with:
+          version: ${{ matrix.emacs_version }}
+      - uses: conao3/setup-cask@master
+
+      - run: cask install
+      - run: make travis
