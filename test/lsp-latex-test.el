@@ -32,8 +32,7 @@
 
 (ert-deftest lsp-latex-open ()
   "Test for lsp-latex."
-  (noflet ((completing-read (a b c d) (message a)
-                            (message (car b)) (car b)))
+  (noflet ((read-key (a) (message a) ?i))
     (add-to-list 'exec-path "~/")
     (find-file "./test/test.tex")
     (lsp)))
