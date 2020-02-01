@@ -24,6 +24,8 @@
   (with-eval-after-load "yatex"
    (add-hook 'yatex-mode-hook 'lsp))
 #+END_SRC
-
+* Note
+  In this package, you can use even texlab v0.4.2 or older, written with Java,
+  though it is not recommended.
 * License
   This package is licensed by GPLv3. See [[file:LICENSE][LICENSE]].

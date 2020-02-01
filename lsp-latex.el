@@ -1,11 +1,11 @@
 ;;; lsp-latex.el --- lsp-mode client for LaTeX.      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2019  ROCKTAKEY
+;; Copyright (C) 2019-2020  ROCKTAKEY
 
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, extensions, tex
 
-;; Version: 1.0.0
+;; Version: 1.0.1
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 
@@ -34,16 +34,21 @@
   :group 'lsp-mode)
 
 
-;; Under texlab v1.0
-
+;;; For texlab v0.4.2 or older.
 (defcustom lsp-latex-java-executable "java"
   "Executable command to run Java.
-This is used with `lsp-latex-java-argument-list'."
+This is used with `lsp-latex-java-argument-list'.
+
+This variable is only for texlab v0.4.2 or older. If you use newer,
+You don't have to set or care about this variable."
   :group 'lsp-latex
   :type 'string)
 
 (defcustom lsp-latex-java-argument-list '("-jar")
-  "List of arguments passed to `lsp-latex-java-executable'."
+  "List of arguments passed to `lsp-latex-java-executable'.
+
+This variable is only for texlab v0.4.2 or older. If you use newer,
+You don't have to set or care about this variable."
   :group 'lsp-latex
   :risky t
   :type '(repeat string))
@@ -53,11 +58,17 @@ This is used with `lsp-latex-java-argument-list'."
 You can install it from https://github.com/latex-lsp/texlab/releases/tag/v0.4.1 .
 
 The value can be a string (path to \"texlab.jar\") or the symbol search-from-exec-path. See the docstring of `lsp-latex-get-texlab-jar-file'."
+
+This variable is only for texlab v0.4.2 or older. If you use newer,
+You don't have to set or care about this variable."
   :group 'lsp-latex
   :type '(choice string (const search-from-exec-path)))
 
 (defcustom lsp-latex-texlab-jar-argument-list '()
-  "List of arguments passed to `lsp-latex-texlab-jar-file'. "
+  "List of arguments passed to `lsp-latex-texlab-jar-file'.
+
+This variable is only for texlab v0.4.2 or older. If you use newer,
+You don't have to set or care about this variable."
   :group 'lsp-latex
   :type '(repeat string))
 
@@ -66,6 +77,9 @@ The value can be a string (path to \"texlab.jar\") or the symbol search-from-exe
 
 If `lsp-latex-texlab-jar-file' is a string, return it.
 If `lsp-latex-texlab-jar-file' is the symbol search-from-exec-path, then search a file named \"texlab.jar\" from `exec-path'."
+
+This function is only for texlab v0.4.2 or older. If you use newer,
+You don't have to set or care about this variable."
   (cond
    ((stringp lsp-latex-texlab-jar-file)
     lsp-latex-texlab-jar-file)
@@ -74,8 +88,7 @@ If `lsp-latex-texlab-jar-file' is the symbol search-from-exec-path, then search 
    (t (error "invalid value of `lsp-latex-texlab-jar-file'"))))
 
 
-;; texlab v1.0 or more
-
+;;; For texlab v1.0.0 or newer.
 (defcustom lsp-latex-texlab-executable
   (cond ((eq system-type 'windows-nt)
          "texlab.exe")
