@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, extensions, tex
 
-;; Version: 1.0.1
+;; Version: 1.0.2
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 
@@ -83,9 +83,10 @@ You don't have to set or care about this variable."
 
 (defcustom lsp-latex-texlab-jar-file 'search-from-exec-path
   "File named \"texlab.jar\".
-You can install it from https://github.com/latex-lsp/texlab/releases/tag/v0.4.1 .
+You can install it from https://github.com/latex-lsp/texlab/releases/ .
 
-The value can be a string (path to \"texlab.jar\") or the symbol search-from-exec-path. See the docstring of `lsp-latex-get-texlab-jar-file'."
+The value can be a string (path to \"texlab.jar\") or the symbol
+search-from-exec-path. See the docstring of `lsp-latex-get-texlab-jar-file'.
 
 This variable is only for texlab v0.4.2 or older. If you use newer,
 You don't have to set or care about this variable."
@@ -104,7 +105,8 @@ You don't have to set or care about this variable."
   "Return the path to \"texlab.jar\".
 
 If `lsp-latex-texlab-jar-file' is a string, return it.
-If `lsp-latex-texlab-jar-file' is the symbol search-from-exec-path, then search a file named \"texlab.jar\" from `exec-path'."
+If `lsp-latex-texlab-jar-file' is the symbol search-from-exec-path,
+then search a file named \"texlab.jar\" from `exec-path'.
 
 This function is only for texlab v0.4.2 or older. If you use newer,
 You don't have to set or care about this variable."
