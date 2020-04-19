@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, extensions, tex
 
-;; Version: 1.0.3
+;; Version: 1.0.4
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -164,15 +164,15 @@ PARAMS progress report notification data."
   (lsp-log (gethash "title" params)))
 
 (lsp-register-client
-   (make-lsp-client :new-connection
-                    (lsp-stdio-connection
-                     #'lsp-latex-new-connection)
-                    :major-modes '(tex-mode yatex-mode latex-mode)
-                    :server-id 'texlab
-                    :notification-handlers
-                    (lsp-ht
-                     ("window/progress"
-                      'lsp-latex-window-progress))))
+ (make-lsp-client :new-connection
+                  (lsp-stdio-connection
+                   #'lsp-latex-new-connection)
+                  :major-modes '(tex-mode yatex-mode latex-mode)
+                  :server-id 'texlab
+                  :notification-handlers
+                  (lsp-ht
+                   ("window/progress"
+                    'lsp-latex-window-progress))))
 
 (provide 'lsp-latex)
 ;;; lsp-latex.el ends here
