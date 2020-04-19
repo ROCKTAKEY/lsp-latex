@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, extensions, tex
 
-;; Version: 1.0.4
+;; Version: 1.0.5
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -68,7 +68,7 @@
   "Executable command to run Java.
 This is used with `lsp-latex-java-argument-list'.
 
-This variable is only for texlab v0.4.2 or older. If you use newer,
+This variable is only for texlab v0.4.2 or older.  If you use newer,
 You don't have to set or care about this variable."
   :group 'lsp-latex
   :type 'string)
@@ -76,7 +76,7 @@ You don't have to set or care about this variable."
 (defcustom lsp-latex-java-argument-list '("-jar")
   "List of arguments passed to `lsp-latex-java-executable'.
 
-This variable is only for texlab v0.4.2 or older. If you use newer,
+This variable is only for texlab v0.4.2 or older.  If you use newer,
 You don't have to set or care about this variable."
   :group 'lsp-latex
   :risky t
@@ -97,7 +97,7 @@ You don't have to set or care about this variable."
 (defcustom lsp-latex-texlab-jar-argument-list '()
   "List of arguments passed to `lsp-latex-texlab-jar-file'.
 
-This variable is only for texlab v0.4.2 or older. If you use newer,
+This variable is only for texlab v0.4.2 or older.  If you use newer,
 You don't have to set or care about this variable."
   :group 'lsp-latex
   :type '(repeat string))
@@ -116,7 +116,7 @@ You don't have to set or care about this variable."
     lsp-latex-texlab-jar-file)
    ((eq lsp-latex-texlab-jar-file 'search-from-exec-path)
     (locate-file "texlab.jar" exec-path))
-   (t (error "invalid value of `lsp-latex-texlab-jar-file'"))))
+   (t (error "Invalid value of `lsp-latex-texlab-jar-file'"))))
 
 
 ;;; For texlab v1.0.0 or newer.
@@ -130,7 +130,7 @@ Runned with the arguments `lsp-latex-texlab-executable-argument-list'."
   :type 'string)
 
 (defcustom lsp-latex-texlab-executable-argument-list '()
-  "list of Arguments passed to `lsp-latex-texlab-executable'."
+  "List of Arguments passed to `lsp-latex-texlab-executable'."
   :group 'lsp-latex
   :type '(repeat string))
 
@@ -139,7 +139,7 @@ Runned with the arguments `lsp-latex-texlab-executable-argument-list'."
 (add-to-list 'lsp-language-id-configuration '(".*\\.tex$" . "latex"))
 
 (defun lsp-latex-new-connection ()
-  ""
+  "Create new connection of lsp-latex."
   (let (jar-file)
     (cond
      ((locate-file lsp-latex-texlab-executable exec-path)
