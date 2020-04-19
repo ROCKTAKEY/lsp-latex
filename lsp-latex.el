@@ -1,13 +1,14 @@
-;;; lsp-latex.el --- lsp-mode client for LaTeX.      -*- lexical-binding: t; -*-
+;;; lsp-latex.el --- lsp-mode client for LaTeX      -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2019-2020  ROCKTAKEY
 
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, extensions, tex
 
-;; Version: 1.0.2
+;; Version: 1.0.3
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
+;; URL: https://github.com/ROCKTAKEY/lsp-latex
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
