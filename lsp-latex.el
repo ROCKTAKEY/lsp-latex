@@ -1,11 +1,11 @@
-;;; lsp-latex.el --- lsp-mode client for LaTeX      -*- lexical-binding: t; -*-
+;;; lsp-latex.el --- lsp-mode client for LaTeX, on texlab     -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2019-2020  ROCKTAKEY
 
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
-;; Keywords: languages, extensions, tex
+;; Keywords: languages, tex
 
-;; Version: 1.0.5
+;; Version: 1.0.6
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -124,8 +124,8 @@ You don't have to set or care about this variable."
   (cond ((eq system-type 'windows-nt)
          "texlab.exe")
         (t "texlab"))
-  "Exeucutable command to run texlab.
-Runned with the arguments `lsp-latex-texlab-executable-argument-list'."
+  "Executable command to run texlab.
+Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
   :group 'lsp-latex
   :type 'string)
 
