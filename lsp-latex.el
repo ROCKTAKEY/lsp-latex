@@ -202,7 +202,7 @@ PARAMS progress report notification data."
 
 
 
-(defun lsp-latex--message-result-only-fail (result)
+(defun lsp-latex--message-forward-search (result)
   "Message unless RESULT means success."
   (message
    (cl-case (plist-get result :status)
@@ -219,7 +219,7 @@ PARAMS progress report notification data."
   (lsp-request-async
    "textDocument/forwardSearch"
    (lsp--text-document-position-params)
-   #'lsp-latex--message-result-only-fail))
+   #'lsp-latex--message-forward-search))
 
 (provide 'lsp-latex)
 ;;; lsp-latex.el ends here
