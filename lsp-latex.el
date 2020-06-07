@@ -137,33 +137,17 @@ Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
 
 
 
-(defvar lsp-latex--client nil)
-
-(defun lsp-latex-forward-search-renew (symbol value)
-  ""
-  (set symbol value)
-  (when lsp-latex--client
-   (setf (lsp--client-initialization-options lsp-latex--client)
-        `(,@(when (bound-and-true-p lsp-latex-forward-search-executable)
-              `(("latex.forwardSearch.executable" .
-                 ,lsp-latex-forward-search-executable)))
-          ,@(when (bound-and-true-p lsp-latex-forward-search-args)
-              `(("latex.forwardSearch.args" .
-                 ,lsp-latex-forward-search-args)))))))
-
 (defcustom lsp-latex-forward-search-executable nil
   "Executable command used to search in preview.
 It is passed server as \"latex.forwardSearch.executable\"."
   :group 'lsp-latex
-  :type 'string
-  :set #'lsp-latex-forward-search-renew)
+  :type 'string)
 
 (defcustom lsp-latex-forward-search-args nil
   "List of arguments passed with `lsp-latex-forward-search-executable.'
  It is passed server as \"latex.forwardSearch.executable\"."
   :group 'lsp-latex
-  :type '(repeat string)
-  :set #'lsp-latex-forward-search-renew)
+  :type '(repeat string))
 
 (add-to-list 'lsp-language-id-configuration '(".*\\.tex$" . "latex"))
 
@@ -200,13 +184,16 @@ PARAMS progress report notification data."
                     #'lsp-latex-new-connection)
                    :major-modes '(tex-mode yatex-mode latex-mode)
                    :server-id 'texlab
-                   :initialization-options
-                   `(,@(when lsp-latex-forward-search-executable
-                         `(("latex.forwardSearch.executable" .
-                            ,lsp-latex-forward-search-executable)))
-                     ,@(when lsp-latex-forward-search-args
-                         `(("latex.forwardSearch.args" .
-                            ,lsp-latex-forward-search-args))))
+                   :initialized-fn
+                   (lambda (workspace)
+                     (with-lsp-workspace workspace
+                       (lsp--set-configuration
+                        `(,@(when lsp-latex-forward-search-executable
+                              `(("latex.forwardSearch.executable" .
+                                 ,lsp-latex-forward-search-executable)))
+                          ,@(when lsp-latex-forward-search-args
+                              `(("latex.forwardSearch.args" .
+                                 ,lsp-latex-forward-search-args)))))))
                    :notification-handlers
                    (lsp-ht
                     ("window/progress"
