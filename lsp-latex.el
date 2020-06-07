@@ -188,12 +188,13 @@ PARAMS progress report notification data."
                    (lambda (workspace)
                      (with-lsp-workspace workspace
                        (lsp--set-configuration
-                        `(,@(when lsp-latex-forward-search-executable
-                              `(("latex.forwardSearch.executable" .
-                                 ,lsp-latex-forward-search-executable)))
-                          ,@(when lsp-latex-forward-search-args
-                              `(("latex.forwardSearch.args" .
-                                 ,lsp-latex-forward-search-args)))))))
+                        `(:latex
+                          (:forwardSearch
+                           (,@(when lsp-latex-forward-search-executable
+                                `((:executable
+                                   ,lsp-latex-forward-search-executable)))
+                            ,@(when lsp-latex-forward-search-args
+                                `((:args ,lsp-latex-forward-search-args)))))))))
                    :notification-handlers
                    (lsp-ht
                     ("window/progress"
