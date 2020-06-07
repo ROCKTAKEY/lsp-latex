@@ -177,28 +177,26 @@ PARAMS progress report notification data."
   (lsp-log (gethash "title" params)))
 
 (lsp-register-client
- (setq
-  lsp-latex--client
-  (make-lsp-client :new-connection
-                   (lsp-stdio-connection
-                    #'lsp-latex-new-connection)
-                   :major-modes '(tex-mode yatex-mode latex-mode)
-                   :server-id 'texlab
-                   :initialized-fn
-                   (lambda (workspace)
-                     (with-lsp-workspace workspace
-                       (lsp--set-configuration
-                        `(:latex
-                          (:forwardSearch
-                           (,@(when lsp-latex-forward-search-executable
-                                `(:executable
-                                  ,lsp-latex-forward-search-executable))
-                            ,@(when lsp-latex-forward-search-args
-                                `(:args ,lsp-latex-forward-search-args))))))))
-                   :notification-handlers
-                   (lsp-ht
-                    ("window/progress"
-                     'lsp-latex-window-progress)))))
+ (make-lsp-client :new-connection
+                  (lsp-stdio-connection
+                   #'lsp-latex-new-connection)
+                  :major-modes '(tex-mode yatex-mode latex-mode)
+                  :server-id 'texlab
+                  :initialized-fn
+                  (lambda (workspace)
+                    (with-lsp-workspace workspace
+                      (lsp--set-configuration
+                       `(:latex
+                         (:forwardSearch
+                          (,@(when lsp-latex-forward-search-executable
+                               `(:executable
+                                 ,lsp-latex-forward-search-executable))
+                           ,@(when lsp-latex-forward-search-args
+                               `(:args ,lsp-latex-forward-search-args))))))))
+                  :notification-handlers
+                  (lsp-ht
+                   ("window/progress"
+                    'lsp-latex-window-progress))))
 
 
 
