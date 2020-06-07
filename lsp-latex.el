@@ -229,7 +229,7 @@ PARAMS progress report notification data."
   (interactive)
   (lsp-request-async
    "textDocument/forwardSearch"
-   (lsp--cur-position)
+   (lsp--text-document-position-params)
    #'lsp-latex--message-result-only-fail))
 
 (provide 'lsp-latex)
