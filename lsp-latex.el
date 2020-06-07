@@ -207,11 +207,11 @@ PARAMS progress report notification data."
   (message
    (cl-case (plist-get result :status)
      ((1)                             ;Error
-      "Build do not succeeded.")
+      "Forward search do not succeeded.")
      ((2)                             ;Failure
-      "Build failed.")
-     ((3)                             ;Cancelled
-      "Build cancelled."))))
+      "Forward search failed.")
+     ((3)                             ;Unconfigured
+      "Forward search has not been configured."))))
 
 (defun lsp-latex-forward-search ()
   "Forward search on preview."
