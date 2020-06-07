@@ -57,6 +57,7 @@
 
 ;;; Code:
 (require 'lsp-mode)
+(require 'cl-lib)
 
 (defgroup lsp-latex nil
   "Language Server Protocol client for LaTeX."
@@ -216,7 +217,7 @@ PARAMS progress report notification data."
 (defun lsp-latex--message-result-only-fail (result)
   "Message unless RESULT means success."
   (message
-   (case (plist-get result :status)
+   (cl-case (plist-get result :status)
      ((1)                             ;Error
       "Build do not succeeded.")
      ((2)                             ;Failure
