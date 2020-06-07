@@ -211,5 +211,26 @@ PARAMS progress report notification data."
                     ("window/progress"
                      'lsp-latex-window-progress)))))
 
+
+
+(defun lsp-latex--message-result-only-fail (result)
+  "Message unless RESULT means success."
+  (message
+   (case (plist-get result :status)
+     ((1)                             ;Error
+      "Build do not succeeded.")
+     ((2)                             ;Failure
+      "Build failed.")
+     ((3)                             ;Cancelled
+      "Build cancelled."))))
+
+(defun lsp-latex-forward-search ()
+  "Forward search on preview."
+  (interactive)
+  (lsp-request-async
+   "textDocument/forwardSearch"
+   (lsp--cur-position)
+   #'lsp-latex--message-result-only-fail))
+
 (provide 'lsp-latex)
 ;;; lsp-latex.el ends here
