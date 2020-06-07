@@ -174,5 +174,28 @@ PARAMS progress report notification data."
                    ("window/progress"
                     'lsp-latex-window-progress))))
 
+
+
+(defun lsp-latex--message-result-build (result)
+  "Message RESULT means success or not."
+  (message
+   (cl-case (plist-get result :status)
+     ((0)                             ;Success
+      "Build was succeeded.")
+     ((1)                             ;Error
+      "Build do not succeeded.")
+     ((2)                             ;Failure
+      "Build failed.")
+     ((3)                             ;Cancelled
+      "Build cancelled."))))
+
+(defun lsp-latex-build ()
+  "texlab build current tex file with latexmk."
+  (interactive)
+  (lsp-request-async
+   "textDocument/build"
+   (list :textDocument (lsp--text-document-identifier))
+   #'lsp-latex--message-result-build))
+
 (provide 'lsp-latex)
 ;;; lsp-latex.el ends here
