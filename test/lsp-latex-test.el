@@ -37,5 +37,16 @@
     (find-file "./test/test.tex")
     (lsp)))
 
+(ert-deftest lsp-latex-build ()
+  "Test for lsp-latex."
+  (flet ((read-key (a) (message a) ?i))
+    (add-to-list 'exec-path "~/")
+    (find-file "./test/test.tex")
+    (lsp)
+    (should
+     (string=
+      (lsp-latex-build t)
+     "Build was succeeded."))))
+
 (provide 'lsp-latex-test)
 ;;; lsp-latex-test.el ends here
