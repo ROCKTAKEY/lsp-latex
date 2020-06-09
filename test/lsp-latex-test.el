@@ -30,6 +30,15 @@
 (require 'lsp-latex)
 (require 'noflet)
 
+(ert-deftest lsp-latex-added ()
+  (noflet ((read-key (a) (message a) ?i))
+    (add-to-list 'exec-path "~/")
+    (find-file "./test/test.tex")
+    (should
+     (lsp--filter-clients
+      (-andfn #'lsp--matching-clients?
+              #'lsp--server-binary-present?)))))
+
 (ert-deftest lsp-latex-open ()
   "Test for lsp-latex."
   (noflet ((read-key (a) (message a) ?i))
