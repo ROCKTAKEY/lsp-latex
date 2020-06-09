@@ -37,7 +37,8 @@
     (should
      (lsp--filter-clients
       (-andfn #'lsp--matching-clients?
-              #'lsp--server-binary-present?)))))
+              #'lsp--server-binary-present?)))
+    (should (lsp-latex-new-connection))))
 
 (ert-deftest lsp-latex-open ()
   "Test for lsp-latex."
