@@ -26,7 +26,7 @@ clean:
 
 texlab:
 	${WGET} -O ~/texlab.tar.gz \
-	"https://github.com/latex-lsp/texlab/releases/download/v1.8.0/texlab-x86_64-linux.tar.gz"
+	"https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-linux.tar.gz"
 	tar -zxvf ~/texlab.tar.gz
 
 clean-texlab:
