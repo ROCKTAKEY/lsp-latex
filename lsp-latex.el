@@ -189,13 +189,18 @@ PARAMS progress report notification data."
      ((3)                             ;Cancelled
       "Build cancelled."))))
 
-(defun lsp-latex-build ()
+(defun lsp-latex-build (&optional sync)
   "texlab build current tex file with latexmk."
-  (interactive)
-  (lsp-request-async
-   "textDocument/build"
-   (list :textDocument (lsp--text-document-identifier))
-   #'lsp-latex--message-result-build))
+  (interactive "P")
+  (if sync
+      (lsp-latex--message-result-build
+       (lsp-request
+       "textDocument/build"
+       (list :textDocument (lsp--text-document-identifier))))
+    (lsp-request-async
+     "textDocument/build"
+     (list :textDocument (lsp--text-document-identifier))
+     #'lsp-latex--message-result-build)))
 
 (provide 'lsp-latex)
 ;;; lsp-latex.el ends here
