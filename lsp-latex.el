@@ -179,7 +179,7 @@ PARAMS progress report notification data."
 (defun lsp-latex--message-result-build (result)
   "Message RESULT means success or not."
   (message
-   (cl-case (plist-get result :status)
+   (cl-case (json-read-from-string (gethash "status" result))
      ((0)                             ;Success
       "Build was succeeded.")
      ((1)                             ;Error
