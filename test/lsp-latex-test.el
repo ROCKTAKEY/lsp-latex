@@ -30,12 +30,33 @@
 (require 'lsp-latex)
 (require 'noflet)
 
+(ert-deftest lsp-latex-added ()
+  (noflet ((read-key (a) (message a) ?i))
+    (add-to-list 'exec-path "~/")
+    (find-file "./test/test.tex")
+    (should
+     (lsp--filter-clients
+      (-andfn #'lsp--matching-clients?
+              #'lsp--server-binary-present?)))
+    (should (lsp-latex-new-connection))))
+
 (ert-deftest lsp-latex-open ()
   "Test for lsp-latex."
   (noflet ((read-key (a) (message a) ?i))
     (add-to-list 'exec-path "~/")
     (find-file "./test/test.tex")
     (lsp)))
+
+;; (ert-deftest lsp-latex-build ()
+;;   "Test for lsp-latex."
+;;   (noflet ((read-key (a) (message a) ?i))
+;;     (add-to-list 'exec-path "~/")
+;;     (find-file "./test/test.tex")
+;;     (lsp)
+;;     (should
+;;      (string=
+;;       (lsp-latex-build t)
+;;       "Build was succeeded."))))
 
 (provide 'lsp-latex-test)
 ;;; lsp-latex-test.el ends here

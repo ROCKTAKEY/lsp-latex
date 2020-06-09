@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 1.0.6
+;; Version: 1.1.0
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -168,11 +168,39 @@ PARAMS progress report notification data."
                   (lsp-stdio-connection
                    #'lsp-latex-new-connection)
                   :major-modes '(tex-mode yatex-mode latex-mode)
-                  :server-id 'texlab
+                  :server-id 'texlab2
                   :notification-handlers
                   (lsp-ht
                    ("window/progress"
                     'lsp-latex-window-progress))))
+
+
+
+(defun lsp-latex--message-result-build (result)
+  "Message RESULT means success or not."
+  (message
+   (cl-case (json-read-from-string (gethash "status" result))
+     ((0)                             ;Success
+      "Build was succeeded.")
+     ((1)                             ;Error
+      "Build do not succeeded.")
+     ((2)                             ;Failure
+      "Build failed.")
+     ((3)                             ;Cancelled
+      "Build cancelled."))))
+
+(defun lsp-latex-build (&optional sync)
+  "texlab build current tex file with latexmk."
+  (interactive "P")
+  (if sync
+      (lsp-latex--message-result-build
+       (lsp-request
+       "textDocument/build"
+       (list :textDocument (lsp--text-document-identifier))))
+    (lsp-request-async
+     "textDocument/build"
+     (list :textDocument (lsp--text-document-identifier))
+     #'lsp-latex--message-result-build)))
 
 (provide 'lsp-latex)
 ;;; lsp-latex.el ends here
