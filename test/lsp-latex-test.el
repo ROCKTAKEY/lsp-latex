@@ -39,7 +39,7 @@
 
 (ert-deftest lsp-latex-build ()
   "Test for lsp-latex."
-  (flet ((read-key (a) (message a) ?i))
+  (noflet ((read-key (a) (message a) ?i))
     (add-to-list 'exec-path "~/")
     (find-file "./test/test.tex")
     (lsp)
