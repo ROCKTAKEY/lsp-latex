@@ -168,7 +168,7 @@ PARAMS progress report notification data."
                   (lsp-stdio-connection
                    #'lsp-latex-new-connection)
                   :major-modes '(tex-mode yatex-mode latex-mode)
-                  :server-id 'texlab
+                  :server-id 'texlab2
                   :notification-handlers
                   (lsp-ht
                    ("window/progress"
