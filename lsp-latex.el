@@ -156,17 +156,88 @@ Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
 
 
 
+(defcustom lsp-latex-root-directory "."
+  "Root directory of each buffer."
+  :group 'lsp-latex
+  :risky t
+  :type 'string)
+
+(defcustom lsp-latex-build-executable "latexmk"
+  "Build command used on `lsp-latex-build'."
+  :group 'lsp-latex
+  :risky t
+  :type 'string)
+
+(defcustom lsp-latex-build-args
+  '("-pdf" "-interaction=nonstopmode" "-synctex=1" "%f")
+  "Arguments passed to `lsp-latex-build-executable', which used on `lsp-latex-build'.
+\"%f\" can be used as the path of the TeX file to compile."
+  :group 'lsp-latex
+  :risky t
+  :type '(repeat string))
+
+(defcustom lsp-latex-on-save nil
+  "Build after saving a file or not."
+  :group 'lsp-latex
+  :type 'boolean)
+
+(defcustom lsp-latex-build-output-directory "."
+  "Directory to which built file is put.
+Note that you should change `lsp-latex-build-args' to change output directory.
+If you use latexmk, use \"-outdir\" flag."
+  :group 'lsp-latex
+  :type 'string
+  :risky t)
+
+(defcustom lsp-latex-forward-search-after nil
+  "Execute forward-research after building."
+  :group 'lsp-latex
+  :type 'boolean)
+
 (defcustom lsp-latex-forward-search-executable nil
   "Executable command used to search in preview.
 It is passed server as \"latex.forwardSearch.executable\"."
   :group 'lsp-latex
-  :type 'string)
+  :type 'string
+  :risky t)
 
 (defcustom lsp-latex-forward-search-args nil
   "List of arguments passed with `lsp-latex-forward-search-executable.'
  It is passed server as \"latex.forwardSearch.executable\"."
   :group 'lsp-latex
-  :type '(repeat string))
+  :type '(repeat string)
+  :risky t)
+
+(defcustom lsp-latex-lint-on-save t
+  "Lint using chktex after saving a file."
+  :group 'lsp-latex
+  :type 'boolean)
+
+(defcustom lsp-latex-bibtex-formatting-line-length 120
+  "Maximum amount of line on formatting BibTeX files.
+0 means disable."
+  :group 'lsp-latex
+  :type 'integerp)
+
+(defcustom lsp-latex-bibtex-formatting-formatter "texlab"
+  "Formatter used to format BibTeX file.
+You can choose \"texlab\" or \"latexindent\". "
+  :group 'lsp-latex
+  :type '(choice (const "texlab") (const "latexindent")))
+
+(lsp-register-custom-settings
+ `(("latex.rootDirectory"            lsp-latex-root-directory)
+   ("latex.build.executable"         lsp-latex-build-executable)
+   ("latex.build.args"               lsp-latex-build-args)
+   ("latex.build.onSave"             lsp-latex-on-save t)
+   ("latex.build.outputDirectory"    lsp-latex-build-output-directory)
+   ("latex.build.forwardSearchAfter" lsp-latex-forward-search-after t)
+   ("latex.forwardSearch.executable" lsp-latex-forward-search-executable)
+   ("latex.forwardSearch.args"       lsp-latex-forward-search-args)
+   ("latex.lint.onChange"            lsp-latex-lint-on-save t)
+   ("latex.lint.onSave"              lsp-latex-bibtex-formatting-line-length t)
+   ("bibtex.formatting.lineLength"   lsp-latex-bibtex-formatting-line-length)
+   ("bibtex.formatting.formatter"    lsp-latex-bibtex-formatting-formatter)))
 
 (add-to-list 'lsp-language-id-configuration '(".*\\.tex$" . "latex"))
 
@@ -205,13 +276,9 @@ PARAMS progress report notification data."
                   (lambda (workspace)
                     (with-lsp-workspace workspace
                       (lsp--set-configuration
-                       `(:latex
-                         (:forwardSearch
-                          (,@(when lsp-latex-forward-search-executable
-                               `(:executable
-                                 ,lsp-latex-forward-search-executable))
-                           ,@(when lsp-latex-forward-search-args
-                               `(:args ,lsp-latex-forward-search-args))))))))
+                       (lsp-configuration-section "latex"))
+                      (lsp--set-configuration
+                       (lsp-configuration-section "bibtex"))))
                   :notification-handlers
                   (lsp-ht
                    ("window/progress"
