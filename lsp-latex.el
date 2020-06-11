@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 1.2.1
+;; Version: 1.2.2
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -176,7 +176,7 @@ Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
   :risky t
   :type '(repeat string))
 
-(defcustom lsp-latex-on-save nil
+(defcustom lsp-latex-build-on-save nil
   "Build after saving a file or not."
   :group 'lsp-latex
   :type 'boolean)
@@ -234,7 +234,7 @@ You can choose \"texlab\" or \"latexindent\". "
  `(("latex.rootDirectory"            lsp-latex-root-directory)
    ("latex.build.executable"         lsp-latex-build-executable)
    ("latex.build.args"               lsp-latex-build-args)
-   ("latex.build.onSave"             lsp-latex-on-save t)
+   ("latex.build.onSave"             lsp-latex-build-on-save t)
    ("latex.build.outputDirectory"    lsp-latex-build-output-directory)
    ("latex.build.forwardSearchAfter" lsp-latex-forward-search-after t)
    ("latex.forwardSearch.executable" lsp-latex-forward-search-executable)
