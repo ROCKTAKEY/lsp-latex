@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 1.2.2
+;; Version: 1.2.3
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -295,7 +295,7 @@ PARAMS progress report notification data."
 (defun lsp-latex--message-result-build (result)
   "Message RESULT means success or not."
   (message
-   (cl-case (json-read-from-string (gethash "status" result))
+   (cl-case (gethash "status" result)
      ((0)                             ;Success
       "Build was succeeded.")
      ((1)                             ;Error
