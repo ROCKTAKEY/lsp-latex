@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 1.2.0
+;; Version: 1.2.1
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -277,6 +277,7 @@ PARAMS progress report notification data."
                    #'lsp-latex-new-connection)
                   :major-modes '(tex-mode yatex-mode latex-mode)
                   :server-id 'texlab2
+                  :priority 2
                   :initialized-fn
                   (lambda (workspace)
                     (with-lsp-workspace workspace
