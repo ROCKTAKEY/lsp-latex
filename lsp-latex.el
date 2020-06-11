@@ -76,6 +76,7 @@
 
 ;;; Code:
 (require 'lsp-mode)
+(require 'cl-lib)
 
 (defgroup lsp-latex nil
   "Language Server Protocol client for LaTeX."
@@ -155,6 +156,94 @@ Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
 
 
 
+(defcustom lsp-latex-root-directory "."
+  "Root directory of each buffer."
+  :group 'lsp-latex
+  :risky t
+  :type 'string)
+
+(defcustom lsp-latex-build-executable "latexmk"
+  "Build command used on `lsp-latex-build'."
+  :group 'lsp-latex
+  :risky t
+  :type 'string)
+
+(defcustom lsp-latex-build-args
+  '("-pdf" "-interaction=nonstopmode" "-synctex=1" "%f")
+  "Arguments passed to `lsp-latex-build-executable', which used on `lsp-latex-build'.
+\"%f\" can be used as the path of the TeX file to compile."
+  :group 'lsp-latex
+  :risky t
+  :type '(repeat string))
+
+(defcustom lsp-latex-on-save nil
+  "Build after saving a file or not."
+  :group 'lsp-latex
+  :type 'boolean)
+
+(defcustom lsp-latex-build-output-directory "."
+  "Directory to which built file is put.
+Note that you should change `lsp-latex-build-args' to change output directory.
+If you use latexmk, use \"-outdir\" flag."
+  :group 'lsp-latex
+  :type 'string
+  :risky t)
+
+(defcustom lsp-latex-forward-search-after nil
+  "Execute forward-research after building."
+  :group 'lsp-latex
+  :type 'boolean)
+
+(defcustom lsp-latex-forward-search-executable nil
+  "Executable command used to search in preview.
+It is passed server as \"latex.forwardSearch.executable\"."
+  :group 'lsp-latex
+  :type 'string
+  :risky t)
+
+(defcustom lsp-latex-forward-search-args nil
+  "List of arguments passed with `lsp-latex-forward-search-executable.'
+ It is passed server as \"latex.forwardSearch.executable\"."
+  :group 'lsp-latex
+  :type '(repeat string)
+  :risky t)
+
+(defcustom lsp-latex-lint-on-change nil
+  "Lint using chktex after changing a file."
+  :group 'lsp-latex
+  :type 'boolean)
+
+(defcustom lsp-latex-lint-on-save nil
+  "Lint using chktex after saving a file."
+  :group 'lsp-latex
+  :type 'boolean)
+
+(defcustom lsp-latex-bibtex-formatting-line-length 120
+  "Maximum amount of line on formatting BibTeX files.
+0 means disable."
+  :group 'lsp-latex
+  :type 'integerp)
+
+(defcustom lsp-latex-bibtex-formatting-formatter "texlab"
+  "Formatter used to format BibTeX file.
+You can choose \"texlab\" or \"latexindent\". "
+  :group 'lsp-latex
+  :type '(choice (const "texlab") (const "latexindent")))
+
+(lsp-register-custom-settings
+ `(("latex.rootDirectory"            lsp-latex-root-directory)
+   ("latex.build.executable"         lsp-latex-build-executable)
+   ("latex.build.args"               lsp-latex-build-args)
+   ("latex.build.onSave"             lsp-latex-on-save t)
+   ("latex.build.outputDirectory"    lsp-latex-build-output-directory)
+   ("latex.build.forwardSearchAfter" lsp-latex-forward-search-after t)
+   ("latex.forwardSearch.executable" lsp-latex-forward-search-executable)
+   ("latex.forwardSearch.args"       lsp-latex-forward-search-args)
+   ("latex.lint.onChange"            lsp-latex-lint-on-change t)
+   ("latex.lint.onSave"              lsp-latex-lint-on-save t)
+   ("bibtex.formatting.lineLength"   lsp-latex-bibtex-formatting-line-length)
+   ("bibtex.formatting.formatter"    lsp-latex-bibtex-formatting-formatter)))
+
 (add-to-list 'lsp-language-id-configuration '(".*\\.tex$" . "latex"))
 
 (defun lsp-latex-new-connection ()
@@ -188,6 +277,13 @@ PARAMS progress report notification data."
                    #'lsp-latex-new-connection)
                   :major-modes '(tex-mode yatex-mode latex-mode)
                   :server-id 'texlab2
+                  :initialized-fn
+                  (lambda (workspace)
+                    (with-lsp-workspace workspace
+                      (lsp--set-configuration
+                       (lsp-configuration-section "latex"))
+                      (lsp--set-configuration
+                       (lsp-configuration-section "bibtex"))))
                   :notification-handlers
                   (lsp-ht
                    ("window/progress"
@@ -220,6 +316,26 @@ PARAMS progress report notification data."
      "textDocument/build"
      (list :textDocument (lsp--text-document-identifier))
      #'lsp-latex--message-result-build)))
+
+(defun lsp-latex--message-forward-search (result)
+  "Message unless RESULT means success."
+  (message
+   (cl-case (plist-get result :status)
+     ((1)                             ;Error
+      "Forward search do not succeeded.")
+     ((2)                             ;Failure
+      "Forward search failed.")
+     ((3)                             ;Unconfigured
+      "Forward search has not been configured."))))
+
+(defun lsp-latex-forward-search ()
+  "Forward search on preview."
+  (interactive)
+  (lsp-request-async
+   "textDocument/forwardSearch"
+   (lsp--text-document-position-params)
+   #'lsp-latex--message-forward-search))
+
 
 (provide 'lsp-latex)
 ;;; lsp-latex.el ends here
