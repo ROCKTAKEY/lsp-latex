@@ -208,7 +208,12 @@ It is passed server as \"latex.forwardSearch.executable\"."
   :type '(repeat string)
   :risky t)
 
-(defcustom lsp-latex-lint-on-save t
+(defcustom lsp-latex-lint-on-change nil
+  "Lint using chktex after changing a file."
+  :group 'lsp-latex
+  :type 'boolean)
+
+(defcustom lsp-latex-lint-on-save nil
   "Lint using chktex after saving a file."
   :group 'lsp-latex
   :type 'boolean)
@@ -234,8 +239,8 @@ You can choose \"texlab\" or \"latexindent\". "
    ("latex.build.forwardSearchAfter" lsp-latex-forward-search-after t)
    ("latex.forwardSearch.executable" lsp-latex-forward-search-executable)
    ("latex.forwardSearch.args"       lsp-latex-forward-search-args)
-   ("latex.lint.onChange"            lsp-latex-lint-on-save t)
-   ("latex.lint.onSave"              lsp-latex-bibtex-formatting-line-length t)
+   ("latex.lint.onChange"            lsp-latex-lint-on-change t)
+   ("latex.lint.onSave"              lsp-latex-lint-on-save t)
    ("bibtex.formatting.lineLength"   lsp-latex-bibtex-formatting-line-length)
    ("bibtex.formatting.formatter"    lsp-latex-bibtex-formatting-formatter)))
 
