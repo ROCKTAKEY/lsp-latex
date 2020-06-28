@@ -169,7 +169,7 @@ Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
   :type 'string)
 
 (defcustom lsp-latex-build-args
-  '("-pdf" "-interaction=nonstopmode" "-synctex=1" "%f")
+  ["-pdf" "-interaction=nonstopmode" "-synctex=1" "%f"]
   "Arguments passed to `lsp-latex-build-executable', which used on `lsp-latex-build'.
 \"%f\" can be used as the path of the TeX file to compile."
   :group 'lsp-latex
