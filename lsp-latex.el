@@ -170,7 +170,7 @@ Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
 
 (defcustom lsp-latex-build-args
   ["-pdf" "-interaction=nonstopmode" "-synctex=1" "%f"]
-  "Arguments passed to `lsp-latex-build-executable', which used on `lsp-latex-build'.
+  "Vector of arguments passed to `lsp-latex-build-executable', which used on `lsp-latex-build'.
 \"%f\" can be used as the path of the TeX file to compile."
   :group 'lsp-latex
   :risky t
@@ -201,8 +201,8 @@ It is passed server as \"latex.forwardSearch.executable\"."
   :type 'string
   :risky t)
 
-(defcustom lsp-latex-forward-search-args nil
-  "List of arguments passed with `lsp-latex-forward-search-executable.'
+(defcustom lsp-latex-forward-search-args []
+  "Vector of arguments passed with `lsp-latex-forward-search-executable.'
  It is passed server as \"latex.forwardSearch.executable\"."
   :group 'lsp-latex
   :type '(repeat string)
