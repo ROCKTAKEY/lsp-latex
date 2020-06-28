@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 1.2.3
+;; Version: 1.2.4
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -170,7 +170,7 @@ Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
 
 (defcustom lsp-latex-build-args
   '("-pdf" "-interaction=nonstopmode" "-synctex=1" "%f")
-  "Arguments passed to `lsp-latex-build-executable', which used on `lsp-latex-build'.
+  "List of arguments passed to `lsp-latex-build-executable', which used on `lsp-latex-build'.
 \"%f\" can be used as the path of the TeX file to compile."
   :group 'lsp-latex
   :risky t
@@ -230,15 +230,27 @@ You can choose \"texlab\" or \"latexindent\". "
   :group 'lsp-latex
   :type '(choice (const "texlab") (const "latexindent")))
 
+(defun lsp-latex--build-args-getter ()
+  "Get `lsp-latex-build-args' with changing to vector.
+Because `json-serialize' cannot recognize normal list as array of json,
+should be vector."
+  (vconcat lsp-latex-build-args))
+
+(defun lsp-latex--forward-search-args-getter ()
+  "Get `lsp-latex-build-args' with changing to vector.
+Because `json-serialize' cannot recognize normal list as array of json,
+should be vector."
+  (vconcat lsp-latex-forward-search-args))
+
 (lsp-register-custom-settings
  `(("latex.rootDirectory"            lsp-latex-root-directory)
    ("latex.build.executable"         lsp-latex-build-executable)
-   ("latex.build.args"               lsp-latex-build-args)
+   ("latex.build.args"               lsp-latex--build-args-getter)
    ("latex.build.onSave"             lsp-latex-build-on-save t)
    ("latex.build.outputDirectory"    lsp-latex-build-output-directory)
    ("latex.build.forwardSearchAfter" lsp-latex-forward-search-after t)
    ("latex.forwardSearch.executable" lsp-latex-forward-search-executable)
-   ("latex.forwardSearch.args"       lsp-latex-forward-search-args)
+   ("latex.forwardSearch.args"       lsp-latex--forward-search-args-getter)
    ("latex.lint.onChange"            lsp-latex-lint-on-change t)
    ("latex.lint.onSave"              lsp-latex-lint-on-save t)
    ("bibtex.formatting.lineLength"   lsp-latex-bibtex-formatting-line-length)
