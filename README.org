@@ -25,6 +25,29 @@
   (with-eval-after-load "yatex"
    (add-hook 'yatex-mode-hook 'lsp))
 #+END_SRC
+* Variables
+** ~lsp-latex-texlab-executable~
+   Where texlab server located.
+** ~lsp-latex-texlab-executable-argument-list~
+   Argument list passed to texlab server.
+** Others, provided by texlab server
+   These variables are connected to texlab configuration variables.
+   See also texlab [[https://texlab.netlify.app/docs/reference/configuration][documentation]].
+| texlab configuration           | custom variable                         |
+|--------------------------------+-----------------------------------------|
+| latex.rootDirectory            | lsp-latex-root-directory                |
+| latex.build.executable         | lsp-latex-build-executable              |
+| latex.build.args               | lsp-latex--build-args                   |
+| latex.build.onSave             | lsp-latex-build-on-save                 |
+| latex.build.outputDirectory    | lsp-latex-build-output-directory        |
+| latex.build.forwardSearchAfter | lsp-latex-forward-search-after          |
+| latex.forwardSearch.executable | lsp-latex-forward-search-executable     |
+| latex.forwardSearch.args       | lsp-latex--forward-search-args          |
+| latex.lint.onChange            | lsp-latex-lint-on-change                |
+| latex.lint.onSave              | lsp-latex-lint-on-save                  |
+| bibtex.formatting.lineLength   | lsp-latex-bibtex-formatting-line-length |
+| bibtex.formatting.formatter    | lsp-latex-bibtex-formatting-formatter   |
+
 * Functions
 ** ~lsp-latex-build~
    Build .tex files with texlab.
