@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 1.2.4
+;; Version: 1.2.5
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -58,9 +58,9 @@
 ;;    with prefix argument(C-u).
 ;;; Note
 ;;   In this package, you can use even texlab v0.4.2 or older, written with Java,
-;;   though it is not recommended. If you want to use them, you can write like:
+;;   though it is not recommended.  If you want to use them, you can write like:
 
-;;   ;; Path to Java executable. If it is added to environmental PATH,
+;;   ;; Path to Java executable.  If it is added to environmental PATH,
 ;;   ;; you don't have to write this.
 ;;   (setq lsp-latex-java-executable "/path/to/java")
 
@@ -170,7 +170,8 @@ Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
 
 (defcustom lsp-latex-build-args
   '("-pdf" "-interaction=nonstopmode" "-synctex=1" "%f")
-  "List of arguments passed to `lsp-latex-build-executable', which used on `lsp-latex-build'.
+  "Argument list passed to `lsp-latex-build-executable'.
+Value is used on `lsp-latex-build'.
 \"%f\" can be used as the path of the TeX file to compile."
   :group 'lsp-latex
   :risky t
@@ -202,8 +203,13 @@ It is passed server as \"latex.forwardSearch.executable\"."
   :risky t)
 
 (defcustom lsp-latex-forward-search-args nil
-  "List of arguments passed with `lsp-latex-forward-search-executable.'
- It is passed server as \"latex.forwardSearch.executable\"."
+  "Argument list passed to `lsp-latex-forward-search-executable'.
+It is passed server as \"latex.forwardSearch.executable\".
+
+Placeholders
+    %f: The path of the current TeX file.
+    %p: The path of the current PDF file.
+    %l: The current line number."
   :group 'lsp-latex
   :type '(repeat string)
   :risky t)
@@ -226,7 +232,7 @@ It is passed server as \"latex.forwardSearch.executable\"."
 
 (defcustom lsp-latex-bibtex-formatting-formatter "texlab"
   "Formatter used to format BibTeX file.
-You can choose \"texlab\" or \"latexindent\". "
+You can choose \"texlab\" or \"latexindent\"."
   :group 'lsp-latex
   :type '(choice (const "texlab") (const "latexindent")))
 
@@ -318,7 +324,8 @@ PARAMS progress report notification data."
       "Build cancelled."))))
 
 (defun lsp-latex-build (&optional sync)
-  "texlab build current tex file with latexmk."
+  "Build current tex file with latexmk, through texlab.
+Build synchronously if SYNC is non-nil."
   (interactive "P")
   (if sync
       (lsp-latex--message-result-build
