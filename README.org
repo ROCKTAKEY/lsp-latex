@@ -24,6 +24,10 @@
   ;; For YaTeX
   (with-eval-after-load "yatex"
    (add-hook 'yatex-mode-hook 'lsp))
+
+  ;; For bibtex
+  (with-eval-after-load "bibtex"
+   (add-hook 'bibtex-mode-hook 'lsp))
 #+END_SRC
 * Variables
 ** ~lsp-latex-texlab-executable~
