@@ -1,11 +1,11 @@
 ;;; lsp-latex.el --- lsp-mode client for LaTeX, on texlab     -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2019-2020  ROCKTAKEY
+;; Copyright (C) 2019-2021  ROCKTAKEY
 
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 1.2.6
+;; Version: 1.3.0
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
