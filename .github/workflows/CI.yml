@@ -5,20 +5,35 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    continue-on-error:
+      ${{ contains(fromJson('["snapshot"]'), matrix.emacs_version) }}
 
     strategy:
       matrix:
         emacs_version:
-          # - '24.5'
           - '25.3'
           - '26.1'
+          - '26.2'
+          - '26.3'
+          - '27.1'
+          - 'snapshot'
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-python@v1.1.1
       - uses: purcell/setup-emacs@master
         with:
           version: ${{ matrix.emacs_version }}
-      - uses: conao3/setup-cask@master
+      - uses: conao3/setup-keg@master
 
-      - run: cask install
-      - run: make travis
+      - run: keg install
+      - run: make test-all
+
+  lint:
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ true }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: purcell/setup-emacs@master
+        with:
+          version: '27.1'
+      - uses: conao3/setup-keg@master
+      - run: make lint

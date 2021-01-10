@@ -1,0 +1,6 @@
+(source gnu melpa)
+
+(package (lsp-latex
+          (recipe . (:fetcher github :repo "ROCKTAKEY/lsp-latex"))))
+
+(dev-dependency noflet)
