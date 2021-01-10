@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 1.3.1
+;; Version: 1.3.2
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -339,6 +339,17 @@ Build synchronously if SYNC is non-nil."
      "textDocument/build"
      (list :textDocument (lsp--text-document-identifier))
      #'lsp-latex--message-result-build)))
+
+
+
+;; To suppress warning.
+(defvar pdf-sync-forward-display-action)
+(declare-function pdf-info-synctex-forward-search "ext:pdf-info")
+(declare-function pdf-sync-synctex-file-name "ext:pdf-sync")
+(declare-function pdf-util-assert-pdf-window "ext:pdf-util")
+(declare-function pdf-util-tooltip-arrow "ext:pdf-util")
+(declare-function pdf-view-goto-page "ext:pdf-view")
+(declare-function pdf-view-image-size "ext:pdf-view")
 
 ;;;###autoload
 (defun lsp-latex-forward-search-with-pdf-tools (tex-file pdf-file line)
