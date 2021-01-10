@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 1.3.0
+;; Version: 1.3.1
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -127,7 +127,7 @@ You don't have to set or care about this variable."
 
 If `lsp-latex-texlab-jar-file' is a string, return it.
 If `lsp-latex-texlab-jar-file' is the symbol search-from-exec-path,
-then search a file named \"texlab.jar\" from `exec-path'.
+then search a file named \"texlab.jar\" from variable `exec-path'.
 
 This function is only for texlab v0.4.2 or older. If you use newer,
 You don't have to set or care about this variable."
