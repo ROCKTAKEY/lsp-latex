@@ -51,7 +51,26 @@
 | latex.lint.onSave              | lsp-latex-lint-on-save                  |
 | bibtex.formatting.lineLength   | lsp-latex-bibtex-formatting-line-length |
 | bibtex.formatting.formatter    | lsp-latex-bibtex-formatting-formatter   |
+*** ~pdf-tools~ integration
+    If you want to use forward search with ~pdf-tools~,
+    follow the setting:
+    #+begin_src emacs-lisp :tangle yes
+      ;; Start Emacs server
+      (server-start)
+      ;; Turn on SyncTeX on the build.
+      ;; If you use `lsp-latex-build', it is on by default.
+      ;; If not (for example, YaTeX or LaTeX-mode building system),
+      ;; put to init.el like this:
+      (setq tex-command "platex --synctex=1")
 
+      ;; Setting for pdf-tools
+      (setq lsp-latex-forward-search-executable "emacsclient")
+      (setq lsp-latex-forward-search-args
+            '("--eval"
+              "(lsp-latex-forward-search-with-pdf-tools \"%f\" \"%p\" \"%l\")"))
+    #+end_src
+    Inverse research is not provided by texlab,
+    so please use ~pdf-sync-backward-search-mouse~.
 * Functions
 ** ~lsp-latex-build~
    Build .tex files with texlab.
