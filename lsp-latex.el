@@ -1,11 +1,11 @@
-;;; lsp-latex.el --- lsp-mode client for LaTeX, on texlab     -*- lexical-binding: t; -*-
+;;; lsp-latex.el --- LSP-mode client for LaTeX, on texlab     -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2019-2021  ROCKTAKEY
 
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 1.3.2
+;; Version: 1.3.3
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -312,6 +312,7 @@ PARAMS progress report notification data."
                     'lsp-latex-window-progress))))
 
 
+;;; Build
 
 (defun lsp-latex--message-result-build (result)
   "Message RESULT means success or not."
@@ -341,6 +342,7 @@ Build synchronously if SYNC is non-nil."
      #'lsp-latex--message-result-build)))
 
 
+;;; Forward search
 
 ;; To suppress warning.
 (defvar pdf-sync-forward-display-action)
@@ -408,7 +410,6 @@ This function is partially copied from
    "textDocument/forwardSearch"
    (lsp--text-document-position-params)
    #'lsp-latex--message-forward-search))
-
 
 (provide 'lsp-latex)
 ;;; lsp-latex.el ends here
