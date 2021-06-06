@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 1.3.3
+;; Version: 1.3.4
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -264,6 +264,7 @@ should be vector."
 
 (add-to-list 'lsp-language-id-configuration '(".*\\.tex$" . "latex"))
 (add-to-list 'lsp-language-id-configuration '(".*\\.bib$" . "bibtex"))
+
 (defun lsp-latex-new-connection ()
   "Create new connection of lsp-latex."
   (let (jar-file)
