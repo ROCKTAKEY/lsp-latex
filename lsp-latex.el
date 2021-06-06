@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 1.3.4
+;; Version: 2.0.0
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -158,6 +158,7 @@ Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
 
 (defcustom lsp-latex-root-directory "."
   "Root directory of each buffer."
+  :local t
   :group 'lsp-latex
   :risky t
   :type 'string)
@@ -178,17 +179,44 @@ Value is used on `lsp-latex-build'.
   :type '(repeat string))
 
 (defcustom lsp-latex-build-on-save nil
-  "Build after saving a file or not."
+  "Build after saving a file or not.
+
+This variable is obsoleted since texlab 3.0.0."
   :group 'lsp-latex
   :type 'boolean)
 
-(defcustom lsp-latex-build-output-directory "."
+(make-obsolete-variable
+ 'lsp-latex-build-on-save
+ "This variable is obsoleted since texlab 3.0.0.
+See also https://github.com/latex-lsp/texlab/blob/a0f0dded751258f57e972ad5e2285f82e3404f27/CHANGELOG.md#changed."
+ "2.0.0")
+
+(defcustom lsp-latex-build-aux-directory "."
   "Directory to which built file is put.
 Note that you should change `lsp-latex-build-args' to change output directory.
 If you use latexmk, use \"-outdir\" flag."
   :group 'lsp-latex
   :type 'string
-  :risky t)
+  :risky t
+  :version "2.0.0")
+
+(define-obsolete-variable-alias 'lsp-latex-build-output-directory
+  'lsp-latex-build-aux-directory
+  "2.0.0"
+  "Directory to which built file is put.
+Note that you should change `lsp-latex-build-args' to change output directory.
+If you use latexmk, use \"-outdir\" flag.
+
+This variable is obsoleted since texlab 3.0.0.")
+
+(defcustom lsp-latex-build-is-continuous nil
+  "A continuous build is implied if non-nil.
+
+This variable is valid since texlab 3.0.0."
+  :group 'lsp-latex
+  :type 'string
+  :risky t
+  :version "2.0.0")
 
 (defcustom lsp-latex-forward-search-after nil
   "Execute forward-research after building."
@@ -214,27 +242,91 @@ Placeholders
   :type '(repeat string)
   :risky t)
 
-(defcustom lsp-latex-lint-on-change nil
+(defcustom lsp-latex-chktex-on-edit nil
   "Lint using chktex after changing a file."
   :group 'lsp-latex
-  :type 'boolean)
+  :type 'boolean
+  :version "2.0.0")
 
-(defcustom lsp-latex-lint-on-save nil
-  "Lint using chktex after saving a file."
+(defcustom lsp-latex-diagnostics-delay 300
+  "Delay time before reporting diagnostics.
+The value is in milliseconds."
   :group 'lsp-latex
-  :type 'boolean)
+  :type 'integerp
+  :version "2.0.0")
 
-(defcustom lsp-latex-bibtex-formatting-line-length 120
+(define-obsolete-variable-alias 'lsp-latex-lint-on-change
+  'lsp-latex-chktex-on-edit
+  "2.0.0"
+  "Lint using chktex after changing a file.
+
+This variable is obsoleted since texlab 3.0.0.")
+
+(defcustom lsp-latex-chktex-on-open-and-save nil
+  "Lint using chktex after opening and saving a file."
+  :group 'lsp-latex
+  :type 'boolean
+  :version "2.0.0")
+
+(define-obsolete-variable-alias 'lsp-latex-lint-on-save
+  'lsp-latex-chktex-on-open-and-save
+   "2.0.0"
+   "Lint using chktex after saving a file.
+
+This variable is obsoleted since texlab 3.0.0.")
+
+(defcustom lsp-latex-bibtex-formatter-line-length 80
   "Maximum amount of line on formatting BibTeX files.
 0 means disable."
   :group 'lsp-latex
-  :type 'integerp)
+  :type 'integerp
+  :version "2.0.0")
 
-(defcustom lsp-latex-bibtex-formatting-formatter "texlab"
+(define-obsolete-variable-alias 'lsp-latex-bibtex-formatting-line-length
+  'lsp-latex-bibtex-formatter-line-length
+  "Maximum amount of line on formatting BibTeX files.
+0 means disable.
+
+This variable is obsoleted since texlab 3.0.0.")
+
+(defcustom lsp-latex-bibtex-formatter "texlab"
   "Formatter used to format BibTeX file.
 You can choose \"texlab\" or \"latexindent\"."
   :group 'lsp-latex
-  :type '(choice (const "texlab") (const "latexindent")))
+  :type '(choice (const "texlab") (const "latexindent"))
+  :version "2.0.0")
+
+(define-obsolete-variable-alias 'lsp-latex-bibtex-formatting-formatter
+  'lsp-latex-bibtex-formatter
+  "2.0.0"
+  "Formatter used to format BibTeX file.
+You can choose \"texlab\" or \"latexindent\".
+
+This variable is obsoleted since texlab 3.0.0.")
+
+(defcustom lsp-latex-latex-formatter "texlab"
+  "Formatter used to format LaTeX file.
+You can choose \"texlab\" or \"latexindent\".
+
+This variable is valid since texlab 3.0.0."
+  :group 'lsp-latex
+  :type '(choice (const "texlab") (const "latexindent"))
+  :version "2.0.0")
+
+(defcustom lsp-latex-latexindent-local nil
+  "Path to file of latexindent configuration.
+The value is passed to latexindent through \"--local\" flag.
+The root directory is used by default."
+  :local t
+  :group 'lsp-latex
+  :type '(choice string (const nil))
+  :version "2.0.0")
+
+(defcustom lsp-latex-latexindent-modify-line-breaks nil
+  "Latexindent modifies line breaks if t."
+  :group 'lsp-latex
+  :type 'boolean
+  :version "2.0.0")
 
 (defun lsp-latex--build-args-getter ()
   "Get `lsp-latex-build-args' with changing to vector.
@@ -248,19 +340,49 @@ Because `json-serialize' cannot recognize normal list as array of json,
 should be vector."
   (vconcat lsp-latex-forward-search-args))
 
-(lsp-register-custom-settings
- `(("latex.rootDirectory"            lsp-latex-root-directory)
-   ("latex.build.executable"         lsp-latex-build-executable)
-   ("latex.build.args"               lsp-latex--build-args-getter)
-   ("latex.build.onSave"             lsp-latex-build-on-save t)
-   ("latex.build.outputDirectory"    lsp-latex-build-output-directory)
-   ("latex.build.forwardSearchAfter" lsp-latex-forward-search-after t)
-   ("latex.forwardSearch.executable" lsp-latex-forward-search-executable)
-   ("latex.forwardSearch.args"       lsp-latex--forward-search-args-getter)
-   ("latex.lint.onChange"            lsp-latex-lint-on-change t)
-   ("latex.lint.onSave"              lsp-latex-lint-on-save t)
-   ("bibtex.formatting.lineLength"   lsp-latex-bibtex-formatting-line-length)
-   ("bibtex.formatting.formatter"    lsp-latex-bibtex-formatting-formatter)))
+(defun lsp-latex-setup-variables ()
+  ""
+  (interactive)
+  (unless (executable-find lsp-latex-texlab-executable)
+    (warn "Texlab executable is not found. Set `lsp-latex-texlab-executable' and run `lsp-latex-setup-variables' again."))
+  (if (version<
+       (substring
+        (shell-command-to-string
+         (format "%s --version" lsp-latex-texlab-executable))
+        7 -1)
+       "3.0.0")
+      (lsp-register-custom-settings
+       `(("latex.rootDirectory"            lsp-latex-root-directory)
+         ("latex.build.executable"         lsp-latex-build-executable)
+         ("latex.build.args"               lsp-latex--build-args-getter)
+         ("latex.build.onSave"             lsp-latex-build-on-save t)
+         ("latex.build.outputDirectory"    lsp-latex-build-aux-directory)
+         ("latex.build.forwardSearchAfter" lsp-latex-forward-search-after t)
+         ("latex.forwardSearch.executable" lsp-latex-forward-search-executable)
+         ("latex.forwardSearch.args"       lsp-latex--forward-search-args-getter)
+         ("latex.lint.onChange"            lsp-latex-chktex-on-edit t)
+         ("latex.lint.onSave"              lsp-latex-chktex-on-open-and-save t)
+         ("bibtex.formatting.lineLength"   lsp-latex-bibtex-formatter-line-length)
+         ("bibtex.formatting.formatter"    lsp-latex-bibtex-formatter)))
+    (lsp-register-custom-settings
+     `(("texlab.rootDirectory"            lsp-latex-root-directory)
+       ("texlab.build.executable"         lsp-latex-build-executable)
+       ("texlab.build.args"               lsp-latex--build-args-getter)
+       ("texlab.build.outputDirectory"    lsp-latex-build-aux-directory)
+       ("texlab.build.isContinuous"       lsp-latex-build-is-continuous)
+       ("texlab.build.forwardSearchAfter" lsp-latex-forward-search-after t)
+       ("texlab.forwardSearch.executable" lsp-latex-forward-search-executable)
+       ("texlab.forwardSearch.args"       lsp-latex--forward-search-args-getter)
+       ("texlab.chktex.onEdit"            lsp-latex-chktex-on-edit t)
+       ("texlab.chktex.onOpenAndSave"     lsp-latex-chktex-on-open-and-save t)
+       ("texlab.diagnosticsDelay"         lsp-latex-diagnostics-delay)
+       ("texlab.formatterLineLength"      lsp-latex-bibtex-formatter-line-length)
+       ("texlab.bibtexFormatter"          lsp-latex-bibtex-formatter)
+       ("texlab.latexFormatter"           lsp-latex-latex-formatter)
+       ("texlab.latexindent.local"        lsp-latex-latexindent-local)
+       ("texlab.latexindent.modifyLineBreaks" lsp-latex-latexindent-modify-line-breaks)))))
+
+(lsp-latex-setup-variables)
 
 (add-to-list 'lsp-language-id-configuration '(".*\\.tex$" . "latex"))
 (add-to-list 'lsp-language-id-configuration '(".*\\.bib$" . "bibtex"))
