@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 2.0.0
+;; Version: 2.0.1
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -191,15 +191,6 @@ This variable is obsoleted since texlab 3.0.0."
 See also https://github.com/latex-lsp/texlab/blob/a0f0dded751258f57e972ad5e2285f82e3404f27/CHANGELOG.md#changed."
  "2.0.0")
 
-(defcustom lsp-latex-build-aux-directory "."
-  "Directory to which built file is put.
-Note that you should change `lsp-latex-build-args' to change output directory.
-If you use latexmk, use \"-outdir\" flag."
-  :group 'lsp-latex
-  :type 'string
-  :risky t
-  :version "2.0.0")
-
 (define-obsolete-variable-alias 'lsp-latex-build-output-directory
   'lsp-latex-build-aux-directory
   "2.0.0"
@@ -208,6 +199,15 @@ Note that you should change `lsp-latex-build-args' to change output directory.
 If you use latexmk, use \"-outdir\" flag.
 
 This variable is obsoleted since texlab 3.0.0.")
+
+(defcustom lsp-latex-build-aux-directory "."
+  "Directory to which built file is put.
+Note that you should change `lsp-latex-build-args' to change output directory.
+If you use latexmk, use \"-outdir\" flag."
+  :group 'lsp-latex
+  :type 'string
+  :risky t
+  :version "2.0.0")
 
 (defcustom lsp-latex-build-is-continuous nil
   "A continuous build is implied if non-nil.
@@ -242,6 +242,13 @@ Placeholders
   :type '(repeat string)
   :risky t)
 
+(define-obsolete-variable-alias 'lsp-latex-lint-on-change
+  'lsp-latex-chktex-on-edit
+  "2.0.0"
+  "Lint using chktex after changing a file.
+
+This variable is obsoleted since texlab 3.0.0.")
+
 (defcustom lsp-latex-chktex-on-edit nil
   "Lint using chktex after changing a file."
   :group 'lsp-latex
@@ -255,10 +262,10 @@ The value is in milliseconds."
   :type 'integerp
   :version "2.0.0")
 
-(define-obsolete-variable-alias 'lsp-latex-lint-on-change
-  'lsp-latex-chktex-on-edit
-  "2.0.0"
-  "Lint using chktex after changing a file.
+(define-obsolete-variable-alias 'lsp-latex-lint-on-save
+  'lsp-latex-chktex-on-open-and-save
+   "2.0.0"
+   "Lint using chktex after saving a file.
 
 This variable is obsoleted since texlab 3.0.0.")
 
@@ -268,10 +275,10 @@ This variable is obsoleted since texlab 3.0.0.")
   :type 'boolean
   :version "2.0.0")
 
-(define-obsolete-variable-alias 'lsp-latex-lint-on-save
-  'lsp-latex-chktex-on-open-and-save
-   "2.0.0"
-   "Lint using chktex after saving a file.
+(define-obsolete-variable-alias 'lsp-latex-bibtex-formatting-line-length
+  'lsp-latex-bibtex-formatter-line-length
+  "Maximum amount of line on formatting BibTeX files.
+0 means disable.
 
 This variable is obsoleted since texlab 3.0.0.")
 
@@ -282,10 +289,11 @@ This variable is obsoleted since texlab 3.0.0.")
   :type 'integerp
   :version "2.0.0")
 
-(define-obsolete-variable-alias 'lsp-latex-bibtex-formatting-line-length
-  'lsp-latex-bibtex-formatter-line-length
-  "Maximum amount of line on formatting BibTeX files.
-0 means disable.
+(define-obsolete-variable-alias 'lsp-latex-bibtex-formatting-formatter
+  'lsp-latex-bibtex-formatter
+  "2.0.0"
+  "Formatter used to format BibTeX file.
+You can choose \"texlab\" or \"latexindent\".
 
 This variable is obsoleted since texlab 3.0.0.")
 
@@ -295,14 +303,6 @@ You can choose \"texlab\" or \"latexindent\"."
   :group 'lsp-latex
   :type '(choice (const "texlab") (const "latexindent"))
   :version "2.0.0")
-
-(define-obsolete-variable-alias 'lsp-latex-bibtex-formatting-formatter
-  'lsp-latex-bibtex-formatter
-  "2.0.0"
-  "Formatter used to format BibTeX file.
-You can choose \"texlab\" or \"latexindent\".
-
-This variable is obsoleted since texlab 3.0.0.")
 
 (defcustom lsp-latex-latex-formatter "texlab"
   "Formatter used to format LaTeX file.
@@ -341,7 +341,7 @@ should be vector."
   (vconcat lsp-latex-forward-search-args))
 
 (defun lsp-latex-setup-variables ()
-  ""
+  "Register texlab customization variables to lsp-mode."
   (interactive)
   (unless (executable-find lsp-latex-texlab-executable)
     (warn "Texlab executable is not found. Set `lsp-latex-texlab-executable' and run `lsp-latex-setup-variables' again."))
