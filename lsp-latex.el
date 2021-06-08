@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 2.0.2
+;; Version: 2.0.3
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -158,7 +158,6 @@ Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
 
 (defcustom lsp-latex-root-directory "."
   "Root directory of each buffer."
-  :local t
   :group 'lsp-latex
   :risky t
   :type 'string)
@@ -317,7 +316,6 @@ This variable is valid since texlab 3.0.0."
   "Path to file of latexindent configuration.
 The value is passed to latexindent through \"--local\" flag.
 The root directory is used by default."
-  :local t
   :group 'lsp-latex
   :type '(choice string (const nil))
   :version "2.0.0")
