@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 2.0.1
+;; Version: 2.0.2
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -343,14 +343,14 @@ should be vector."
 (defun lsp-latex-setup-variables ()
   "Register texlab customization variables to lsp-mode."
   (interactive)
-  (unless (executable-find lsp-latex-texlab-executable)
-    (warn "Texlab executable is not found. Set `lsp-latex-texlab-executable' and run `lsp-latex-setup-variables' again."))
-  (if (version<
-       (substring
-        (shell-command-to-string
-         (format "%s --version" lsp-latex-texlab-executable))
-        7 -1)
-       "3.0.0")
+  (if (and
+       (executable-find lsp-latex-texlab-executable)
+       (version<
+        (substring
+         (shell-command-to-string
+          (format "%s --version" lsp-latex-texlab-executable))
+         7 -1)
+        "3.0.0"))
       (lsp-register-custom-settings
        `(("latex.rootDirectory"            lsp-latex-root-directory)
          ("latex.build.executable"         lsp-latex-build-executable)
