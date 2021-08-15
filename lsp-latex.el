@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 2.0.3
+;; Version: 2.0.4
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -339,7 +339,7 @@ should be vector."
   (vconcat lsp-latex-forward-search-args))
 
 (defun lsp-latex-setup-variables ()
-  "Register texlab customization variables to lsp-mode."
+  "Register texlab customization variables to function `lsp-mode'."
   (interactive)
   (if (and
        (executable-find lsp-latex-texlab-executable)
