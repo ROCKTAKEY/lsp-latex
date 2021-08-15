@@ -71,7 +71,7 @@
     #+end_src
     Inverse research is not provided by texlab,
     so please use ~pdf-sync-backward-search-mouse~.
-* Functions
+* Build
 ** ~lsp-latex-build~
    Build .tex files with texlab.
    It use latexmk by default, so add .latexmkrc if you want to customize
@@ -81,13 +81,185 @@
 
    This command build asynchronously by default, while it build synchronously
    with prefix argument(C-u).
-** ~lsp-latex-forward-search~
-   Move to current position on pdf viewer.
+* Forward/inverse search
+  Forward search and inverse search are available. See also [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md][document of texlab]].
+
+** Forward search
+   You can move from Emacs to current position on pdf viewer
+   by the function ~lsp-latex-forward-search~.
    To use, you should set ~lsp-latex-forward-search-executable~ and
    ~lsp-latex-forward-search-args~ according to your pdf viewer.
-   See also [[https://texlab.netlify.app/docs/installation/previewing]].
-   ~latex.forwardSearch.executable~ means ~lsp-latex-forward-search-executable~,
-   and ~latex.forwardSearch.args~ means ~lsp-latex-forward-search-args~.
+
+   You can see [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md][document of texlab]], but you should replace some VSCode words with Emacs words.
+   ~latex.forwardSearch.executable~ should be replaced with  ~lsp-latex-forward-search-executable~,
+   and ~latex.forwardSearch.args~ with ~lsp-latex-forward-search-args~. You should setq each variable
+   instead of writing like json, and vector in json is replaced to list in Emacs Lisp. So the json:
+   #+BEGIN_SRC json :tangle yes
+     {
+            "texlab.forwardSearch.executable": "FavoriteViewer",
+            "texlab.forwardSearch.args": [ "%p", "%f", "%l" ]
+          }
+   #+END_SRC
+   should be replaced with the Emacs Lisp code:
+   #+begin_src emacs-lisp :tangle yes
+     (setq lsp-latex-forward-search-executable "FavoriteViewer")
+     (setq lsp-latex-forward-search-args '("%p" "%f" "%l"))
+   #+end_src
+
+   In ~lsp-latex-forward-search-args~, the string "%f" is replaced with
+   "The path of the current TeX file", "%p" with "The path of the current PDF file",
+   "%l" with "The current line number", by texlab (see [[https://github.com/latex-lsp/texlab/blob/master/docs/options.md#texlabforwardsearchargs][here]]).
+
+   For example of SumatraPDF, write in init.el:
+   #+begin_src emacs-lisp :tangle yes
+     (setq lsp-latex-forward-search-executable "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe")
+     (setq lsp-latex-forward-search-args '("-reuse-instance" "%p" "-forward-search" "%f" "%l"))
+   #+end_src
+   while VSCode config with json (see [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md#forward-search][document of texlab]]) is:
+   #+BEGIN_SRC json :tangle yes
+     {
+       "texlab.forwardSearch.executable": "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe",
+       "texlab.forwardSearch.args": [
+         "-reuse-instance",
+         "%p",
+         "-forward-search",
+         "%f",
+         "%l"
+       ]
+     }
+   #+END_SRC
+
+   Then, you can jump to the current position on pdf viewer by command ~lsp-latex-forward-search~.
+
+** Inverse search
+   You can go to the current position on Emacs from pdf viewer.
+   Whatever pdf viewer you use, you should start emacs server by writing in init.el:
+   #+begin_src emacs-lisp :tangle yes
+     (server-start)
+   #+end_src
+   Then, you can jump to line {{LINE-NUMBER}} in file named {{FILENAME}} with the command:
+   #+BEGIN_SRC shell -n
+     emacsclient +{{LINE-NUMBER}} {{FILENAME}}
+   #+END_SRC
+  {{LINE-NUMBER}} and {{FILENAME}} should be replaced with line number and filename you want
+  to jump to. Each pdf viewer can provide some syntax to replace.
+
+  For example of SmatraPDF (see [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md#inverse-search][document of texlab]]),
+  "Add the following line to your SumatraPDF settings file (Menu -> Settings -> Advanced Options):"
+  #+BEGIN_SRC ini -n
+    InverseSearchCmdLine = C:\path\to\emacsclient.exe +%l %f
+  #+END_SRC
+  Then, "You can execute the search by pressing Alt+DoubleClick in the PDF document".
+
+** Examples
+   These examples are according to [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md#inverse-search][document of texlab]]. Especially, quoted or double-quoted
+   sentences are citation from [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md#inverse-search][document of texlab]].
+*** SumatraPDF
+    #+BEGIN_QUOTE
+        We highly recommend SumatraPDF on Windows
+        because Adobe Reader locks the opened PDF file and will therefore prevent further builds.
+    #+END_QUOTE
+**** Forward search
+     Write to init.el:
+     #+begin_src emacs-lisp :tangle yes
+       (setq lsp-latex-forward-search-executable "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe")
+       (setq lsp-latex-forward-search-args '("-reuse-instance" "%p" "-forward-search" "%f" "%l"))
+     #+end_src
+**** Inverse Search
+     #+BEGIN_QUOTE
+     Add the following line to your [[https://www.sumatrapdfreader.org/][SumatraPDF]] settings file (Menu -> Settings -> Advanced Options):
+     #+END_QUOTE
+     #+BEGIN_SRC ini -n
+       InverseSearchCmdLine = C:\path\to\emacsclient.exe +%l "%f"
+     #+END_SRC
+     #+BEGIN_QUOTE
+     You can execute the search by pressing =Alt+DoubleClick= in the PDF document.
+     #+END_QUOTE
+*** Evince
+    The SyncTeX feature of [[https://wiki.gnome.org/Apps/Evince][Evince]] requires communication via D-Bus.
+    In order to use it from the command line, install the [[https://github.com/latex-lsp/evince-synctex][evince-synctex]] script.
+**** Forward search
+     Write to init.el:
+     #+begin_src emacs-lisp :tangle yes
+       (setq lsp-latex-forward-search-executable "evince-synctex")
+       (setq lsp-latex-forward-search-args '("-f" "%l" "%p" "\"emacsclient +%l %f\""))
+     #+end_src
+**** Inverse search
+     #+BEGIN_QUOTE
+     The inverse search feature is already configured if you use =evince-synctex=.
+     You can execute the search by pressing =Ctrl+Click= in the PDF document.
+     #+END_QUOTE
+*** Okular
+**** Forward search
+     Write to init.el:
+     #+begin_src emacs-lisp :tangle yes
+       (setq lsp-latex-forward-search-executable "okular")
+       (setq lsp-latex-forward-search-args '("--unique" "file:%p#src:%l%f"))
+     #+end_src
+**** Inverse search
+     #+BEGIN_QUOTE
+     Change the editor of Okular (Settings -> Configure Okular... -> Editor)
+     to "Custom Text Editor" and set the following command:
+     #+END_QUOTE
+     #+begin_src shell :tangle yes
+       emacsclient +%l "%f"
+     #+end_src
+     You can execute the search by pressing =Shift+Click= in the PDF document.
+*** Zathura
+**** Forward search
+     Write to init.el:
+     #+begin_src emacs-lisp :tangle yes
+       (setq lsp-latex-forward-search-executable "zathura")
+       (setq lsp-latex-forward-search-args '("--synctex-forward" "%l:1:%f" "%p"))
+     #+end_src
+**** Inverse search
+     #+BEGIN_QUOTE
+     Add the following lines to your =~/.config/zathura/zathurarc= file:
+     #+END_QUOTE
+     #+BEGIN_SRC shell -n
+       set synctex true
+       set synctex-editor-command "emacsclient +%{line} %{input}"
+     #+END_SRC
+     #+BEGIN_QUOTE
+     You can execute the search by pressing =Alt+Click= in the PDF document.
+     #+END_QUOTE
+*** qpdfview
+**** Forward search
+     Write to init.el:
+     #+begin_src emacs-lisp :tangle yes
+       (setq lsp-latex-forward-search-executable "qpdfview")
+       (setq lsp-latex-forward-search-args '("--unique" "%p#src:%f:%l:1"))
+     #+end_src
+**** Inverse search
+     #+BEGIN_QUOTE
+     Change the source editor setting (Edit -> Settings... -> Behavior -> Source editor) to:
+     #+END_QUOTE
+     #+BEGIN_SRC shell -n
+       emacsclient +%2 "%1"
+     #+END_SRC
+     #+BEGIN_QUOTE
+     and select a mouse button modifier (Edit -> Settings... -> Behavior -> Modifiers ->
+     Mouse button modifiers -> Open in Source Editor)of choice.
+     You can execute the search by pressing Modifier+Click in the PDF document.
+     #+END_QUOTE
+*** Skim
+    #+BEGIN_QUOTE
+    We recommend [[https://skim-app.sourceforge.io/][Skim]] on macOS since it is the only native viewer that supports SyncTeX.
+    Additionally, enable the "Reload automatically" setting in the Skim preferences
+    (Skim -> Preferences -> Sync -> Check for file changes).
+    #+END_QUOTE
+**** Forward search
+     Write to init.el:
+     #+begin_src emacs-lisp :tangle yes
+       (setq lsp-latex-forward-search-executable "/Applications/Skim.app/Contents/SharedSupport/displayline")
+       (setq lsp-latex-forward-search-args '("%l" "%p" "%f"))
+     #+end_src
+     "If you want Skim to stay in the background after executing the forward search,
+     you can add the =-g= option to" =lsp-latex-forward-search-args=.
+**** Inverse search
+     Select Emacs preset "in the Skim preferences
+     (Skim -> Preferences -> Sync -> PDF-TeX Sync support).
+     You can execute the search by pressing =Shift+⌘+Click= in the PDF document."
 * Note
   In this package, you can use even texlab v0.4.2 or older, written with Java,
   though it is not recommended. If you want to use them, you can write like:
