@@ -161,8 +161,10 @@
      You can execute the search by pressing =Alt+DoubleClick= in the PDF document.
      #+END_QUOTE
 *** Evince
+    #+BEGIN_QUOTE
     The SyncTeX feature of [[https://wiki.gnome.org/Apps/Evince][Evince]] requires communication via D-Bus.
     In order to use it from the command line, install the [[https://github.com/latex-lsp/evince-synctex][evince-synctex]] script.
+    #+END_QUOTE
 **** Forward search
      Write to init.el:
      #+begin_src emacs-lisp :tangle yes
