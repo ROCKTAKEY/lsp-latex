@@ -83,7 +83,7 @@
      {
             "texlab.forwardSearch.executable": "FavoriteViewer",
             "texlab.forwardSearch.args": [ "%p", "%f", "%l" ]
-          }
+     }
    #+END_SRC
    should be replaced with the Emacs Lisp code:
    #+begin_src emacs-lisp :tangle yes
