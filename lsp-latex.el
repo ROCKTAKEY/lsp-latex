@@ -404,6 +404,28 @@ The value is in milliseconds."
   :type 'integerp
   :version "2.0.0")
 
+(defcustom lsp-latex-diagnostics-allowed-patterns '()
+  "Regexp whitelist for diagnostics.
+It should be a list of regular expression.
+Only diagnostics that match at least one of the elemnt is shown.
+
+Note that this is applied before `lsp-latex-diagnostics-ignored-patterns',
+so `lsp-latex-diagnostics-ignored-patterns' is priored."
+  :group 'lsp-latex
+  :type '(repeat string)
+  :version "3.0.0")
+
+(defcustom lsp-latex-diagnostics-ignored-patterns '()
+  "Regexp blacklist for diagnostics.
+It should be a list of regular expression.
+Only diagnostics that do NOT match at least one of the elemnt is shown.
+
+Note that this is applied after `lsp-latex-diagnostics-allowed-patterns',
+so this variable is priored."
+  :group 'lsp-latex
+  :type '(repeat string)
+  :version "3.0.0")
+
 (define-obsolete-variable-alias 'lsp-latex-bibtex-formatting-line-length
   'lsp-latex-bibtex-formatter-line-length
   "Maximum amount of line on formatting BibTeX files.
@@ -464,6 +486,12 @@ This function is used for the treatment before `json-serialize',
 because `json-serialize' cannot recognize normal list as array of json."
   (vconcat (eval symbol)))
 
+(defun lsp-latex--diagnostics-allowed-patterns ()
+  "Get `lsp-latex-build-args' with changing to vector.
+Because `json-serialize' cannot recognize normal list as array of json,
+should be vector."
+  (vconcat lsp-latex-build-args))
+
 (defun lsp-latex-setup-variables ()
   "Register texlab customization variables to function `lsp-mode'."
   (interactive)
@@ -479,6 +507,8 @@ because `json-serialize' cannot recognize normal list as array of json."
      ("texlab.chktex.onEdit" lsp-latex-chktex-on-edit t)
      ("texlab.chktex.onOpenAndSave" lsp-latex-chktex-on-open-and-save t)
      ("texlab.diagnosticsDelay" lsp-latex-diagnostics-delay)
+     ("texlab.diagnostics.allowedPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-diagnostics-allowed-patterns))
+     ("texlab.diagnostics.ignoredPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-diagnostics-ignored-patterns))
      ("texlab.formatterLineLength" lsp-latex-bibtex-formatter-line-length)
      ("texlab.bibtexFormatter" lsp-latex-bibtex-formatter)
      ("texlab.latexFormatter" lsp-latex-latex-formatter)
