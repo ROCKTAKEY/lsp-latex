@@ -43,8 +43,8 @@
 | lsp-latex-build-executable               | texlab.build.executable             |
 | lsp-latex-build-args                     | texlab.build.args                   |
 | lsp-latex-build-aux-directory            | texlab.build.outputDirectory        |
-| lsp-latex-build-is-continuous            | texlab.build.isContinuous           |
-| lsp-latex-forward-search-after           | texlab.build.forwardSearchAfter     |
+| lsp-latex-build-forward-search-after     | texlab.build.forwardSearchAfter     |
+| lsp-latex-build-on-save                  | texlab.build.onSave                 |
 | lsp-latex-forward-search-executable      | texlab.forwardSearch.executable     |
 | lsp-latex-forward-search-args            | texlab.forwardSearch.args           |
 | lsp-latex-chktex-on-edit                 | texlab.chktex.onEdit                |
@@ -268,20 +268,5 @@
     Inverse research is not provided by texlab,
     so please use ~pdf-sync-backward-search-mouse~.
 
-* Note
-  In this package, you can use even texlab v0.4.2 or older, written with Java,
-  though it is not recommended. If you want to use them, you can write like:
-  #+BEGIN_SRC emacs-lisp -n
-  ;; Path to Java executable. If it is added to environmental PATH,
-  ;; you don't have to write this.
-  (setq lsp-latex-java-executable "/path/to/java")
-
-  ;; "texlab.jar" must be located at a directory contained in `exec-path'
-  ;; "texlab" must be located at a directory contained in `exec-path'.
-  (setq lsp-latex-texlab-jar-file 'search-from-exec-path)
-  ;; If you want to put "texlab.jar" somewhere else,
-  ;; you can specify the path to "texlab.jar" as follows:
-  ;; (setq lsp-latex-texlab-jar-file "/path/to/texlab.jar")
-  #+END_SRC
 * License
   This package is licensed by GPLv3. See [[file:LICENSE][LICENSE]].

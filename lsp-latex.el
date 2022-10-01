@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 2.0.4
+;; Version: 3.0.0
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -24,56 +24,247 @@
 ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
+
 ;;; lsp-mode client for LaTeX.
 ;;; How to Use?
 ;;   - First, you have to install ~texlab~.
-;;     Please install this from https://github.com/latex-lsp/texlab/releases .
-;;   - Next, you should make ~lsp-mode~ available.
-;;     See https://github.com/emacs-lsp/lsp-mode.
-;;   - Now, you can use Language Server Protocol (LSP) on (la)tex-mode or
-;;     yatex-mode just to evaluate this:
-
+;;     Please install this [[https://github.com/latex-lsp/texlab/releases][here]].
+;;   - Next, you should make ~lsp-mode~ available.  See [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]].
+;;   - Now, you can use Language Server Protocol (LSP) on (la)tex-mode or yatex-mode just to evaluate this:
+;;
+;;
 ;;   (add-to-list 'load-path "/path/to/lsp-latex")
 ;;   (require 'lsp-latex)
 ;;   ;; "texlab" must be located at a directory contained in `exec-path'.
 ;;   ;; If you want to put "texlab" somewhere else,
 ;;   ;; you can specify the path to "texlab" as follows:
 ;;   ;; (setq lsp-latex-texlab-executable "/path/to/texlab")
-
+;;
 ;;   (with-eval-after-load "tex-mode"
 ;;    (add-hook 'tex-mode-hook 'lsp)
 ;;    (add-hook 'latex-mode-hook 'lsp))
-
+;;
 ;;   ;; For YaTeX
 ;;   (with-eval-after-load "yatex"
 ;;    (add-hook 'yatex-mode-hook 'lsp))
-
-;;; Functions
+;;
+;;   ;; For bibtex
+;;   (with-eval-after-load "bibtex"
+;;    (add-hook 'bibtex-mode-hook 'lsp))
+;;
+;;; Build
 ;;;; ~lsp-latex-build~
 ;;    Build .tex files with texlab.
-;;    It use latexmk internally, so add .latexmkrc if you want to customize
-;;    build commands or options.
-
+;;    It use latexmk by default, so add .latexmkrc if you want to customize
+;;    latex commands or options.  You can change build command and option to other
+;;    such as `make`, by changing ~lsp-latex-build-executable~ and
+;;    ~lsp-latex-build-args~.
+;;
 ;;    This command build asynchronously by default, while it build synchronously
 ;;    with prefix argument(C-u).
-;;; Note
-;;   In this package, you can use even texlab v0.4.2 or older, written with Java,
-;;   though it is not recommended.  If you want to use them, you can write like:
+;;; Forward/inverse search
+;;   Forward search and inverse search are available.  See also [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md][document of texlab]].
+;;
+;;;; Forward search
+;;    You can move from Emacs to current position on pdf viewer
+;;    by the function ~lsp-latex-forward-search~.
+;;    To use, you should set ~lsp-latex-forward-search-executable~ and
+;;    ~lsp-latex-forward-search-args~ according to your pdf viewer.
+;;
+;;    You can see [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md][document of texlab]], but you should replace some VSCode words with Emacs words.
+;;    ~latex.forwardSearch.executable~ should be replaced with  ~lsp-latex-forward-search-executable~,
+;;    and ~latex.forwardSearch.args~ with ~lsp-latex-forward-search-args~.  You should setq each variable
+;;    instead of writing like json, and vector in json is replaced to list in Emacs Lisp.  So the json:
+;;
+;;      {
+;;             "texlab.forwardSearch.executable": "FavoriteViewer",
+;;             "texlab.forwardSearch.args": [ "%p", "%f", "%l" ]
+;;      }
+;;
+;;    should be replaced with the Emacs Lisp code:
+;;
+;;      (setq lsp-latex-forward-search-executable "FavoriteViewer")
+;;      (setq lsp-latex-forward-search-args '("%p" "%f" "%l"))
+;;
+;;
+;;    In ~lsp-latex-forward-search-args~, the string "%f" is replaced with
+;;    "The path of the current TeX file", "%p" with "The path of the current PDF file",
+;;    "%l" with "The current line number", by texlab (see [[https://github.com/latex-lsp/texlab/blob/master/docs/options.md
+;;
+;;    For example of SumatraPDF, write in init.el:
+;;
+;;      (setq lsp-latex-forward-search-executable "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe")
+;;      (setq lsp-latex-forward-search-args '("-reuse-instance" "%p" "-forward-search" "%f" "%l"))
+;;
+;;    while VSCode config with json (see [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md
+;;
+;;      {
+;;        "texlab.forwardSearch.executable": "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe",
+;;        "texlab.forwardSearch.args": [
+;;          "-reuse-instance",
+;;          "%p",
+;;          "-forward-search",
+;;          "%f",
+;;          "%l"
+;;        ]
+;;      }
+;;
+;;
+;;    Then, you can jump to the current position on pdf viewer by command ~lsp-latex-forward-search~.
+;;
+;;;; Inverse search
+;;    You can go to the current position on Emacs from pdf viewer.
+;;    Whatever pdf viewer you use, you should start Emacs server by writing in init.el:
+;;
+;;      (server-start)
+;;
+;;    Then, you can jump to line {{LINE-NUMBER}} in file named {{FILENAME}} with the command:
+;;
+;;      emacsclient +{{LINE-NUMBER}} {{FILENAME}}
+;;
+;;   {{LINE-NUMBER}} and {{FILENAME}} should be replaced with line number and filename you want
+;;   to jump to.  Each pdf viewer can provide some syntax to replace.
+;;
+;;   For example of SmatraPDF (see [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md
+;;   "Add the following line to your SumatraPDF settings file (Menu -> Settings -> Advanced Options):"
+;;
+;;     InverseSearchCmdLine = C:\path\to\emacsclient.exe +%l %f
+;;
+;;   Then, "You can execute the search by pressing Alt+DoubleClick in the PDF document".
+;;
+;;;; Examples
+;;    These examples are according to [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md
+;;    sentences are citation from [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md
+;;;;; SumatraPDF
+;;
+;;         We highly recommend SumatraPDF on Windows
+;;         because Adobe Reader locks the opened PDF file and will therefore prevent further builds.
+;;
+;;;;;; Forward search
+;;      Write to init.el:
+;;
+;;        (setq lsp-latex-forward-search-executable "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe")
+;;        (setq lsp-latex-forward-search-args '("-reuse-instance" "%p" "-forward-search" "%f" "%l"))
+;;
+;;;;;; Inverse Search
+;;
+;;      Add the following line to your [[https://www.sumatrapdfreader.org/][SumatraPDF]] settings file (Menu -> Settings -> Advanced Options):
+;;
+;;
+;;        InverseSearchCmdLine = C:\path\to\emacsclient.exe +%l "%f"
+;;
+;;
+;;      You can execute the search by pressing `Alt+DoubleClick' in the PDF document.
+;;
+;;;;; Evince
+;;
+;;     The SyncTeX feature of [[https://wiki.gnome.org/Apps/Evince][Evince]] requires communication via D-Bus.
+;;     In order to use it from the command line, install the [[https://github.com/latex-lsp/evince-synctex][evince-synctex]] script.
+;;
+;;;;;; Forward search
+;;      Write to init.el:
+;;
+;;        (setq lsp-latex-forward-search-executable "evince-synctex")
+;;        (setq lsp-latex-forward-search-args '("-f" "%l" "%p" "\"emacsclient +%l %f\""))
+;;
+;;;;;; Inverse search
+;;
+;;      The inverse search feature is already configured if you use `evince-synctex'.
+;;      You can execute the search by pressing `Ctrl+Click' in the PDF document.
+;;
+;;;;; Okular
+;;;;;; Forward search
+;;      Write to init.el:
+;;
+;;        (setq lsp-latex-forward-search-executable "okular")
+;;        (setq lsp-latex-forward-search-args '("--unique" "file:%p
+;;
+;;;;;; Inverse search
+;;
+;;      Change the editor of Okular (Settings -> Configure Okular... -> Editor)
+;;      to "Custom Text Editor" and set the following command:
+;;
+;;
+;;        emacsclient +%l "%f"
+;;
+;;      You can execute the search by pressing `Shift+Click' in the PDF document.
+;;;;; Zathura
+;;;;;; Forward search
+;;      Write to init.el:
+;;
+;;        (setq lsp-latex-forward-search-executable "zathura")
+;;        (setq lsp-latex-forward-search-args '("--synctex-forward" "%l:1:%f" "%p"))
+;;
+;;;;;; Inverse search
+;;
+;;      Add the following lines to your =~/.config/zathura/zathurarc= file:
+;;
+;;
+;;        set synctex true
+;;        set synctex-editor-command "emacsclient +%{line} %{input}"
+;;
+;;
+;;      You can execute the search by pressing `Alt+Click' in the PDF document.
+;;
+;;;;; qpdfview
+;;;;;; Forward search
+;;      Write to init.el:
+;;
+;;        (setq lsp-latex-forward-search-executable "qpdfview")
+;;        (setq lsp-latex-forward-search-args '("--unique" "%p
+;;
+;;;;;; Inverse search
+;;
+;;      Change the source editor setting (Edit -> Settings... -> Behavior -> Source editor) to:
+;;
+;;
+;;        emacsclient +%2 "%1"
+;;
+;;
+;;      and select a mouse button modifier (Edit -> Settings... -> Behavior -> Modifiers ->
+;;      Mouse button modifiers -> Open in Source Editor)of choice.
+;;      You can execute the search by pressing Modifier+Click in the PDF document.
+;;
+;;;;; Skim
+;;
+;;     We recommend [[https://skim-app.sourceforge.io/][Skim]] on macOS since it is the only native viewer that supports SyncTeX.
+;;     Additionally, enable the "Reload automatically" setting in the Skim preferences
+;;     (Skim -> Preferences -> Sync -> Check for file changes).
+;;
+;;;;;; Forward search
+;;      Write to init.el:
+;;
+;;        (setq lsp-latex-forward-search-executable "/Applications/Skim.app/Contents/SharedSupport/displayline")
+;;        (setq lsp-latex-forward-search-args '("%l" "%p" "%f"))
+;;
+;;      "If you want Skim to stay in the background after executing the forward search,
+;;      you can add the =-g= option to" `lsp-latex-forward-search-args'.
+;;;;;; Inverse search
+;;      Select Emacs preset "in the Skim preferences
+;;      (Skim -> Preferences -> Sync -> PDF-TeX Sync support).
+;;      You can execute the search by pressing `Shift+⌘+Click' in the PDF document."
+;;;;; ~pdf-tools~ integration
+;;     If you want to use forward search with ~pdf-tools~,
+;;     follow the setting:
+;;
+;;       ;; Start Emacs server
+;;       (server-start)
+;;       ;; Turn on SyncTeX on the build.
+;;       ;; If you use `lsp-latex-build', it is on by default.
+;;       ;; If not (for example, YaTeX or LaTeX-mode building system),
+;;       ;; put to init.el like this:
+;;       (setq tex-command "platex --synctex=1")
+;;
+;;       ;; Setting for pdf-tools
+;;       (setq lsp-latex-forward-search-executable "emacsclient")
+;;       (setq lsp-latex-forward-search-args
+;;             '("--eval"
+;;               "(lsp-latex-forward-search-with-pdf-tools \"%f\" \"%p\" \"%l\")"))
+;;
+;;     Inverse research is not provided by texlab,
+;;     so please use ~pdf-sync-backward-search-mouse~.
 
-;;   ;; Path to Java executable.  If it is added to environmental PATH,
-;;   ;; you don't have to write this.
-;;   (setq lsp-latex-java-executable "/path/to/java")
-
-;;   ;; "texlab.jar" must be located at a directory contained in `exec-path'
-;;   ;; "texlab" must be located at a directory contained in `exec-path'.
-;;   (setq lsp-latex-texlab-jar-file 'search-from-exec-path)
-;;   ;; If you want to put "texlab.jar" somewhere else,
-;;   ;; you can specify the path to "texlab.jar" as follows:
-;;   ;; (setq lsp-latex-texlab-jar-file "/path/to/texlab.jar")
-
-;;; License
-;;   This package is licensed by GPLv3. See the file "LICENSE".
-
+;;
 ;;; Code:
 (require 'lsp-mode)
 (require 'cl-lib)
@@ -83,63 +274,7 @@
   :group 'lsp-mode)
 
 
-;;; For texlab v0.4.2 or older.
-(defcustom lsp-latex-java-executable "java"
-  "Executable command to run Java.
-This is used with `lsp-latex-java-argument-list'.
 
-This variable is only for texlab v0.4.2 or older.  If you use newer,
-You don't have to set or care about this variable."
-  :group 'lsp-latex
-  :type 'string)
-
-(defcustom lsp-latex-java-argument-list '("-jar")
-  "List of arguments passed to `lsp-latex-java-executable'.
-
-This variable is only for texlab v0.4.2 or older.  If you use newer,
-You don't have to set or care about this variable."
-  :group 'lsp-latex
-  :risky t
-  :type '(repeat string))
-
-(defcustom lsp-latex-texlab-jar-file 'search-from-exec-path
-  "File named \"texlab.jar\".
-You can install it from https://github.com/latex-lsp/texlab/releases/ .
-
-The value can be a string (path to \"texlab.jar\") or the symbol
-search-from-exec-path. See the docstring of `lsp-latex-get-texlab-jar-file'.
-
-This variable is only for texlab v0.4.2 or older. If you use newer,
-You don't have to set or care about this variable."
-  :group 'lsp-latex
-  :type '(choice string (const search-from-exec-path)))
-
-(defcustom lsp-latex-texlab-jar-argument-list '()
-  "List of arguments passed to `lsp-latex-texlab-jar-file'.
-
-This variable is only for texlab v0.4.2 or older.  If you use newer,
-You don't have to set or care about this variable."
-  :group 'lsp-latex
-  :type '(repeat string))
-
-(defun lsp-latex-get-texlab-jar-file ()
-  "Return the path to \"texlab.jar\".
-
-If `lsp-latex-texlab-jar-file' is a string, return it.
-If `lsp-latex-texlab-jar-file' is the symbol search-from-exec-path,
-then search a file named \"texlab.jar\" from variable `exec-path'.
-
-This function is only for texlab v0.4.2 or older. If you use newer,
-You don't have to set or care about this variable."
-  (cond
-   ((stringp lsp-latex-texlab-jar-file)
-    lsp-latex-texlab-jar-file)
-   ((eq lsp-latex-texlab-jar-file 'search-from-exec-path)
-    (locate-file "texlab.jar" exec-path))
-   (t (error "Invalid value of `lsp-latex-texlab-jar-file'"))))
-
-
-;;; For texlab v1.0.0 or newer.
 (defcustom lsp-latex-texlab-executable
   (cond ((eq system-type 'windows-nt)
          "texlab.exe")
@@ -177,18 +312,21 @@ Value is used on `lsp-latex-build'.
   :risky t
   :type '(repeat string))
 
-(defcustom lsp-latex-build-on-save nil
-  "Build after saving a file or not.
+(define-obsolete-variable-alias 'lsp-latex-forward-search-after
+  'lsp-latex-build-forward-search-after
+   "3.0.0")
 
-This variable is obsoleted since texlab 3.0.0."
+(defcustom lsp-latex-build-forward-search-after nil
+  "Execute forward-research after building."
   :group 'lsp-latex
-  :type 'boolean)
+  :type 'boolean
+  :version "3.0.0")
 
-(make-obsolete-variable
- 'lsp-latex-build-on-save
- "This variable is obsoleted since texlab 3.0.0.
-See also https://github.com/latex-lsp/texlab/blob/a0f0dded751258f57e972ad5e2285f82e3404f27/CHANGELOG.md#changed."
- "2.0.0")
+(defcustom lsp-latex-build-on-save nil
+  "Build after saving a file or not."
+  :group 'lsp-latex
+  :type 'boolean
+  :version "3.0.0")
 
 (define-obsolete-variable-alias 'lsp-latex-build-output-directory
   'lsp-latex-build-aux-directory
@@ -208,19 +346,11 @@ If you use latexmk, use \"-outdir\" flag."
   :risky t
   :version "2.0.0")
 
-(defcustom lsp-latex-build-is-continuous nil
-  "A continuous build is implied if non-nil.
-
-This variable is valid since texlab 3.0.0."
-  :group 'lsp-latex
-  :type 'string
-  :risky t
-  :version "2.0.0")
-
-(defcustom lsp-latex-forward-search-after nil
-  "Execute forward-research after building."
-  :group 'lsp-latex
-  :type 'boolean)
+(make-obsolete-variable
+ 'lsp-latex-build-is-continuous
+ "This variable is obsoleted since texlab 3.2.0.
+https://github.com/latex-lsp/texlab/blob/fe828eed914088c6ad90a4574192024008b3d96a/CHANGELOG.md#changed."
+ "3.0.0")
 
 (defcustom lsp-latex-forward-search-executable nil
   "Executable command used to search in preview.
@@ -240,6 +370,19 @@ Placeholders
   :group 'lsp-latex
   :type '(repeat string)
   :risky t)
+
+(define-obsolete-variable-alias 'lsp-latex-lint-on-save
+  'lsp-latex-chktex-on-open-and-save
+   "2.0.0"
+   "Lint using chktex after saving a file.
+
+This variable is obsoleted since texlab 3.0.0.")
+
+(defcustom lsp-latex-chktex-on-open-and-save nil
+  "Lint using chktex after opening and saving a file."
+  :group 'lsp-latex
+  :type 'boolean
+  :version "2.0.0")
 
 (define-obsolete-variable-alias 'lsp-latex-lint-on-change
   'lsp-latex-chktex-on-edit
@@ -261,18 +404,27 @@ The value is in milliseconds."
   :type 'integerp
   :version "2.0.0")
 
-(define-obsolete-variable-alias 'lsp-latex-lint-on-save
-  'lsp-latex-chktex-on-open-and-save
-   "2.0.0"
-   "Lint using chktex after saving a file.
+(defcustom lsp-latex-diagnostics-allowed-patterns '()
+  "Regexp whitelist for diagnostics.
+It should be a list of regular expression.
+Only diagnostics that match at least one of the elemnt is shown.
 
-This variable is obsoleted since texlab 3.0.0.")
-
-(defcustom lsp-latex-chktex-on-open-and-save nil
-  "Lint using chktex after opening and saving a file."
+Note that this is applied before `lsp-latex-diagnostics-ignored-patterns',
+so `lsp-latex-diagnostics-ignored-patterns' is priored."
   :group 'lsp-latex
-  :type 'boolean
-  :version "2.0.0")
+  :type '(repeat string)
+  :version "3.0.0")
+
+(defcustom lsp-latex-diagnostics-ignored-patterns '()
+  "Regexp blacklist for diagnostics.
+It should be a list of regular expression.
+Only diagnostics that do NOT match at least one of the elemnt is shown.
+
+Note that this is applied after `lsp-latex-diagnostics-allowed-patterns',
+so this variable is priored."
+  :group 'lsp-latex
+  :type '(repeat string)
+  :version "3.0.0")
 
 (define-obsolete-variable-alias 'lsp-latex-bibtex-formatting-line-length
   'lsp-latex-bibtex-formatter-line-length
@@ -326,59 +478,42 @@ The root directory is used by default."
   :type 'boolean
   :version "2.0.0")
 
-(defun lsp-latex--build-args-getter ()
+(defun lsp-latex--getter-vectorize-list (symbol)
+  "Make list in SYMBOL into vector.
+This function is thoughted to be used with `apply-partially'.
+
+This function is used for the treatment before `json-serialize',
+because `json-serialize' cannot recognize normal list as array of json."
+  (vconcat (eval symbol)))
+
+(defun lsp-latex--diagnostics-allowed-patterns ()
   "Get `lsp-latex-build-args' with changing to vector.
 Because `json-serialize' cannot recognize normal list as array of json,
 should be vector."
   (vconcat lsp-latex-build-args))
 
-(defun lsp-latex--forward-search-args-getter ()
-  "Get `lsp-latex-build-args' with changing to vector.
-Because `json-serialize' cannot recognize normal list as array of json,
-should be vector."
-  (vconcat lsp-latex-forward-search-args))
-
 (defun lsp-latex-setup-variables ()
   "Register texlab customization variables to function `lsp-mode'."
   (interactive)
-  (if (and
-       (executable-find lsp-latex-texlab-executable)
-       (version<
-        (substring
-         (shell-command-to-string
-          (format "%s --version" lsp-latex-texlab-executable))
-         7 -1)
-        "3.0.0"))
-      (lsp-register-custom-settings
-       `(("latex.rootDirectory"            lsp-latex-root-directory)
-         ("latex.build.executable"         lsp-latex-build-executable)
-         ("latex.build.args"               lsp-latex--build-args-getter)
-         ("latex.build.onSave"             lsp-latex-build-on-save t)
-         ("latex.build.outputDirectory"    lsp-latex-build-aux-directory)
-         ("latex.build.forwardSearchAfter" lsp-latex-forward-search-after t)
-         ("latex.forwardSearch.executable" lsp-latex-forward-search-executable)
-         ("latex.forwardSearch.args"       lsp-latex--forward-search-args-getter)
-         ("latex.lint.onChange"            lsp-latex-chktex-on-edit t)
-         ("latex.lint.onSave"              lsp-latex-chktex-on-open-and-save t)
-         ("bibtex.formatting.lineLength"   lsp-latex-bibtex-formatter-line-length)
-         ("bibtex.formatting.formatter"    lsp-latex-bibtex-formatter)))
-    (lsp-register-custom-settings
-     `(("texlab.rootDirectory"            lsp-latex-root-directory)
-       ("texlab.build.executable"         lsp-latex-build-executable)
-       ("texlab.build.args"               lsp-latex--build-args-getter)
-       ("texlab.build.outputDirectory"    lsp-latex-build-aux-directory)
-       ("texlab.build.isContinuous"       lsp-latex-build-is-continuous)
-       ("texlab.build.forwardSearchAfter" lsp-latex-forward-search-after t)
-       ("texlab.forwardSearch.executable" lsp-latex-forward-search-executable)
-       ("texlab.forwardSearch.args"       lsp-latex--forward-search-args-getter)
-       ("texlab.chktex.onEdit"            lsp-latex-chktex-on-edit t)
-       ("texlab.chktex.onOpenAndSave"     lsp-latex-chktex-on-open-and-save t)
-       ("texlab.diagnosticsDelay"         lsp-latex-diagnostics-delay)
-       ("texlab.formatterLineLength"      lsp-latex-bibtex-formatter-line-length)
-       ("texlab.bibtexFormatter"          lsp-latex-bibtex-formatter)
-       ("texlab.latexFormatter"           lsp-latex-latex-formatter)
-       ("texlab.latexindent.local"        lsp-latex-latexindent-local)
-       ("texlab.latexindent.modifyLineBreaks" lsp-latex-latexindent-modify-line-breaks)))))
+  (lsp-register-custom-settings
+   `(("texlab.rootDirectory" lsp-latex-root-directory)
+     ("texlab.build.executable" lsp-latex-build-executable)
+     ("texlab.build.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-build-args))
+     ("texlab.build.outputDirectory" lsp-latex-build-aux-directory)
+     ("texlab.build.forwardSearchAfter" lsp-latex-build-forward-search-after t)
+     ("texlab.build.onSave" lsp-latex-build-on-save t)
+     ("texlab.forwardSearch.executable" lsp-latex-forward-search-executable)
+     ("texlab.forwardSearch.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-forward-search-args))
+     ("texlab.chktex.onEdit" lsp-latex-chktex-on-edit t)
+     ("texlab.chktex.onOpenAndSave" lsp-latex-chktex-on-open-and-save t)
+     ("texlab.diagnosticsDelay" lsp-latex-diagnostics-delay)
+     ("texlab.diagnostics.allowedPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-diagnostics-allowed-patterns))
+     ("texlab.diagnostics.ignoredPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-diagnostics-ignored-patterns))
+     ("texlab.formatterLineLength" lsp-latex-bibtex-formatter-line-length)
+     ("texlab.bibtexFormatter" lsp-latex-bibtex-formatter)
+     ("texlab.latexFormatter" lsp-latex-latex-formatter)
+     ("texlab.latexindent.local" lsp-latex-latexindent-local)
+     ("texlab.latexindent.modifyLineBreaks" lsp-latex-latexindent-modify-line-breaks))))
 
 (lsp-latex-setup-variables)
 
@@ -387,21 +522,10 @@ should be vector."
 
 (defun lsp-latex-new-connection ()
   "Create new connection of lsp-latex."
-  (let (jar-file)
-    (cond
-     ((locate-file lsp-latex-texlab-executable exec-path)
+  (if (locate-file lsp-latex-texlab-executable exec-path)
       (cons lsp-latex-texlab-executable
-            lsp-latex-texlab-executable-argument-list))
-     ((setq jar-file (lsp-latex-get-texlab-jar-file))
-      (append
-       (cons
-        lsp-latex-java-executable
-        lsp-latex-java-argument-list)
-       (cons
-        jar-file
-        lsp-latex-texlab-jar-argument-list)))
-     (t
-      (error "No executable \"texlab\" file")))))
+            lsp-latex-texlab-executable-argument-list)
+    (error "No executable \"texlab\" file")))
 
 ;; Copied from `lsp-clients--rust-window-progress' in `lsp-rust'.
 (defun lsp-latex-window-progress (_workspace params)
