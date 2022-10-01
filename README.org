@@ -50,6 +50,8 @@
 | lsp-latex-chktex-on-edit                 | texlab.chktex.onEdit                |
 | lsp-latex-chktex-on-open-and-save        | texlab.chktex.onOpenAndSave         |
 | lsp-latex-diagnostics-delay              | texlab.diagnosticsDelay             |
+| lsp-latex-diagnostics-allowed-patterns   | texlab.diagnostics.allowedPatterns  |
+| lsp-latex-diagnostics-ignored-patterns   | texlab.diagnostics.ignoredPatterns  |
 | lsp-latex-bibtex-formatter-line-length   | texlab.formatterLineLength          |
 | lsp-latex-bibtex-formatter               | texlab.bibtexFormatter              |
 | lsp-latex-latex-formatter                | texlab.latexFormatter               |
