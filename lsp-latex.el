@@ -29,7 +29,7 @@
 ;;; How to Use?
 ;;   - First, you have to install ~texlab~.
 ;;     Please install this [[https://github.com/latex-lsp/texlab/releases][here]].
-;;   - Next, you should make ~lsp-mode~ available. See [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]].
+;;   - Next, you should make ~lsp-mode~ available.  See [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]].
 ;;   - Now, you can use Language Server Protocol (LSP) on (la)tex-mode or yatex-mode just to evaluate this:
 ;;
 ;;
@@ -56,14 +56,14 @@
 ;;;; ~lsp-latex-build~
 ;;    Build .tex files with texlab.
 ;;    It use latexmk by default, so add .latexmkrc if you want to customize
-;;    latex commands or options. You can change build command and option to other
+;;    latex commands or options.  You can change build command and option to other
 ;;    such as `make`, by changing ~lsp-latex-build-executable~ and
 ;;    ~lsp-latex-build-args~.
 ;;
 ;;    This command build asynchronously by default, while it build synchronously
 ;;    with prefix argument(C-u).
 ;;; Forward/inverse search
-;;   Forward search and inverse search are available. See also [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md][document of texlab]].
+;;   Forward search and inverse search are available.  See also [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md][document of texlab]].
 ;;
 ;;;; Forward search
 ;;    You can move from Emacs to current position on pdf viewer
@@ -73,8 +73,8 @@
 ;;
 ;;    You can see [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md][document of texlab]], but you should replace some VSCode words with Emacs words.
 ;;    ~latex.forwardSearch.executable~ should be replaced with  ~lsp-latex-forward-search-executable~,
-;;    and ~latex.forwardSearch.args~ with ~lsp-latex-forward-search-args~. You should setq each variable
-;;    instead of writing like json, and vector in json is replaced to list in Emacs Lisp. So the json:
+;;    and ~latex.forwardSearch.args~ with ~lsp-latex-forward-search-args~.  You should setq each variable
+;;    instead of writing like json, and vector in json is replaced to list in Emacs Lisp.  So the json:
 ;;
 ;;      {
 ;;             "texlab.forwardSearch.executable": "FavoriteViewer",
@@ -114,7 +114,7 @@
 ;;
 ;;;; Inverse search
 ;;    You can go to the current position on Emacs from pdf viewer.
-;;    Whatever pdf viewer you use, you should start emacs server by writing in init.el:
+;;    Whatever pdf viewer you use, you should start Emacs server by writing in init.el:
 ;;
 ;;      (server-start)
 ;;
@@ -123,7 +123,7 @@
 ;;      emacsclient +{{LINE-NUMBER}} {{FILENAME}}
 ;;
 ;;   {{LINE-NUMBER}} and {{FILENAME}} should be replaced with line number and filename you want
-;;   to jump to. Each pdf viewer can provide some syntax to replace.
+;;   to jump to.  Each pdf viewer can provide some syntax to replace.
 ;;
 ;;   For example of SmatraPDF (see [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md
 ;;   "Add the following line to your SumatraPDF settings file (Menu -> Settings -> Advanced Options):"
