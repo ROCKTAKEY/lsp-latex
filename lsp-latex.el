@@ -522,21 +522,10 @@ should be vector."
 
 (defun lsp-latex-new-connection ()
   "Create new connection of lsp-latex."
-  (let (jar-file)
-    (cond
-     ((locate-file lsp-latex-texlab-executable exec-path)
+  (if (locate-file lsp-latex-texlab-executable exec-path)
       (cons lsp-latex-texlab-executable
-            lsp-latex-texlab-executable-argument-list))
-     ((setq jar-file (lsp-latex-get-texlab-jar-file))
-      (append
-       (cons
-        lsp-latex-java-executable
-        lsp-latex-java-argument-list)
-       (cons
-        jar-file
-        lsp-latex-texlab-jar-argument-list)))
-     (t
-      (error "No executable \"texlab\" file")))))
+            lsp-latex-texlab-executable-argument-list)
+    (error "No executable \"texlab\" file")))
 
 ;; Copied from `lsp-clients--rust-window-progress' in `lsp-rust'.
 (defun lsp-latex-window-progress (_workspace params)
