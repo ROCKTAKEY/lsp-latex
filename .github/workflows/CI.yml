@@ -17,24 +17,26 @@ jobs:
           - '26.3'
           - '27.1'
           - '27.2'
+          - '28.1'
+          - '28.2'
           - 'snapshot'
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - uses: purcell/setup-emacs@master
         with:
           version: ${{ matrix.emacs_version }}
       - uses: conao3/setup-keg@master
 
       - run: keg install
-      - run: make test-all
+      - run: keg run test-all
 
   lint:
     runs-on: ubuntu-latest
     continue-on-error: ${{ true }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - uses: purcell/setup-emacs@master
         with:
-          version: '27.1'
+          version: '28.2'
       - uses: conao3/setup-keg@master
-      - run: make lint
+      - run: keg lint

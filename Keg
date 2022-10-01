@@ -2,3 +2,18 @@
 
 (package (lsp-latex
           (recipe . (:fetcher github :repo "ROCKTAKEY/lsp-latex"))))
+
+(script
+ (test
+  (let ((test-files (mapcar (lambda (file) (file-relative-name file "."))
+                            (directory-files "test" t "\\.el$"))))
+    (keg-shell
+     `("keg" "emacs" "--batch" "-Q" "-L" "."
+       ,@(mapcar (apply-partially #'concat "--load=") test-files)
+       "-f" "ert-run-tests-batch-and-exit"))))
+ (test-all
+  (keg-shell "keg clean-elc"
+             "keg run test"
+             "keg build"
+             "keg run test"
+             "keg clean-elc")))
