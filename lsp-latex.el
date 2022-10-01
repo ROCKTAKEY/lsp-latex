@@ -326,17 +326,13 @@ The root directory is used by default."
   :type 'boolean
   :version "2.0.0")
 
-(defun lsp-latex--build-args-getter ()
-  "Get `lsp-latex-build-args' with changing to vector.
-Because `json-serialize' cannot recognize normal list as array of json,
-should be vector."
-  (vconcat lsp-latex-build-args))
+(defun lsp-latex--getter-vectorize-list (symbol)
+  "Make list in SYMBOL into vector.
+This function is thoughted to be used with `apply-partially'.
 
-(defun lsp-latex--forward-search-args-getter ()
-  "Get `lsp-latex-build-args' with changing to vector.
-Because `json-serialize' cannot recognize normal list as array of json,
-should be vector."
-  (vconcat lsp-latex-forward-search-args))
+This function is used for the treatment before `json-serialize',
+because `json-serialize' cannot recognize normal list as array of json."
+  (vconcat (eval symbol)))
 
 (defun lsp-latex-setup-variables ()
   "Register texlab customization variables to function `lsp-mode'."
@@ -352,12 +348,12 @@ should be vector."
       (lsp-register-custom-settings
        `(("latex.rootDirectory"            lsp-latex-root-directory)
          ("latex.build.executable"         lsp-latex-build-executable)
-         ("latex.build.args"               lsp-latex--build-args-getter)
+         ("latex.build.args"               ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-build-args))
          ("latex.build.onSave"             lsp-latex-build-on-save t)
          ("latex.build.outputDirectory"    lsp-latex-build-aux-directory)
          ("latex.build.forwardSearchAfter" lsp-latex-forward-search-after t)
          ("latex.forwardSearch.executable" lsp-latex-forward-search-executable)
-         ("latex.forwardSearch.args"       lsp-latex--forward-search-args-getter)
+         ("latex.forwardSearch.args"       ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-forward-search-args))
          ("latex.lint.onChange"            lsp-latex-chktex-on-edit t)
          ("latex.lint.onSave"              lsp-latex-chktex-on-open-and-save t)
          ("bibtex.formatting.lineLength"   lsp-latex-bibtex-formatter-line-length)
@@ -365,12 +361,12 @@ should be vector."
     (lsp-register-custom-settings
      `(("texlab.rootDirectory"            lsp-latex-root-directory)
        ("texlab.build.executable"         lsp-latex-build-executable)
-       ("texlab.build.args"               lsp-latex--build-args-getter)
+       ("texlab.build.args"               ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-build-args))
        ("texlab.build.outputDirectory"    lsp-latex-build-aux-directory)
        ("texlab.build.isContinuous"       lsp-latex-build-is-continuous)
        ("texlab.build.forwardSearchAfter" lsp-latex-forward-search-after t)
        ("texlab.forwardSearch.executable" lsp-latex-forward-search-executable)
-       ("texlab.forwardSearch.args"       lsp-latex--forward-search-args-getter)
+       ("texlab.forwardSearch.args"       ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-forward-search-args))
        ("texlab.chktex.onEdit"            lsp-latex-chktex-on-edit t)
        ("texlab.chktex.onOpenAndSave"     lsp-latex-chktex-on-open-and-save t)
        ("texlab.diagnosticsDelay"         lsp-latex-diagnostics-delay)
