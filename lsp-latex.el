@@ -315,18 +315,18 @@ Value is used on `lsp-latex-build'.
 (defcustom lsp-latex-build-forward-search-after nil
   "Execute forward-research after building."
   :group 'lsp-latex
-  :type 'boolean)
+  :type 'boolean
+  :version "3.0.0")
 
 (define-obsolete-variable-alias 'lsp-latex-forward-search-after
   'lsp-latex-build-forward-search-after
-  "2.1.0")
+  "3.0.0")
 
 (defcustom lsp-latex-build-on-save nil
-  "Build after saving a file or not.
-
-This variable is obsoleted since texlab 3.0.0."
+  "Build after saving a file or not."
   :group 'lsp-latex
-  :type 'boolean)
+  :type 'boolean
+  :version "3.0.0")
 
 (define-obsolete-variable-alias 'lsp-latex-build-output-directory
   'lsp-latex-build-aux-directory
@@ -350,7 +350,7 @@ If you use latexmk, use \"-outdir\" flag."
  'lsp-latex-build-is-continuous
  "This variable is obsoleted since texlab 3.2.0.
 https://github.com/latex-lsp/texlab/blob/fe828eed914088c6ad90a4574192024008b3d96a/CHANGELOG.md#changed."
- "2.1.0")
+ "3.0.0")
 
 (defcustom lsp-latex-forward-search-executable nil
   "Executable command used to search in preview.
