@@ -312,15 +312,15 @@ Value is used on `lsp-latex-build'.
   :risky t
   :type '(repeat string))
 
+(define-obsolete-variable-alias 'lsp-latex-forward-search-after
+  'lsp-latex-build-forward-search-after
+   "3.0.0")
+
 (defcustom lsp-latex-build-forward-search-after nil
   "Execute forward-research after building."
   :group 'lsp-latex
   :type 'boolean
   :version "3.0.0")
-
-(define-obsolete-variable-alias 'lsp-latex-forward-search-after
-  'lsp-latex-build-forward-search-after
-  "3.0.0")
 
 (defcustom lsp-latex-build-on-save nil
   "Build after saving a file or not."
