@@ -83,63 +83,7 @@
   :group 'lsp-mode)
 
 
-;;; For texlab v0.4.2 or older.
-(defcustom lsp-latex-java-executable "java"
-  "Executable command to run Java.
-This is used with `lsp-latex-java-argument-list'.
 
-This variable is only for texlab v0.4.2 or older.  If you use newer,
-You don't have to set or care about this variable."
-  :group 'lsp-latex
-  :type 'string)
-
-(defcustom lsp-latex-java-argument-list '("-jar")
-  "List of arguments passed to `lsp-latex-java-executable'.
-
-This variable is only for texlab v0.4.2 or older.  If you use newer,
-You don't have to set or care about this variable."
-  :group 'lsp-latex
-  :risky t
-  :type '(repeat string))
-
-(defcustom lsp-latex-texlab-jar-file 'search-from-exec-path
-  "File named \"texlab.jar\".
-You can install it from https://github.com/latex-lsp/texlab/releases/ .
-
-The value can be a string (path to \"texlab.jar\") or the symbol
-search-from-exec-path. See the docstring of `lsp-latex-get-texlab-jar-file'.
-
-This variable is only for texlab v0.4.2 or older. If you use newer,
-You don't have to set or care about this variable."
-  :group 'lsp-latex
-  :type '(choice string (const search-from-exec-path)))
-
-(defcustom lsp-latex-texlab-jar-argument-list '()
-  "List of arguments passed to `lsp-latex-texlab-jar-file'.
-
-This variable is only for texlab v0.4.2 or older.  If you use newer,
-You don't have to set or care about this variable."
-  :group 'lsp-latex
-  :type '(repeat string))
-
-(defun lsp-latex-get-texlab-jar-file ()
-  "Return the path to \"texlab.jar\".
-
-If `lsp-latex-texlab-jar-file' is a string, return it.
-If `lsp-latex-texlab-jar-file' is the symbol search-from-exec-path,
-then search a file named \"texlab.jar\" from variable `exec-path'.
-
-This function is only for texlab v0.4.2 or older. If you use newer,
-You don't have to set or care about this variable."
-  (cond
-   ((stringp lsp-latex-texlab-jar-file)
-    lsp-latex-texlab-jar-file)
-   ((eq lsp-latex-texlab-jar-file 'search-from-exec-path)
-    (locate-file "texlab.jar" exec-path))
-   (t (error "Invalid value of `lsp-latex-texlab-jar-file'"))))
-
-
-;;; For texlab v1.0.0 or newer.
 (defcustom lsp-latex-texlab-executable
   (cond ((eq system-type 'windows-nt)
          "texlab.exe")
@@ -332,44 +276,23 @@ because `json-serialize' cannot recognize normal list as array of json."
 (defun lsp-latex-setup-variables ()
   "Register texlab customization variables to function `lsp-mode'."
   (interactive)
-  (if (and
-       (executable-find lsp-latex-texlab-executable)
-       (version<
-        (substring
-         (shell-command-to-string
-          (format "%s --version" lsp-latex-texlab-executable))
-         7 -1)
-        "3.0.0"))
-      (lsp-register-custom-settings
-       `(("latex.rootDirectory" lsp-latex-root-directory)
-         ("latex.build.executable" lsp-latex-build-executable)
-         ("latex.build.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-build-args))
-         ("latex.build.onSave" lsp-latex-build-on-save t)
-         ("latex.build.outputDirectory" lsp-latex-build-aux-directory)
-         ("latex.build.forwardSearchAfter" lsp-latex-build-forward-search-after t)
-         ("latex.forwardSearch.executable" lsp-latex-forward-search-executable)
-         ("latex.forwardSearch.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-forward-search-args))
-         ("latex.lint.onChange" lsp-latex-chktex-on-edit t)
-         ("latex.lint.onSave" lsp-latex-chktex-on-open-and-save t)
-         ("bibtex.formatting.lineLength" lsp-latex-bibtex-formatter-line-length)
-         ("bibtex.formatting.formatter" lsp-latex-bibtex-formatter)))
-    (lsp-register-custom-settings
-     `(("texlab.rootDirectory" lsp-latex-root-directory)
-       ("texlab.build.executable" lsp-latex-build-executable)
-       ("texlab.build.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-build-args))
-       ("texlab.build.outputDirectory" lsp-latex-build-aux-directory)
-       ("texlab.build.forwardSearchAfter" lsp-latex-build-forward-search-after t)
-       ("texlab.build.onSave" lsp-latex-build-on-save t)
-       ("texlab.forwardSearch.executable" lsp-latex-forward-search-executable)
-       ("texlab.forwardSearch.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-forward-search-args))
-       ("texlab.chktex.onEdit" lsp-latex-chktex-on-edit t)
-       ("texlab.chktex.onOpenAndSave" lsp-latex-chktex-on-open-and-save t)
-       ("texlab.diagnosticsDelay" lsp-latex-diagnostics-delay)
-       ("texlab.formatterLineLength" lsp-latex-bibtex-formatter-line-length)
-       ("texlab.bibtexFormatter" lsp-latex-bibtex-formatter)
-       ("texlab.latexFormatter" lsp-latex-latex-formatter)
-       ("texlab.latexindent.local" lsp-latex-latexindent-local)
-       ("texlab.latexindent.modifyLineBreaks" lsp-latex-latexindent-modify-line-breaks)))))
+  (lsp-register-custom-settings
+   `(("texlab.rootDirectory" lsp-latex-root-directory)
+     ("texlab.build.executable" lsp-latex-build-executable)
+     ("texlab.build.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-build-args))
+     ("texlab.build.outputDirectory" lsp-latex-build-aux-directory)
+     ("texlab.build.forwardSearchAfter" lsp-latex-build-forward-search-after t)
+     ("texlab.build.onSave" lsp-latex-build-on-save t)
+     ("texlab.forwardSearch.executable" lsp-latex-forward-search-executable)
+     ("texlab.forwardSearch.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-forward-search-args))
+     ("texlab.chktex.onEdit" lsp-latex-chktex-on-edit t)
+     ("texlab.chktex.onOpenAndSave" lsp-latex-chktex-on-open-and-save t)
+     ("texlab.diagnosticsDelay" lsp-latex-diagnostics-delay)
+     ("texlab.formatterLineLength" lsp-latex-bibtex-formatter-line-length)
+     ("texlab.bibtexFormatter" lsp-latex-bibtex-formatter)
+     ("texlab.latexFormatter" lsp-latex-latex-formatter)
+     ("texlab.latexindent.local" lsp-latex-latexindent-local)
+     ("texlab.latexindent.modifyLineBreaks" lsp-latex-latexindent-modify-line-breaks))))
 
 (lsp-latex-setup-variables)
 
