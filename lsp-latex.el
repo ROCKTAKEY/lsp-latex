@@ -177,18 +177,21 @@ Value is used on `lsp-latex-build'.
   :risky t
   :type '(repeat string))
 
+(defcustom lsp-latex-build-forward-search-after nil
+  "Execute forward-research after building."
+  :group 'lsp-latex
+  :type 'boolean)
+
+(define-obsolete-variable-alias 'lsp-latex-forward-search-after
+  'lsp-latex-build-forward-search-after
+  "2.1.0")
+
 (defcustom lsp-latex-build-on-save nil
   "Build after saving a file or not.
 
 This variable is obsoleted since texlab 3.0.0."
   :group 'lsp-latex
   :type 'boolean)
-
-(make-obsolete-variable
- 'lsp-latex-build-on-save
- "This variable is obsoleted since texlab 3.0.0.
-See also https://github.com/latex-lsp/texlab/blob/a0f0dded751258f57e972ad5e2285f82e3404f27/CHANGELOG.md#changed."
- "2.0.0")
 
 (define-obsolete-variable-alias 'lsp-latex-build-output-directory
   'lsp-latex-build-aux-directory
@@ -208,19 +211,11 @@ If you use latexmk, use \"-outdir\" flag."
   :risky t
   :version "2.0.0")
 
-(defcustom lsp-latex-build-is-continuous nil
-  "A continuous build is implied if non-nil.
-
-This variable is valid since texlab 3.0.0."
-  :group 'lsp-latex
-  :type 'string
-  :risky t
-  :version "2.0.0")
-
-(defcustom lsp-latex-forward-search-after nil
-  "Execute forward-research after building."
-  :group 'lsp-latex
-  :type 'boolean)
+(make-obsolete-variable
+ 'lsp-latex-build-is-continuous
+ "This variable is obsoleted since texlab 3.2.0.
+https://github.com/latex-lsp/texlab/blob/fe828eed914088c6ad90a4574192024008b3d96a/CHANGELOG.md#changed."
+ "2.1.0")
 
 (defcustom lsp-latex-forward-search-executable nil
   "Executable command used to search in preview.
@@ -241,6 +236,19 @@ Placeholders
   :type '(repeat string)
   :risky t)
 
+(define-obsolete-variable-alias 'lsp-latex-lint-on-save
+  'lsp-latex-chktex-on-open-and-save
+   "2.0.0"
+   "Lint using chktex after saving a file.
+
+This variable is obsoleted since texlab 3.0.0.")
+
+(defcustom lsp-latex-chktex-on-open-and-save nil
+  "Lint using chktex after opening and saving a file."
+  :group 'lsp-latex
+  :type 'boolean
+  :version "2.0.0")
+
 (define-obsolete-variable-alias 'lsp-latex-lint-on-change
   'lsp-latex-chktex-on-edit
   "2.0.0"
@@ -259,19 +267,6 @@ This variable is obsoleted since texlab 3.0.0.")
 The value is in milliseconds."
   :group 'lsp-latex
   :type 'integerp
-  :version "2.0.0")
-
-(define-obsolete-variable-alias 'lsp-latex-lint-on-save
-  'lsp-latex-chktex-on-open-and-save
-   "2.0.0"
-   "Lint using chktex after saving a file.
-
-This variable is obsoleted since texlab 3.0.0.")
-
-(defcustom lsp-latex-chktex-on-open-and-save nil
-  "Lint using chktex after opening and saving a file."
-  :group 'lsp-latex
-  :type 'boolean
   :version "2.0.0")
 
 (define-obsolete-variable-alias 'lsp-latex-bibtex-formatting-line-length
@@ -351,7 +346,7 @@ because `json-serialize' cannot recognize normal list as array of json."
          ("latex.build.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-build-args))
          ("latex.build.onSave" lsp-latex-build-on-save t)
          ("latex.build.outputDirectory" lsp-latex-build-aux-directory)
-         ("latex.build.forwardSearchAfter" lsp-latex-forward-search-after t)
+         ("latex.build.forwardSearchAfter" lsp-latex-build-forward-search-after t)
          ("latex.forwardSearch.executable" lsp-latex-forward-search-executable)
          ("latex.forwardSearch.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-forward-search-args))
          ("latex.lint.onChange" lsp-latex-chktex-on-edit t)
@@ -363,8 +358,8 @@ because `json-serialize' cannot recognize normal list as array of json."
        ("texlab.build.executable" lsp-latex-build-executable)
        ("texlab.build.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-build-args))
        ("texlab.build.outputDirectory" lsp-latex-build-aux-directory)
-       ("texlab.build.isContinuous" lsp-latex-build-is-continuous)
-       ("texlab.build.forwardSearchAfter" lsp-latex-forward-search-after t)
+       ("texlab.build.forwardSearchAfter" lsp-latex-build-forward-search-after t)
+       ("texlab.build.onSave" lsp-latex-build-on-save t)
        ("texlab.forwardSearch.executable" lsp-latex-forward-search-executable)
        ("texlab.forwardSearch.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-forward-search-args))
        ("texlab.chktex.onEdit" lsp-latex-chktex-on-edit t)
