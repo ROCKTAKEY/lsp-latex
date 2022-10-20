@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.0.0
+;; Version: 3.0.1
 
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -291,11 +291,12 @@ Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
 
 
 
-(defcustom lsp-latex-root-directory "."
+(defcustom lsp-latex-root-directory nil
   "Root directory of each buffer."
   :group 'lsp-latex
   :risky t
-  :type 'string)
+  :type '(choice string
+                 (const nil)))
 
 (defcustom lsp-latex-build-executable "latexmk"
   "Build command used on `lsp-latex-build'."
