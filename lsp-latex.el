@@ -5,9 +5,9 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.0.1
+;; Version: 3.1.0
 
-;; Package-Requires: ((emacs "25.1") (lsp-mode "6.0"))
+;; Package-Requires: ((emacs "26.3") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
 
 ;; This program is free software; you can redistribute it and/or modify
