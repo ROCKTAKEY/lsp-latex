@@ -120,7 +120,7 @@
 
 ** Inverse search
    You can go to the current position on Emacs from pdf viewer.
-   Whatever pdf viewer you use, you should start emacs server by writing in init.el:
+   Whatever pdf viewer you use, you should start Emacs server by writing in init.el:
    #+begin_src emacs-lisp :tangle yes
      (server-start)
    #+end_src
