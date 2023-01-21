@@ -1,6 +1,6 @@
 [[https://github.com/ROCKTAKEY/lsp-latex][https://img.shields.io/github/tag/ROCKTAKEY/lsp-latex.svg?style=flat-square]]
 [[file:LICENSE][https://img.shields.io/github/license/ROCKTAKEY/lsp-latex.svg?style=flat-square]]
-[[https://github.com/ROCKTAKEY/lsp-latex/actions][https://img.shields.io/github/workflow/status/ROCKTAKEY/lsp-latex/CI/master.svg?style=flat-square]]
+[[https://github.com/ROCKTAKEY/lsp-latex/actions][https://img.shields.io/github/actions/workflow/status/ROCKTAKEY/lsp-latex/CI.yml.svg?style=flat-square]]
 [[https://melpa.org/#/lsp-latex][file:https://melpa.org/packages/lsp-latex-badge.svg]]
 * lsp-mode client for LaTeX.
 * How to Use?
