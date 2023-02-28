@@ -506,6 +506,17 @@ Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
 
 
 
+(defcustom lsp-latex-completion-sort-in-emacs nil
+  "Sort completion results in Emacs if non-nil.
+Texlab sorts completion results, so sorting in Emacs is not needed.
+Set non-nil value if you prefers they are sorted in Emacs.
+See also `lsp-completion-sort-initial-results'."
+  :group 'lsp-latex
+  :type 'boolean
+  :version "3.2.0")
+
+
+
 (defcustom lsp-latex-root-directory nil
   "Root directory of each buffer."
   :group 'lsp-latex
@@ -770,7 +781,10 @@ PARAMS progress report notification data."
                   :notification-handlers
                   (lsp-ht
                    ("window/progress"
-                    'lsp-latex-window-progress))))
+                    'lsp-latex-window-progress))
+                  :after-open-fn
+                  (lambda ()
+                    (setq-local lsp-completion-sort-initial-results lsp-latex-completion-sort-in-emacs))))
 
 
 ;;; Build
