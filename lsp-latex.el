@@ -914,5 +914,40 @@ This function is partially copied from
    (lsp--text-document-position-params)
    #'lsp-latex--message-forward-search))
 
+
+;;; Workspace commands
+(defun lsp-latex-clean-auxiliary (text-document-identifier)
+  ""
+  (interactive
+   (list (lsp-text-document-identifier)))
+  (lsp-workspace-command-execute "cleanAuxiliary" text-document-identifier))
+
+(defun lsp-latex-clean-artifacts (text-document-identifier)
+  ""
+  (interactive
+   (list (lsp-text-document-identifier)))
+  (lsp-workspace-command-execute "cleanArtifacts" text-document-identifier))
+
+(defun lsp-latex-change-environment (params)
+  ""
+  (interactive
+   (list
+     (list :textDocument (lsp-text-document-identifier)
+           :position (lsp--cur-position)
+           :newName (read-string "New environment name: "))))
+  (lsp-workspace-command-execute "changeEnvironment" params))
+
+(declare-function graphviz-dot-mode "ext:graphviz-dot-mode")
+(defun lsp-latex-show-dependency-graph ()
+  ""
+  (interactive)
+  (let ((dot-language-text (lsp-workspace-command-execute "showDependencyGraph"))
+        (buffer (get-buffer-create "*lsp-latex: Dependency Graph*")))
+    (with-current-buffer buffer
+      (insert dot-language-text)
+      (when (require 'graphviz-dot-mode nil t)
+        (graphviz-dot-mode)))
+    (pop-to-buffer buffer)))
+
 (provide 'lsp-latex)
 ;;; lsp-latex.el ends here
