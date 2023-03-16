@@ -2,7 +2,10 @@
 [[file:LICENSE][https://img.shields.io/github/license/ROCKTAKEY/lsp-latex.svg?style=flat-square]]
 [[https://github.com/ROCKTAKEY/lsp-latex/actions][https://img.shields.io/github/actions/workflow/status/ROCKTAKEY/lsp-latex/CI.yml.svg?style=flat-square]]
 [[https://melpa.org/#/lsp-latex][file:https://melpa.org/packages/lsp-latex-badge.svg]]
-* lsp-mode client for LaTeX.
+* lsp-mode client for texlab.
+While =lsp-tex.el=, included by [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]], provides minimal setting for [[https://github.com/latex-lsp/texlab][texlab]],
+=lsp-latex.el= provides full features of [[https://github.com/latex-lsp/texlab][texlab]]!
+
 * How to Use?
   - First, you have to install ~texlab~.
     Please install this [[https://github.com/latex-lsp/texlab/releases][here]].
