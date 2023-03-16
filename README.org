@@ -77,11 +77,11 @@ See also [[https://github.com/latex-lsp/texlab/wiki/Workspace-commands][texlab o
 
 ** =lsp-latex-clean-auxiliary=
 This command removes LaTeX auxiliary files.
-It will run \"latexmk -c\" in the project.
+It will run =latexmk -c= in the project.
 
 ** =lsp-latex-clean-artifacts=
 This command removes LaTeX auxiliary files and artifacts
-It will run \"latexmk -C\" in the project..
+It will run =latexmk -C= in the project.
 
 ** =lsp-latex-change-environment=
 This command replaces enviroment name to NEW-NAME in current position.
