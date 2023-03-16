@@ -36,7 +36,7 @@
    Argument list passed to texlab server.
 ** Others, provided by texlab server
    These variables are connected to texlab configuration variables.
-   See also texlab [[https://github.com/latex-lsp/texlab/blob/master/docs/options.md][documentation]].
+   See also [[https://github.com/latex-lsp/texlab/wiki/Configuration][texlab official wiki]].
 | Custom variable in Emacs                     | Configuration provided by texlab         |
 |----------------------------------------------+------------------------------------------|
 | lsp-latex-root-directory                     | texlab.rootDirectory                     |
@@ -88,7 +88,7 @@ This command replaces enviroment name to NEW-NAME in current position.
 This edits most-inner environment containing the current position.
 
 * Forward/inverse search
-  Forward search and inverse search are available. See also [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md][document of texlab]].
+  Forward search and inverse search are available. See also [[https://github.com/latex-lsp/texlab/wiki/Previewing][texlab official wiki]].
 
 ** Forward search
    You can move from Emacs to current position on pdf viewer
@@ -96,7 +96,7 @@ This edits most-inner environment containing the current position.
    To use, you should set ~lsp-latex-forward-search-executable~ and
    ~lsp-latex-forward-search-args~ according to your pdf viewer.
 
-   You can see [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md][document of texlab]], but you should replace some VSCode words with Emacs words.
+   You can see [[https://github.com/latex-lsp/texlab/wiki/Previewing][texlab official wiki]], but you should replace some VSCode words with Emacs words.
    ~latex.forwardSearch.executable~ should be replaced with  ~lsp-latex-forward-search-executable~,
    and ~latex.forwardSearch.args~ with ~lsp-latex-forward-search-args~. You should setq each variable
    instead of writing like json, and vector in json is replaced to list in Emacs Lisp. So the json:
@@ -114,14 +114,14 @@ This edits most-inner environment containing the current position.
 
    In ~lsp-latex-forward-search-args~, the string "%f" is replaced with
    "The path of the current TeX file", "%p" with "The path of the current PDF file",
-   "%l" with "The current line number", by texlab (see [[https://github.com/latex-lsp/texlab/blob/master/docs/options.md#texlabforwardsearchargs][here]]).
+   "%l" with "The current line number", by texlab (see [[https://github.com/latex-lsp/texlab/wiki/Configuration#texlabforwardsearchargs][here]]).
 
    For example of SumatraPDF, write in init.el:
    #+begin_src emacs-lisp :tangle yes
      (setq lsp-latex-forward-search-executable "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe")
      (setq lsp-latex-forward-search-args '("-reuse-instance" "%p" "-forward-search" "%f" "%l"))
    #+end_src
-   while VSCode config with json (see [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md#forward-search][document of texlab]]) is:
+   while VSCode config with json (see [[https://github.com/latex-lsp/texlab/wiki/Previewing#forward-search][texlab official wiki]]) is:
    #+BEGIN_SRC json :tangle yes
      {
        "texlab.forwardSearch.executable": "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe",
@@ -150,7 +150,7 @@ This edits most-inner environment containing the current position.
   {{LINE-NUMBER}} and {{FILENAME}} should be replaced with line number and filename you want
   to jump to. Each pdf viewer can provide some syntax to replace.
 
-  For example of SmatraPDF (see [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md#inverse-search][document of texlab]]),
+  For example of SmatraPDF (see [[https://github.com/latex-lsp/texlab/wiki/Previewing#inverse-search][texlab official wiki]]),
   "Add the following line to your SumatraPDF settings file (Menu -> Settings -> Advanced Options):"
   #+BEGIN_SRC ini -n
     InverseSearchCmdLine = C:\path\to\emacsclient.exe +%l %f
@@ -158,8 +158,8 @@ This edits most-inner environment containing the current position.
   Then, "You can execute the search by pressing Alt+DoubleClick in the PDF document".
 
 ** Examples
-   These examples are according to [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md#inverse-search][document of texlab]]. Especially, quoted or double-quoted
-   sentences are citation from [[https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md#inverse-search][document of texlab]].
+   These examples are according to [[https://github.com/latex-lsp/texlab/wiki/Previewing][texlab official wiki]]. Especially, quoted or double-quoted
+   sentences are citation from [[https://github.com/latex-lsp/texlab/wiki/Previewing][texlab official wiki]].
 *** SumatraPDF
     #+BEGIN_QUOTE
         We highly recommend SumatraPDF on Windows
