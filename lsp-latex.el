@@ -916,37 +916,63 @@ This function is partially copied from
 
 
 ;;; Workspace commands
+
 (defun lsp-latex-clean-auxiliary (text-document-identifier)
-  ""
+  "Remove LaTeX auxiliary files.
+Auxiliary files in project specified by TEXT-DOCUMENT-IDENTIFIER is removed.
+It will run \"latexmk -c\" in the project.
+
+When called interactively, TEXT-DOCUMENT-IDENTIFIER is provided by
+`lsp-text-document-identifier'."
   (interactive
    (list (lsp-text-document-identifier)))
-  (lsp-workspace-command-execute "cleanAuxiliary" text-document-identifier))
+  (lsp-workspace-command-execute "texlab.cleanAuxiliary"
+                                 (vector text-document-identifier)))
 
 (defun lsp-latex-clean-artifacts (text-document-identifier)
-  ""
+  "Remove LaTeX auxiliary files and artifact.
+Removed files are in project specified by TEXT-DOCUMENT-IDENTIFIER.
+It will run \"latexmk -C\" in the project.
+
+When called interactively, TEXT-DOCUMENT-IDENTIFIER is provided by
+`lsp-text-document-identifier'."
   (interactive
    (list (lsp-text-document-identifier)))
-  (lsp-workspace-command-execute "cleanArtifacts" text-document-identifier))
+  (lsp-workspace-command-execute "texlab.cleanArtifacts"
+                                 (vector text-document-identifier)))
 
-(defun lsp-latex-change-environment (params)
-  ""
+(defun lsp-latex-change-environment (text-document-identifier
+                                     point
+                                     new-name)
+  "Change environment name to NEW-NAME in current position.
+This will change most-inner environment containing the POINT position
+the file specified by TEXT-DOCUMENT-IDENTIFIER."
   (interactive
    (list
-     (list :textDocument (lsp-text-document-identifier)
-           :position (lsp--cur-position)
-           :newName (read-string "New environment name: "))))
-  (lsp-workspace-command-execute "changeEnvironment" params))
+    (lsp-text-document-identifier)
+    (point)
+    (read-string "New environment name: ")))
+  (lsp-workspace-command-execute "texlab.changeEnvironment"
+                                 (vector
+                                  (list :textDocument text-document-identifier
+                                        :position (lsp-point-to-position point)
+                                        :newName new-name))))
 
 (declare-function graphviz-dot-mode "ext:graphviz-dot-mode")
 (defun lsp-latex-show-dependency-graph ()
-  ""
+  "Show dependency graph written by DOT format.
+`graphviz-dot-mode' is needed if you needs syntax highlights
+or a graphical image."
   (interactive)
-  (let ((dot-language-text (lsp-workspace-command-execute "showDependencyGraph"))
+  (let ((dot-language-text (lsp-workspace-command-execute "texlab.showDependencyGraph"))
         (buffer (get-buffer-create "*lsp-latex: Dependency Graph*")))
     (with-current-buffer buffer
+      (read-only-mode -1)
+      (erase-buffer)
       (insert dot-language-text)
       (when (require 'graphviz-dot-mode nil t)
-        (graphviz-dot-mode)))
+        (graphviz-dot-mode))
+      (read-only-mode +1))
     (pop-to-buffer buffer)))
 
 (provide 'lsp-latex)
