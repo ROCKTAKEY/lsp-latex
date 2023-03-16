@@ -930,7 +930,7 @@ When called interactively, TEXT-DOCUMENT-IDENTIFIER is provided by
                                  (vector text-document-identifier)))
 
 (defun lsp-latex-clean-artifacts (text-document-identifier)
-  "Remove LaTeX auxiliary files and artifact.
+  "Remove LaTeX auxiliary files and artifacts.
 Removed files are in project specified by TEXT-DOCUMENT-IDENTIFIER.
 It will run \"latexmk -C\" in the project.
 
