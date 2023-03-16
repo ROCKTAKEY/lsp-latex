@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.4.0
+;; Version: 3.4.1
 
 ;; Package-Requires: ((emacs "26.3") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -856,9 +856,9 @@ PARAMS progress report notification data."
   (message
    (cl-case (gethash "status" result)
      ((0)                             ;Success
-      "Build was succeeded.")
+      "Build succeeded.")
      ((1)                             ;Error
-      "Build do not succeeded.")
+      "Build error.")
      ((2)                             ;Failure
       "Build failed.")
      ((3)                             ;Cancelled
