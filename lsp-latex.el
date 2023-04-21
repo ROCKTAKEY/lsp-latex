@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.4.1
+;; Version: 3.5.0
 
 ;; Package-Requires: ((emacs "26.3") (lsp-mode "6.0"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -28,7 +28,7 @@
 ;; Table of Contents
 ;; _________________
 
-;; 1. lsp-mode client for LaTeX.
+;; 1. lsp-mode client for texlab.
 ;; 2. How to Use?
 ;; 3. Variables
 ;; .. 1. `lsp-latex-texlab-executable'
@@ -73,8 +73,16 @@
 ;; <https://melpa.org/#/lsp-latex>
 
 
-;; 1 lsp-mode client for LaTeX.
-;; ============================
+;; 1 lsp-mode client for texlab.
+;; =============================
+
+;;   While `lsp-tex.el', included by [lsp-mode], provides minimal setting
+;;   for [texlab], `lsp-latex.el' provides full features of [texlab]!
+
+
+;; [lsp-mode] <https://github.com/emacs-lsp/lsp-mode>
+
+;; [texlab] <https://github.com/latex-lsp/texlab>
 
 
 ;; 2 How to Use?
@@ -131,34 +139,38 @@
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;;   These variables are connected to texlab configuration variables.  See
-;;   also texlab [documentation].
+;;   also [texlab official wiki].
 ;;    Custom variable in Emacs                      Configuration provided by texlab
 ;;   ----------------------------------------------------------------------------------------
 ;;    lsp-latex-root-directory                      texlab.rootDirectory
 ;;    lsp-latex-build-executable                    texlab.build.executable
 ;;    lsp-latex-build-args                          texlab.build.args
-;;    lsp-latex-build-aux-directory                 texlab.build.outputDirectory
 ;;    lsp-latex-build-forward-search-after          texlab.build.forwardSearchAfter
 ;;    lsp-latex-build-on-save                       texlab.build.onSave
+;;    lsp-latex-build-aux-directory                 texlab.auxDirectory
 ;;    lsp-latex-forward-search-executable           texlab.forwardSearch.executable
 ;;    lsp-latex-forward-search-args                 texlab.forwardSearch.args
-;;    lsp-latex-chktex-on-edit                      texlab.chktex.onEdit
 ;;    lsp-latex-chktex-on-open-and-save             texlab.chktex.onOpenAndSave
+;;    lsp-latex-chktex-on-edit                      texlab.chktex.onEdit
 ;;    lsp-latex-diagnostics-delay                   texlab.diagnosticsDelay
 ;;    lsp-latex-diagnostics-allowed-patterns        texlab.diagnostics.allowedPatterns
 ;;    lsp-latex-diagnostics-ignored-patterns        texlab.diagnostics.ignoredPatterns
+;;    lsp-latex-symbol-allowed-patterns             texlab.symbol.allowedPatterns
+;;    lsp-latex-symbol-ignored-patterns             texlab.symbol.ignoredPatterns
 ;;    lsp-latex-bibtex-formatter-line-length        texlab.formatterLineLength
 ;;    lsp-latex-bibtex-formatter                    texlab.bibtexFormatter
 ;;    lsp-latex-latex-formatter                     texlab.latexFormatter
 ;;    lsp-latex-latexindent-local                   texlab.latexindent.local
 ;;    lsp-latex-latexindent-modify-line-breaks      texlab.latexindent.modifyLineBreaks
+;;    lsp-latex-completion-matcher                  texlab.completion.matcher
 ;;    lsp-latex-experimental-math-environments      texlab.experimental.mathEnvironments
 ;;    lsp-latex-experimental-enum-environments      texlab.experimental.enumEnvironments
 ;;    lsp-latex-experimental-verbatim-environments  texlab.experimental.verbatimEnvironments
+;;    lsp-latex-experimental-citation-commands      texlab.experimental.citationCommands
 
 
-;; [documentation]
-;; <https://github.com/latex-lsp/texlab/blob/master/docs/options.md>
+;; [texlab official wiki]
+;; <https://github.com/latex-lsp/texlab/wiki/Configuration>
 
 
 ;; 4 Build
@@ -188,15 +200,15 @@
 ;; 5.1 `lsp-latex-clean-auxiliary'
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-;;   This command removes LaTeX auxiliary files.  It will run \"latexmk
-;;   -c\" in the project.
+;;   This command removes LaTeX auxiliary files.  It will run `latexmk -c'
+;;   in the project.
 
 
 ;; 5.2 `lsp-latex-clean-artifacts'
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;;   This command removes LaTeX auxiliary files and artifacts It will run
-;;   \"latexmk -C\" in the project..
+;;   `latexmk -C' in the project.
 
 
 ;; 5.3 `lsp-latex-change-environment'
@@ -209,12 +221,12 @@
 ;; 6 Forward/inverse search
 ;; ========================
 
-;;   Forward search and inverse search are available.  See also [document of
-;;   texlab].
+;;   Forward search and inverse search are available.  See also [texlab
+;;   official wiki].
 
 
-;; [document of texlab]
-;; <https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md>
+;; [texlab official wiki]
+;; <https://github.com/latex-lsp/texlab/wiki/Previewing>
 
 ;; 6.1 Forward search
 ;; ~~~~~~~~~~~~~~~~~~
@@ -224,7 +236,7 @@
 ;;   `lsp-latex-forward-search-executable' and
 ;;   `lsp-latex-forward-search-args' according to your pdf viewer.
 
-;;   You can see [document of texlab], but you should replace some VSCode
+;;   You can see [texlab official wiki], but you should replace some VSCode
 ;;   words with Emacs words.  `latex.forwardSearch.executable' should be
 ;;   replaced with `lsp-latex-forward-search-executable', and
 ;;   `latex.forwardSearch.args' with `lsp-latex-forward-search-args'.  You
@@ -252,7 +264,7 @@
 ;;   | (setq lsp-latex-forward-search-executable "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe")
 ;;   | (setq lsp-latex-forward-search-args '("-reuse-instance" "%p" "-forward-search" "%f" "%l"))
 ;;   `----
-;;   while VSCode config with json (see [document of texlab]) is:
+;;   while VSCode config with json (see [texlab official wiki]) is:
 ;;   ,----
 ;;   | {
 ;;   |   "texlab.forwardSearch.executable": "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe",
@@ -270,14 +282,14 @@
 ;;   `lsp-latex-forward-search'.
 
 
-;; [document of texlab]
-;; <https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md>
+;; [texlab official wiki]
+;; <https://github.com/latex-lsp/texlab/wiki/Previewing>
 
 ;; [here]
-;; <https://github.com/latex-lsp/texlab/blob/master/docs/options.md#texlabforwardsearchargs>
+;; <https://github.com/latex-lsp/texlab/wiki/Configuration#texlabforwardsearchargs>
 
-;; [document of texlab]
-;; <https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md#forward-search>
+;; [texlab official wiki]
+;; <https://github.com/latex-lsp/texlab/wiki/Previewing#forward-search>
 
 
 ;; 6.2 Inverse search
@@ -298,7 +310,7 @@
 ;;   and filename you want to jump to.  Each pdf viewer can provide some
 ;;   syntax to replace.
 
-;;   For example of SmatraPDF (see [document of texlab]), "Add the
+;;   For example of SmatraPDF (see [texlab official wiki]), "Add the
 ;;   following line to your SumatraPDF settings file (Menu -> Settings ->
 ;;   Advanced Options):"
 ;;   ,----
@@ -308,20 +320,20 @@
 ;;   PDF document".
 
 
-;; [document of texlab]
-;; <https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md#inverse-search>
+;; [texlab official wiki]
+;; <https://github.com/latex-lsp/texlab/wiki/Previewing#inverse-search>
 
 
 ;; 6.3 Examples
 ;; ~~~~~~~~~~~~
 
-;;   These examples are according to [document of texlab].  Especially,
-;;   quoted or double-quoted sentences are citation from [document of
-;;   texlab].
+;;   These examples are according to [texlab official wiki].  Especially,
+;;   quoted or double-quoted sentences are citation from [texlab official
+;;   wiki].
 
 
-;; [document of texlab]
-;; <https://github.com/latex-lsp/texlab/blob/master/docs/previewing.md#inverse-search>
+;; [texlab official wiki]
+;; <https://github.com/latex-lsp/texlab/wiki/Previewing>
 
 ;; 6.3.1 SumatraPDF
 ;; ----------------
@@ -690,6 +702,28 @@ so this variable is priored."
   :type '(repeat string)
   :version "3.0.0")
 
+(defcustom lsp-latex-symbol-allowed-patterns '()
+  "Regexp whitelist for document symbol.
+It should be a list of regular expression.
+Only document symbol that match at least one of the elemnt is shown.
+
+Note that this is applied before `lsp-latex-symbol-ignored-patterns',
+so `lsp-latex-symbol-ignored-patterns' is priored."
+  :group 'lsp-latex
+  :type '(repeat string)
+  :version "3.5.0")
+
+(defcustom lsp-latex-symbol-ignored-patterns '()
+  "Regexp blacklist for document symbol.
+It should be a list of regular expression.
+Only document symbol that do NOT match at least one of the elemnt is shown.
+
+Note that this is applied after `lsp-latex-symbol-allowed-patterns',
+so this variable is priored."
+  :group 'lsp-latex
+  :type '(repeat string)
+  :version "3.5.0")
+
 (define-obsolete-variable-alias 'lsp-latex-bibtex-formatting-line-length
   'lsp-latex-bibtex-formatter-line-length
   "Maximum amount of line on formatting BibTeX files.
@@ -742,6 +776,19 @@ The root directory is used by default."
   :type 'boolean
   :version "2.0.0")
 
+(defcustom lsp-latex-completion-matcher "fuzzy-ignore-case"
+  "Algorithm used to filter the completion by texlab.
+\"fuzzy\", which means fuzzy matching, or \"prefix\",
+which means that prefix matching is allowed.
+In addition, \"-ignore-case\" suffix is also available,
+which means the matcher should be case insensitive."
+  :group 'lsp-latex
+  :type '(choice (const "fuzzy")
+                 (const "fuzzy-ignore-case")
+                 (const "prefix")
+                 (const "prefix-ignore-case"))
+  :version "3.5.0")
+
 (defcustom lsp-latex-experimental-math-environments '()
   "List of environment name regarded as math environment, such as \"align\"."
   :group 'lsp-latex
@@ -764,6 +811,13 @@ For example, \"lstlisting\" is meet the condition."
   :type '(repeat string)
   :version "3.3.0")
 
+(defcustom lsp-latex-experimental-citation-commands '()
+  "List of command name which should be regarded as citation command.
+For example, \"cite\" is meet the condition. Note that backslash is not needed."
+  :group 'lsp-latex
+  :type '(repeat string)
+  :version "3.5.0")
+
 (defun lsp-latex--getter-vectorize-list (symbol)
   "Make list in SYMBOL into vector.
 This function is thoughted to be used with `apply-partially'.
@@ -785,13 +839,13 @@ should be vector."
    `(("texlab.rootDirectory" lsp-latex-root-directory)
      ("texlab.build.executable" lsp-latex-build-executable)
      ("texlab.build.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-build-args))
-     ("texlab.build.outputDirectory" lsp-latex-build-aux-directory)
      ("texlab.build.forwardSearchAfter" lsp-latex-build-forward-search-after t)
      ("texlab.build.onSave" lsp-latex-build-on-save t)
+     ("texlab.auxDirectory" lsp-latex-build-aux-directory)
      ("texlab.forwardSearch.executable" lsp-latex-forward-search-executable)
      ("texlab.forwardSearch.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-forward-search-args))
-     ("texlab.chktex.onEdit" lsp-latex-chktex-on-edit t)
      ("texlab.chktex.onOpenAndSave" lsp-latex-chktex-on-open-and-save t)
+     ("texlab.chktex.onEdit" lsp-latex-chktex-on-edit t)
      ("texlab.diagnosticsDelay" lsp-latex-diagnostics-delay)
      ("texlab.diagnostics.allowedPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-diagnostics-allowed-patterns))
      ("texlab.diagnostics.ignoredPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-diagnostics-ignored-patterns))
@@ -800,9 +854,11 @@ should be vector."
      ("texlab.latexFormatter" lsp-latex-latex-formatter)
      ("texlab.latexindent.local" lsp-latex-latexindent-local)
      ("texlab.latexindent.modifyLineBreaks" lsp-latex-latexindent-modify-line-breaks)
+     ("texlab.completion.matcher" lsp-latex-completion-matcher)
      ("texlab.experimental.mathEnvironments" lsp-latex-experimental-math-environments)
      ("texlab.experimental.enumEnvironments"lsp-latex-experimental-enum-environments)
-     ("texlab.experimental.verbatimEnvironments" lsp-latex-experimental-verbatim-environments))))
+     ("texlab.experimental.verbatimEnvironments" lsp-latex-experimental-verbatim-environments)
+     ("texlab.experimental.citationCommands" lsp-latex-experimental-citation-commands))))
 
 (lsp-latex-setup-variables)
 
