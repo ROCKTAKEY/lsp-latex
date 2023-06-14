@@ -1048,13 +1048,24 @@ the file specified by TEXT-DOCUMENT-IDENTIFIER."
                                         :position (lsp-point-to-position point)
                                         :newName new-name))))
 
+;; TODO: Add process for returned value
+(defun lsp-latex-find-environment (point)
+  ""
+  (interactive
+   (list
+    (point)))
+  (let* ((environment-location-list
+          (lsp-workspace-command-execute "texlab.findEnvironments"
+                                         (vector
+                                          (lsp--text-document-position-params)))))))
+
 (declare-function graphviz-dot-mode "ext:graphviz-dot-mode")
 (defun lsp-latex-show-dependency-graph ()
   "Show dependency graph written by DOT format.
 `graphviz-dot-mode' is needed if you needs syntax highlights
 or a graphical image."
   (interactive)
-  (let ((dot-language-text (lsp-workspace-command-execute "texlab.showDependencyGraph"))
+  (let ((dot-language-text (lsp-workspace-command-execute "texlab.showDependencyGraph")bff)
         (buffer (get-buffer-create "*lsp-latex: Dependency Graph*")))
     (with-current-buffer buffer
       (read-only-mode -1)
@@ -1064,6 +1075,10 @@ or a graphical image."
         (graphviz-dot-mode))
       (read-only-mode +1))
     (pop-to-buffer buffer)))
+
+(defun lsp-latex-cancel-build ()
+  "Cancel builds by texlab."
+  (lsp-workspace-command-execute "texlab.cancelBuild"))
 
 (provide 'lsp-latex)
 ;;; lsp-latex.el ends here
