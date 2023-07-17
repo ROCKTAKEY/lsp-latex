@@ -1065,5 +1065,9 @@ or a graphical image."
       (read-only-mode +1))
     (pop-to-buffer buffer)))
 
+(defun lsp-latex-cancel-build ()
+  "Cancel builds by texlab."
+  (lsp-workspace-command-execute "texlab.cancelBuild"))
+
 (provide 'lsp-latex)
 ;;; lsp-latex.el ends here
