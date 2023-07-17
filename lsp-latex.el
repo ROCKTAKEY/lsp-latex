@@ -40,7 +40,13 @@
 ;; .. 1. `lsp-latex-clean-auxiliary'
 ;; .. 2. `lsp-latex-clean-artifacts'
 ;; .. 3. `lsp-latex-change-environment'
-;; 6. Forward/inverse search
+;; .. 4. `lsp-latex-cancel-build'
+;; .. 5. `lsp-latex-find-environments'
+;; ..... 1. `lsp-latex-complete-environment'
+;; 6. Commands with `lsp-latex-complete-environment'
+;; .. 1. `lsp-latex-goto-environment'
+;; .. 2. `lsp-latex-select-and-change-environment'
+;; 7. Forward/inverse search
 ;; .. 1. Forward search
 ;; .. 2. Inverse search
 ;; .. 3. Examples
@@ -51,7 +57,7 @@
 ;; ..... 5. qpdfview
 ;; ..... 6. Skim
 ;; ..... 7. `pdf-tools' integration
-;; 7. License
+;; 8. License
 
 
 ;; [https://img.shields.io/github/tag/ROCKTAKEY/lsp-latex.svg?style=flat-square]
@@ -218,7 +224,43 @@
 ;;   This edits most-inner environment containing the current position.
 
 
-;; 6 Forward/inverse search
+;; 5.4 `lsp-latex-cancel-build'
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+;;   This command cancel build of texlab.
+
+
+;; 5.5 `lsp-latex-find-environments'
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+;; 5.5.1 `lsp-latex-complete-environment'
+;; --------------------------------------
+
+;;   This function reads environment name from minibuffer and returns
+;;   `lsp-latex-environment-location' instance.
+
+;;   It takes three arguments, `BUFFER', `POINT', `PROMPT'.  `PROMPT' is
+;;   used as prompt for `consult--read', which is wrapper of
+;;   `completing-read'.  `BUFFER' and `POINT' specify basis to find
+;;   environments.
+
+
+;; 6 Commands with `lsp-latex-complete-environment'
+;; ================================================
+
+;; 6.1 `lsp-latex-goto-environment'
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+;;   Go to selected environment containing the current point.
+
+
+;; 6.2 `lsp-latex-select-and-change-environment'
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+;;   Change name of selected environment to NEW-NAME.
+
+
+;; 7 Forward/inverse search
 ;; ========================
 
 ;;   Forward search and inverse search are available.  See also [texlab
@@ -228,7 +270,7 @@
 ;; [texlab official wiki]
 ;; <https://github.com/latex-lsp/texlab/wiki/Previewing>
 
-;; 6.1 Forward search
+;; 7.1 Forward search
 ;; ~~~~~~~~~~~~~~~~~~
 
 ;;   You can move from Emacs to current position on pdf viewer by the
@@ -292,7 +334,7 @@
 ;; <https://github.com/latex-lsp/texlab/wiki/Previewing#forward-search>
 
 
-;; 6.2 Inverse search
+;; 7.2 Inverse search
 ;; ~~~~~~~~~~~~~~~~~~
 
 ;;   You can go to the current position on Emacs from pdf viewer.  Whatever
@@ -324,7 +366,7 @@
 ;; <https://github.com/latex-lsp/texlab/wiki/Previewing#inverse-search>
 
 
-;; 6.3 Examples
+;; 7.3 Examples
 ;; ~~~~~~~~~~~~
 
 ;;   These examples are according to [texlab official wiki].  Especially,
@@ -335,7 +377,7 @@
 ;; [texlab official wiki]
 ;; <https://github.com/latex-lsp/texlab/wiki/Previewing>
 
-;; 6.3.1 SumatraPDF
+;; 7.3.1 SumatraPDF
 ;; ----------------
 
 ;;         We highly recommend SumatraPDF on Windows because Adobe
@@ -343,7 +385,7 @@
 ;;         prevent further builds.
 
 
-;; * 6.3.1.1 Forward search
+;; * 7.3.1.1 Forward search
 
 ;;   Write to init.el:
 ;;   ,----
@@ -352,7 +394,7 @@
 ;;   `----
 
 
-;; * 6.3.1.2 Inverse Search
+;; * 7.3.1.2 Inverse Search
 
 ;;         Add the following line to your [SumatraPDF] settings file
 ;;         (Menu -> Settings -> Advanced Options):
@@ -366,7 +408,7 @@
 ;;   [SumatraPDF] <https://www.sumatrapdfreader.org/>
 
 
-;; 6.3.2 Evince
+;; 7.3.2 Evince
 ;; ------------
 
 ;;         The SyncTeX feature of [Evince] requires communication via
@@ -378,7 +420,7 @@
 
 ;; [evince-synctex] <https://github.com/latex-lsp/evince-synctex>
 
-;; * 6.3.2.1 Forward search
+;; * 7.3.2.1 Forward search
 
 ;;   Write to init.el:
 ;;   ,----
@@ -387,17 +429,17 @@
 ;;   `----
 
 
-;; * 6.3.2.2 Inverse search
+;; * 7.3.2.2 Inverse search
 
 ;;         The inverse search feature is already configured if you
 ;;         use `evince-synctex'.  You can execute the search by
 ;;         pressing `Ctrl+Click' in the PDF document.
 
 
-;; 6.3.3 Okular
+;; 7.3.3 Okular
 ;; ------------
 
-;; * 6.3.3.1 Forward search
+;; * 7.3.3.1 Forward search
 
 ;;   Write to init.el:
 ;;   ,----
@@ -406,7 +448,7 @@
 ;;   `----
 
 
-;; * 6.3.3.2 Inverse search
+;; * 7.3.3.2 Inverse search
 
 ;;         Change the editor of Okular (Settings -> Configure
 ;;         Okular... -> Editor) to "Custom Text Editor" and set the
@@ -418,10 +460,10 @@
 ;;   document.
 
 
-;; 6.3.4 Zathura
+;; 7.3.4 Zathura
 ;; -------------
 
-;; * 6.3.4.1 Forward search
+;; * 7.3.4.1 Forward search
 
 ;;   Write to init.el:
 ;;   ,----
@@ -430,7 +472,7 @@
 ;;   `----
 
 
-;; * 6.3.4.2 Inverse search
+;; * 7.3.4.2 Inverse search
 
 ;;         Add the following lines to your
 ;;         `~/.config/zathura/zathurarc' file:
@@ -442,10 +484,10 @@
 ;;         PDF document.
 
 
-;; 6.3.5 qpdfview
+;; 7.3.5 qpdfview
 ;; --------------
 
-;; * 6.3.5.1 Forward search
+;; * 7.3.5.1 Forward search
 
 ;;   Write to init.el:
 ;;   ,----
@@ -454,7 +496,7 @@
 ;;   `----
 
 
-;; * 6.3.5.2 Inverse search
+;; * 7.3.5.2 Inverse search
 
 ;;         Change the source editor setting (Edit -> Settings... ->
 ;;         Behavior -> Source editor) to:
@@ -467,7 +509,7 @@
 ;;         pressing Modifier+Click in the PDF document.
 
 
-;; 6.3.6 Skim
+;; 7.3.6 Skim
 ;; ----------
 
 ;;         We recommend [Skim] on macOS since it is the only native
@@ -478,7 +520,7 @@
 
 ;; [Skim] <https://skim-app.sourceforge.io/>
 
-;; * 6.3.6.1 Forward search
+;; * 7.3.6.1 Forward search
 
 ;;   Write to init.el:
 ;;   ,----
@@ -490,14 +532,14 @@
 ;;   `lsp-latex-forward-search-args'.
 
 
-;; * 6.3.6.2 Inverse search
+;; * 7.3.6.2 Inverse search
 
 ;;   Select Emacs preset "in the Skim preferences (Skim -> Preferences ->
 ;;   Sync -> PDF-TeX Sync support).  You can execute the search by pressing
 ;;   `Shift+⌘+Click' in the PDF document."
 
 
-;; 6.3.7 `pdf-tools' integration
+;; 7.3.7 `pdf-tools' integration
 ;; -----------------------------
 
 ;;   If you want to use forward search with `pdf-tools', follow the
@@ -521,7 +563,7 @@
 ;;   `pdf-sync-backward-search-mouse'.
 
 
-;; 7 License
+;; 8 License
 ;; =========
 
 ;;   This package is licensed by GPLv3. See [LICENSE].
