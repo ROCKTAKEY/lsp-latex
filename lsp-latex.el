@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.6.1
+;; Version: 3.6.2
 
 ;; Package-Requires: ((emacs "27.1") (lsp-mode "6.0") (consult "0.35"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -28,7 +28,7 @@
 ;; Table of Contents
 ;; _________________
 
-;; 1. lsp-mode client for texlab.
+;; 1. lsp-mode client for Texlab.
 ;; 2. How to Use?
 ;; 3. Variables
 ;; .. 1. `lsp-latex-texlab-executable'
@@ -40,9 +40,10 @@
 ;; .. 1. `lsp-latex-clean-auxiliary'
 ;; .. 2. `lsp-latex-clean-artifacts'
 ;; .. 3. `lsp-latex-change-environment'
-;; .. 4. `lsp-latex-cancel-build'
-;; .. 5. `lsp-latex-find-environments'
+;; .. 4. `lsp-latex-find-environments'
 ;; ..... 1. `lsp-latex-complete-environment'
+;; .. 5. `lsp-latex-show-dependency-graph'
+;; .. 6. `lsp-latex-cancel-build'
 ;; 6. Commands with `lsp-latex-complete-environment'
 ;; .. 1. `lsp-latex-goto-environment'
 ;; .. 2. `lsp-latex-select-and-change-environment'
@@ -79,22 +80,22 @@
 ;; <https://melpa.org/#/lsp-latex>
 
 
-;; 1 lsp-mode client for texlab.
+;; 1 lsp-mode client for Texlab.
 ;; =============================
 
 ;;   While `lsp-tex.el', included by [lsp-mode], provides minimal setting
-;;   for [texlab], `lsp-latex.el' provides full features of [texlab]!
+;;   for [Texlab], `lsp-latex.el' provides full features of [Texlab]!
 
 
 ;; [lsp-mode] <https://github.com/emacs-lsp/lsp-mode>
 
-;; [texlab] <https://github.com/latex-lsp/texlab>
+;; [Texlab] <https://github.com/latex-lsp/texlab>
 
 
 ;; 2 How to Use?
 ;; =============
 
-;;   - First, you have to install `texlab'.  Please install this [here].
+;;   - First, you have to install Texlab.  Please install this [here].
 ;;   - Next, you should make `lsp-mode' available.  See [lsp-mode].
 ;;   - Now, you can use Language Server Protocol (LSP) on (la)tex-mode or
 ;;     yatex-mode just to evaluate this:
@@ -102,7 +103,7 @@
 ;;   ,----
 ;;   |  1  (add-to-list 'load-path "/path/to/lsp-latex")
 ;;   |  2  (require 'lsp-latex)
-;;   |  3  ;; "texlab" must be located at a directory contained in `exec-path'.
+;;   |  3  ;; "texlab" executable must be located at a directory contained in `exec-path'.
 ;;   |  4  ;; If you want to put "texlab" somewhere else,
 ;;   |  5  ;; you can specify the path to "texlab" as follows:
 ;;   |  6  ;; (setq lsp-latex-texlab-executable "/path/to/texlab")
@@ -132,21 +133,21 @@
 ;; 3.1 `lsp-latex-texlab-executable'
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-;;   Where texlab server located.
+;;   Where Texlab server executable located.
 
 
 ;; 3.2 `lsp-latex-texlab-executable-argument-list'
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-;;   Argument list passed to texlab server.
+;;   Argument list passed to Texlab server.
 
 
 ;; 3.3 Others, provided by texlab server
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-;;   These variables are connected to texlab configuration variables.  See
-;;   also [texlab official wiki].
-;;    Custom variable in Emacs                      Configuration provided by texlab
+;;   These variables are connected to Texlab configuration variables.  See
+;;   also [Texlab official wiki].
+;;    Custom variable in Emacs                      Configuration provided by Texlab
 ;;   ----------------------------------------------------------------------------------------
 ;;    lsp-latex-root-directory                      texlab.rootDirectory
 ;;    lsp-latex-build-executable                    texlab.build.executable
@@ -175,7 +176,7 @@
 ;;    lsp-latex-experimental-citation-commands      texlab.experimental.citationCommands
 
 
-;; [texlab official wiki]
+;; [Texlab official wiki]
 ;; <https://github.com/latex-lsp/texlab/wiki/Configuration>
 
 
@@ -185,22 +186,36 @@
 ;; 4.1 `lsp-latex-build'
 ;; ~~~~~~~~~~~~~~~~~~~~~
 
-;;   Build .tex files with texlab.  It use latexmk by default, so add
-;;   .latexmkrc if you want to customize latex commands or options.  You can
-;;   change build command and option to other such as `make`, by changing
-;;   `lsp-latex-build-executable' and `lsp-latex-build-args'.
+;;   Request texlab to build `.tex' files.  It use [`latexmk'] by default,
+;;   so add `.latexmkrc' if you want to customize latex commands or
+;;   options.  You can change build command and option to other such as
+;;   `make', by changing `lsp-latex-build-executable' and
+;;   `lsp-latex-build-args'.
 
 ;;   This command build asynchronously by default, while it build
-;;   synchronously with prefix argument(C-u).
+;;   synchronously with prefix argument(`C-u').
+
+
+;; [`latexmk'] <https://personal.psu.edu/~jcc8/software/latexmk/>
 
 
 ;; 5 Workspace commands
 ;; ====================
 
-;;   See also [texlab official wiki].
+;;   These commands are connected to Texlab Workspace commands.  See also
+;;   [Texlab official wiki].
+
+;;    Custom variable in Emacs         Configuration provided by Texlab
+;;   -------------------------------------------------------------------
+;;    lsp-latex-clean-auxiliary        texlab.cleanAuxiliary
+;;    lsp-latex-clean-artifacts        texlab.cleanArtifacts
+;;    lsp-latex-change-environment     texlab.changeEnvironment
+;;    lsp-latex-find-environments      texlab.findEnvironments
+;;    lsp-latex-show-dependency-graph  texlab.showDependencyGraph
+;;    lsp-latex-cancel-build           texlab.cancelBuild
 
 
-;; [texlab official wiki]
+;; [Texlab official wiki]
 ;; <https://github.com/latex-lsp/texlab/wiki/Workspace-commands>
 
 ;; 5.1 `lsp-latex-clean-auxiliary'
@@ -224,16 +239,15 @@
 ;;   This edits most-inner environment containing the current position.
 
 
-;; 5.4 `lsp-latex-cancel-build'
-;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-;;   This command cancel build of texlab.
-
-
-;; 5.5 `lsp-latex-find-environments'
+;; 5.4 `lsp-latex-find-environments'
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-;; 5.5.1 `lsp-latex-complete-environment'
+;;   This function get list of environments containing the current point.
+;;   Each element of the list is `lsp-latex-environment-location' instance.
+;;   See the docstring of `lsp-latex-environment-location'.
+
+
+;; 5.4.1 `lsp-latex-complete-environment'
 ;; --------------------------------------
 
 ;;   This function reads environment name from minibuffer and returns
@@ -245,8 +259,30 @@
 ;;   environments.
 
 
+;; 5.5 `lsp-latex-show-dependency-graph'
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+;;   Show dependency graph written by DOT format.  [`graphviz-dot-mode'] is
+;;   needed if you needs syntax highlights or a graphical image.
+
+
+;; [`graphviz-dot-mode'] <https://ppareit.github.io/graphviz-dot-mode/>
+
+
+;; 5.6 `lsp-latex-cancel-build'
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+;;   This command request Texlab to cancel the proceeding build.
+
+
 ;; 6 Commands with `lsp-latex-complete-environment'
 ;; ================================================
+
+;;   `lsp-latex-find-environments', which is interface for
+;;   `texlab.FindEnvironments', does nothing but returns list of
+;;   environments.  So this package provide some additional commands to
+;;   utilize it.
+
 
 ;; 6.1 `lsp-latex-goto-environment'
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -263,11 +299,11 @@
 ;; 7 Forward/inverse search
 ;; ========================
 
-;;   Forward search and inverse search are available.  See also [texlab
+;;   Forward search and inverse search are available.  See also [Texlab
 ;;   official wiki].
 
 
-;; [texlab official wiki]
+;; [Texlab official wiki]
 ;; <https://github.com/latex-lsp/texlab/wiki/Previewing>
 
 ;; 7.1 Forward search
@@ -278,7 +314,7 @@
 ;;   `lsp-latex-forward-search-executable' and
 ;;   `lsp-latex-forward-search-args' according to your pdf viewer.
 
-;;   You can see [texlab official wiki], but you should replace some VSCode
+;;   You can see [Texlab official wiki], but you should replace some VSCode
 ;;   words with Emacs words.  `latex.forwardSearch.executable' should be
 ;;   replaced with `lsp-latex-forward-search-executable', and
 ;;   `latex.forwardSearch.args' with `lsp-latex-forward-search-args'.  You
@@ -298,15 +334,15 @@
 
 ;;   In `lsp-latex-forward-search-args', the string "%f" is replaced with
 ;;   "The path of the current TeX file", "%p" with "The path of the current
-;;   PDF file", "%l" with "The current line number", by texlab (see
-;;   [here]).
+;;   PDF file", "%l" with "The current line number", by Texlab (see
+;;   [Forward search arg section in Texlab official wiki]).
 
 ;;   For example of SumatraPDF, write in init.el:
 ;;   ,----
 ;;   | (setq lsp-latex-forward-search-executable "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe")
 ;;   | (setq lsp-latex-forward-search-args '("-reuse-instance" "%p" "-forward-search" "%f" "%l"))
 ;;   `----
-;;   while VSCode config with json (see [texlab official wiki]) is:
+;;   while VSCode config with json (see [Texlab official wiki]) is:
 ;;   ,----
 ;;   | {
 ;;   |   "texlab.forwardSearch.executable": "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe",
@@ -324,13 +360,13 @@
 ;;   `lsp-latex-forward-search'.
 
 
-;; [texlab official wiki]
+;; [Texlab official wiki]
 ;; <https://github.com/latex-lsp/texlab/wiki/Previewing>
 
-;; [here]
+;; [Forward search arg section in Texlab official wiki]
 ;; <https://github.com/latex-lsp/texlab/wiki/Configuration#texlabforwardsearchargs>
 
-;; [texlab official wiki]
+;; [Texlab official wiki]
 ;; <https://github.com/latex-lsp/texlab/wiki/Previewing#forward-search>
 
 
@@ -352,7 +388,7 @@
 ;;   and filename you want to jump to.  Each pdf viewer can provide some
 ;;   syntax to replace.
 
-;;   For example of SmatraPDF (see [texlab official wiki]), "Add the
+;;   For example of SmatraPDF (see [Texlab official wiki]), "Add the
 ;;   following line to your SumatraPDF settings file (Menu -> Settings ->
 ;;   Advanced Options):"
 ;;   ,----
@@ -362,19 +398,19 @@
 ;;   PDF document".
 
 
-;; [texlab official wiki]
+;; [Texlab official wiki]
 ;; <https://github.com/latex-lsp/texlab/wiki/Previewing#inverse-search>
 
 
 ;; 7.3 Examples
 ;; ~~~~~~~~~~~~
 
-;;   These examples are according to [texlab official wiki].  Especially,
-;;   quoted or double-quoted sentences are citation from [texlab official
+;;   These examples are according to [Texlab official wiki].  Especially,
+;;   quoted or double-quoted sentences are citation from [Texlab official
 ;;   wiki].
 
 
-;; [texlab official wiki]
+;; [Texlab official wiki]
 ;; <https://github.com/latex-lsp/texlab/wiki/Previewing>
 
 ;; 7.3.1 SumatraPDF
@@ -559,7 +595,7 @@
 ;;   |       '("--eval"
 ;;   |         "(lsp-latex-forward-search-with-pdf-tools \"%f\" \"%p\" \"%l\")"))
 ;;   `----
-;;   Inverse research is not provided by texlab, so please use
+;;   Inverse research is not provided by Texlab, so please use
 ;;   `pdf-sync-backward-search-mouse'.
 
 
@@ -587,7 +623,7 @@
   (cond ((eq system-type 'windows-nt)
          "texlab.exe")
         (t "texlab"))
-  "Executable command to run texlab.
+  "Executable command to run Texlab.
 Called with the arguments in `lsp-latex-texlab-executable-argument-list'."
   :group 'lsp-latex
   :type 'string)
@@ -655,7 +691,7 @@ Value is used on `lsp-latex-build'.
 Note that you should change `lsp-latex-build-args' to change output directory.
 If you use latexmk, use \"-outdir\" flag.
 
-This variable is obsoleted since texlab 3.0.0.")
+This variable is obsoleted since Texlab 3.0.0.")
 
 (defcustom lsp-latex-build-aux-directory "."
   "Directory to which built file is put.
@@ -668,7 +704,7 @@ If you use latexmk, use \"-outdir\" flag."
 
 (make-obsolete-variable
  'lsp-latex-build-is-continuous
- "This variable is obsoleted since texlab 3.2.0.
+ "This variable is obsoleted since Texlab 3.2.0.
 https://github.com/latex-lsp/texlab/blob/fe828eed914088c6ad90a4574192024008b3d96a/CHANGELOG.md#changed."
  "3.0.0")
 
@@ -696,7 +732,7 @@ Placeholders
    "2.0.0"
    "Lint using chktex after saving a file.
 
-This variable is obsoleted since texlab 3.0.0.")
+This variable is obsoleted since Texlab 3.0.0.")
 
 (defcustom lsp-latex-chktex-on-open-and-save nil
   "Lint using chktex after opening and saving a file."
@@ -709,7 +745,7 @@ This variable is obsoleted since texlab 3.0.0.")
   "2.0.0"
   "Lint using chktex after changing a file.
 
-This variable is obsoleted since texlab 3.0.0.")
+This variable is obsoleted since Texlab 3.0.0.")
 
 (defcustom lsp-latex-chktex-on-edit nil
   "Lint using chktex after changing a file."
@@ -773,7 +809,7 @@ so this variable is priored."
   "Maximum amount of line on formatting BibTeX files.
 0 means disable.
 
-This variable is obsoleted since texlab 3.0.0.")
+This variable is obsoleted since Texlab 3.0.0.")
 
 (defcustom lsp-latex-bibtex-formatter-line-length 80
   "Maximum amount of line on formatting BibTeX files.
@@ -788,7 +824,7 @@ This variable is obsoleted since texlab 3.0.0.")
   "Formatter used to format BibTeX file.
 You can choose \"texlab\" or \"latexindent\".
 
-This variable is obsoleted since texlab 3.0.0.")
+This variable is obsoleted since Texlab 3.0.0.")
 
 (defcustom lsp-latex-bibtex-formatter "texlab"
   "Formatter used to format BibTeX file.
@@ -801,7 +837,7 @@ You can choose \"texlab\" or \"latexindent\"."
   "Formatter used to format LaTeX file.
 You can choose \"texlab\" or \"latexindent\".
 
-This variable is valid since texlab 3.0.0."
+This variable is valid since Texlab 3.0.0."
   :group 'lsp-latex
   :type '(choice (const "texlab") (const "latexindent"))
   :version "2.0.0")
@@ -821,7 +857,7 @@ The root directory is used by default."
   :version "2.0.0")
 
 (defcustom lsp-latex-completion-matcher "fuzzy-ignore-case"
-  "Algorithm used to filter the completion by texlab.
+  "Algorithm used to filter the completion by Texlab.
 \"fuzzy\", which means fuzzy matching, or \"prefix\",
 which means that prefix matching is allowed.
 In addition, \"-ignore-case\" suffix is also available,
@@ -877,7 +913,7 @@ should be vector."
   (vconcat lsp-latex-build-args))
 
 (defun lsp-latex-setup-variables ()
-  "Register texlab customization variables to function `lsp-mode'."
+  "Register Texlab customization variables to function `lsp-mode'."
   (interactive)
   (lsp-register-custom-settings
    `(("texlab.rootDirectory" lsp-latex-root-directory)
@@ -914,7 +950,7 @@ should be vector."
   (if (locate-file lsp-latex-texlab-executable exec-path)
       (cons lsp-latex-texlab-executable
             lsp-latex-texlab-executable-argument-list)
-    (error "No executable \"texlab\" file")))
+    (error "\"texlab\" executable is not found")))
 
 ;; Copied from `lsp-clients--rust-window-progress' in `lsp-rust'.
 (defun lsp-latex-window-progress (_workspace params)
@@ -981,7 +1017,7 @@ PARAMS progress report notification data."
       "Build cancelled."))))
 
 (defun lsp-latex-build (&optional sync)
-  "Build current tex file with latexmk, through texlab.
+  "Build current tex file with latexmk, through Texlab.
 Build synchronously if SYNC is non-nil."
   (interactive "P")
   (if sync
@@ -1131,7 +1167,7 @@ or a graphical image."
     (pop-to-buffer buffer)))
 
 (defun lsp-latex-cancel-build ()
-  "Cancel builds by texlab."
+  "Cancel builds by Texlab."
   (lsp-workspace-command-execute "texlab.cancelBuild"))
 
 ;;;; Find environments

@@ -2,12 +2,12 @@
 [[file:LICENSE][https://img.shields.io/github/license/ROCKTAKEY/lsp-latex.svg?style=flat-square]]
 [[https://github.com/ROCKTAKEY/lsp-latex/actions][https://img.shields.io/github/actions/workflow/status/ROCKTAKEY/lsp-latex/CI.yml.svg?style=flat-square]]
 [[https://melpa.org/#/lsp-latex][file:https://melpa.org/packages/lsp-latex-badge.svg]]
-* lsp-mode client for texlab.
-While =lsp-tex.el=, included by [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]], provides minimal setting for [[https://github.com/latex-lsp/texlab][texlab]],
-=lsp-latex.el= provides full features of [[https://github.com/latex-lsp/texlab][texlab]]!
+* lsp-mode client for Texlab.
+While =lsp-tex.el=, included by [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]], provides minimal setting for [[https://github.com/latex-lsp/texlab][Texlab]],
+=lsp-latex.el= provides full features of [[https://github.com/latex-lsp/texlab][Texlab]]!
 
 * How to Use?
-  - First, you have to install ~texlab~.
+  - First, you have to install Texlab.
     Please install this [[https://github.com/latex-lsp/texlab/releases][here]].
   - Next, you should make ~lsp-mode~ available. See [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]].
   - Now, you can use Language Server Protocol (LSP) on (la)tex-mode or yatex-mode just to evaluate this:
@@ -15,7 +15,7 @@ While =lsp-tex.el=, included by [[https://github.com/emacs-lsp/lsp-mode][lsp-mod
 #+BEGIN_SRC emacs-lisp -n
   (add-to-list 'load-path "/path/to/lsp-latex")
   (require 'lsp-latex)
-  ;; "texlab" must be located at a directory contained in `exec-path'.
+  ;; "texlab" executable must be located at a directory contained in `exec-path'.
   ;; If you want to put "texlab" somewhere else,
   ;; you can specify the path to "texlab" as follows:
   ;; (setq lsp-latex-texlab-executable "/path/to/texlab")
@@ -34,13 +34,13 @@ While =lsp-tex.el=, included by [[https://github.com/emacs-lsp/lsp-mode][lsp-mod
 #+END_SRC
 * Variables
 ** ~lsp-latex-texlab-executable~
-   Where texlab server located.
+   Where Texlab server executable located.
 ** ~lsp-latex-texlab-executable-argument-list~
-   Argument list passed to texlab server.
+   Argument list passed to Texlab server.
 ** Others, provided by texlab server
-   These variables are connected to texlab configuration variables.
-   See also [[https://github.com/latex-lsp/texlab/wiki/Configuration][texlab official wiki]].
-| Custom variable in Emacs                     | Configuration provided by texlab         |
+These variables are connected to Texlab configuration variables.
+See also [[https://github.com/latex-lsp/texlab/wiki/Configuration][Texlab official wiki]].
+| Custom variable in Emacs                     | Configuration provided by Texlab        |
 |----------------------------------------------+------------------------------------------|
 | lsp-latex-root-directory                     | texlab.rootDirectory                     |
 | lsp-latex-build-executable                   | texlab.build.executable                  |
@@ -70,17 +70,27 @@ While =lsp-tex.el=, included by [[https://github.com/emacs-lsp/lsp-mode][lsp-mod
 
 * Build
 ** ~lsp-latex-build~
-   Build .tex files with texlab.
-   It use latexmk by default, so add .latexmkrc if you want to customize
+   Request texlab to build =.tex= files.
+   It use [[https://personal.psu.edu/~jcc8/software/latexmk/][=latexmk=]] by default, so add =.latexmkrc= if you want to customize
    latex commands or options. You can change build command and option to other
-   such as `make`, by changing ~lsp-latex-build-executable~ and
+   such as =make=, by changing ~lsp-latex-build-executable~ and
    ~lsp-latex-build-args~.
 
    This command build asynchronously by default, while it build synchronously
-   with prefix argument(C-u).
+   with prefix argument(=C-u=).
 
 * Workspace commands
-See also [[https://github.com/latex-lsp/texlab/wiki/Workspace-commands][texlab official wiki]].
+These commands are connected to Texlab Workspace commands.
+See also [[https://github.com/latex-lsp/texlab/wiki/Workspace-commands][Texlab official wiki]].
+
+| Custom variable in Emacs        | Configuration provided by Texlab |
+|---------------------------------+----------------------------------|
+| lsp-latex-clean-auxiliary       | texlab.cleanAuxiliary            |
+| lsp-latex-clean-artifacts       | texlab.cleanArtifacts            |
+| lsp-latex-change-environment    | texlab.changeEnvironment         |
+| lsp-latex-find-environments     | texlab.findEnvironments          |
+| lsp-latex-show-dependency-graph | texlab.showDependencyGraph       |
+| lsp-latex-cancel-build          | texlab.cancelBuild               |
 
 ** =lsp-latex-clean-auxiliary=
 This command removes LaTeX auxiliary files.
@@ -94,10 +104,10 @@ It will run =latexmk -C= in the project.
 This command replaces enviroment name to NEW-NAME in current position.
 This edits most-inner environment containing the current position.
 
-** =lsp-latex-cancel-build=
-This command cancel build of texlab.
-
 ** =lsp-latex-find-environments=
+This function get list of environments containing the current point.
+Each element of the list is =lsp-latex-environment-location= instance.
+See the docstring of =lsp-latex-environment-location=.
 
 *** =lsp-latex-complete-environment=
 This function reads environment name from minibuffer and returns =lsp-latex-environment-location= instance.
@@ -106,7 +116,16 @@ It takes three arguments, =BUFFER=, =POINT=, =PROMPT=.
 =PROMPT= is used as prompt for =consult--read=, which is wrapper of =completing-read=.
 =BUFFER= and =POINT= specify basis to find environments.
 
+** =lsp-latex-show-dependency-graph=
+Show dependency graph written by DOT format.
+[[https://ppareit.github.io/graphviz-dot-mode/][=graphviz-dot-mode=]] is needed if you needs syntax highlights or a graphical image.
+** =lsp-latex-cancel-build=
+This command request Texlab to cancel the proceeding build.
+
 * Commands with =lsp-latex-complete-environment=
+=lsp-latex-find-environments=, which is interface for =texlab.FindEnvironments=, does nothing but returns list of environments.
+So this package provide some additional commands to utilize it.
+
 ** =lsp-latex-goto-environment=
 Go to selected environment containing the current point.
 
@@ -114,7 +133,7 @@ Go to selected environment containing the current point.
 Change name of selected environment to NEW-NAME.
 
 * Forward/inverse search
-  Forward search and inverse search are available. See also [[https://github.com/latex-lsp/texlab/wiki/Previewing][texlab official wiki]].
+  Forward search and inverse search are available. See also [[https://github.com/latex-lsp/texlab/wiki/Previewing][Texlab official wiki]].
 
 ** Forward search
    You can move from Emacs to current position on pdf viewer
@@ -122,7 +141,7 @@ Change name of selected environment to NEW-NAME.
    To use, you should set ~lsp-latex-forward-search-executable~ and
    ~lsp-latex-forward-search-args~ according to your pdf viewer.
 
-   You can see [[https://github.com/latex-lsp/texlab/wiki/Previewing][texlab official wiki]], but you should replace some VSCode words with Emacs words.
+   You can see [[https://github.com/latex-lsp/texlab/wiki/Previewing][Texlab official wiki]], but you should replace some VSCode words with Emacs words.
    ~latex.forwardSearch.executable~ should be replaced with  ~lsp-latex-forward-search-executable~,
    and ~latex.forwardSearch.args~ with ~lsp-latex-forward-search-args~. You should setq each variable
    instead of writing like json, and vector in json is replaced to list in Emacs Lisp. So the json:
@@ -140,14 +159,14 @@ Change name of selected environment to NEW-NAME.
 
    In ~lsp-latex-forward-search-args~, the string "%f" is replaced with
    "The path of the current TeX file", "%p" with "The path of the current PDF file",
-   "%l" with "The current line number", by texlab (see [[https://github.com/latex-lsp/texlab/wiki/Configuration#texlabforwardsearchargs][here]]).
+   "%l" with "The current line number", by Texlab (see [[https://github.com/latex-lsp/texlab/wiki/Configuration#texlabforwardsearchargs][Forward search arg section in Texlab official wiki]]).
 
    For example of SumatraPDF, write in init.el:
    #+begin_src emacs-lisp :tangle yes
      (setq lsp-latex-forward-search-executable "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe")
      (setq lsp-latex-forward-search-args '("-reuse-instance" "%p" "-forward-search" "%f" "%l"))
    #+end_src
-   while VSCode config with json (see [[https://github.com/latex-lsp/texlab/wiki/Previewing#forward-search][texlab official wiki]]) is:
+   while VSCode config with json (see [[https://github.com/latex-lsp/texlab/wiki/Previewing#forward-search][Texlab official wiki]]) is:
    #+BEGIN_SRC json :tangle yes
      {
        "texlab.forwardSearch.executable": "C:/Users/{User}/AppData/Local/SumatraPDF/SumatraPDF.exe",
@@ -176,7 +195,7 @@ Change name of selected environment to NEW-NAME.
   {{LINE-NUMBER}} and {{FILENAME}} should be replaced with line number and filename you want
   to jump to. Each pdf viewer can provide some syntax to replace.
 
-  For example of SmatraPDF (see [[https://github.com/latex-lsp/texlab/wiki/Previewing#inverse-search][texlab official wiki]]),
+  For example of SmatraPDF (see [[https://github.com/latex-lsp/texlab/wiki/Previewing#inverse-search][Texlab official wiki]]),
   "Add the following line to your SumatraPDF settings file (Menu -> Settings -> Advanced Options):"
   #+BEGIN_SRC ini -n
     InverseSearchCmdLine = C:\path\to\emacsclient.exe +%l %f
@@ -184,8 +203,8 @@ Change name of selected environment to NEW-NAME.
   Then, "You can execute the search by pressing Alt+DoubleClick in the PDF document".
 
 ** Examples
-   These examples are according to [[https://github.com/latex-lsp/texlab/wiki/Previewing][texlab official wiki]]. Especially, quoted or double-quoted
-   sentences are citation from [[https://github.com/latex-lsp/texlab/wiki/Previewing][texlab official wiki]].
+   These examples are according to [[https://github.com/latex-lsp/texlab/wiki/Previewing][Texlab official wiki]]. Especially, quoted or double-quoted
+   sentences are citation from [[https://github.com/latex-lsp/texlab/wiki/Previewing][Texlab official wiki]].
 *** SumatraPDF
     #+BEGIN_QUOTE
         We highly recommend SumatraPDF on Windows
@@ -312,7 +331,7 @@ Change name of selected environment to NEW-NAME.
             '("--eval"
               "(lsp-latex-forward-search-with-pdf-tools \"%f\" \"%p\" \"%l\")"))
     #+end_src
-    Inverse research is not provided by texlab,
+    Inverse research is not provided by Texlab,
     so please use ~pdf-sync-backward-search-mouse~.
 
 * License
