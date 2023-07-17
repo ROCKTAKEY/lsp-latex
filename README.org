@@ -94,6 +94,25 @@ It will run =latexmk -C= in the project.
 This command replaces enviroment name to NEW-NAME in current position.
 This edits most-inner environment containing the current position.
 
+** =lsp-latex-cancel-build=
+This command cancel build of texlab.
+
+** =lsp-latex-find-environments=
+
+*** =lsp-latex-complete-environment=
+This function reads environment name from minibuffer and returns =lsp-latex-environment-location= instance.
+
+It takes three arguments, =BUFFER=, =POINT=, =PROMPT=.
+=PROMPT= is used as prompt for =consult--read=, which is wrapper of =completing-read=.
+=BUFFER= and =POINT= specify basis to find environments.
+
+* Commands with =lsp-latex-complete-environment=
+** =lsp-latex-goto-environment=
+Go to selected environment containing the current point.
+
+** =lsp-latex-select-and-change-environment=
+Change name of selected environment to NEW-NAME.
+
 * Forward/inverse search
   Forward search and inverse search are available. See also [[https://github.com/latex-lsp/texlab/wiki/Previewing][texlab official wiki]].
 
