@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.6.0
+;; Version: 3.6.1
 
 ;; Package-Requires: ((emacs "27.1") (lsp-mode "6.0") (consult "0.35"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -953,16 +953,24 @@ PARAMS progress report notification data."
 ;;; Interface
 (eval-when-compile
   (lsp-interface
+   (texlab:BuildTextDocumentParams
+    (:textDocument) (:position?))
+   (texlab:BuildResult
+    (:status) nil)
+   (texlab:ForwardSearchResult
+    (:status) nil)
    (texlab:EnvironmentLocation
-    (:name :fullRange) nil)))
+    (:name :fullRange) nil)
+   (texlab:ChangeEnvironmentParams
+    (:textDocument :position :newName) nil)))
 
 
 ;;; Build
 
-(defun lsp-latex--message-result-build (result)
-  "Message RESULT means success or not."
+(lsp-defun lsp-latex--message-result-build ((&texlab:BuildResult :status))
+  "Message STATUS means success or not."
   (message
-   (cl-case (gethash "status" result)
+   (cl-case status
      ((0)                             ;Success
       "Build succeeded.")
      ((1)                             ;Error
@@ -979,11 +987,13 @@ Build synchronously if SYNC is non-nil."
   (if sync
       (lsp-latex--message-result-build
        (lsp-request
-       "textDocument/build"
-       (list :textDocument (lsp--text-document-identifier))))
+        "textDocument/build"
+        (lsp-make-texlab-build-text-document-params
+         :text-document (lsp--text-document-identifier))))
     (lsp-request-async
      "textDocument/build"
-     (list :textDocument (lsp--text-document-identifier))
+     (lsp-make-texlab-build-text-document-params
+      :text-document (lsp--text-document-identifier))
      #'lsp-latex--message-result-build)))
 
 
@@ -1037,10 +1047,10 @@ This function is partially copied from
        (with-current-buffer buffer
          (run-hooks 'pdf-sync-forward-hook))))))
 
-(defun lsp-latex--message-forward-search (result)
-  "Message unless RESULT means success."
+(lsp-defun lsp-latex--message-forward-search ((&texlab:ForwardSearchResult :status))
+  "Message unless STATUS means success."
   (message
-   (cl-case (plist-get result :status)
+   (cl-case status
      ((1)                             ;Error
       "Forward search do not succeeded.")
      ((2)                             ;Failure
@@ -1096,9 +1106,10 @@ the file specified by TEXT-DOCUMENT-IDENTIFIER."
     (read-string "New environment name: ")))
   (lsp-workspace-command-execute "texlab.changeEnvironment"
                                  (vector
-                                  (list :textDocument text-document-identifier
-                                        :position position
-                                        :newName new-name))))
+                                  (lsp-make-texlab-change-environment-params
+                                   :text-document text-document-identifier
+                                   :position position
+                                   :new-name new-name))))
 
 (defalias 'lsp-latex-change-environment #'lsp-latex-change-environment-most-inner)
 
