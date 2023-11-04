@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.6.2
+;; Version: 3.6.3
 
 ;; Package-Requires: ((emacs "27.1") (lsp-mode "6.0") (consult "0.35"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -670,7 +670,7 @@ Value is used on `lsp-latex-build'.
 
 (define-obsolete-variable-alias 'lsp-latex-forward-search-after
   'lsp-latex-build-forward-search-after
-   "3.0.0")
+  "3.0.0")
 
 (defcustom lsp-latex-build-forward-search-after nil
   "Execute forward-research after building."
@@ -729,8 +729,8 @@ Placeholders
 
 (define-obsolete-variable-alias 'lsp-latex-lint-on-save
   'lsp-latex-chktex-on-open-and-save
-   "2.0.0"
-   "Lint using chktex after saving a file.
+  "2.0.0"
+  "Lint using chktex after saving a file.
 
 This variable is obsoleted since Texlab 3.0.0.")
 
@@ -1055,33 +1055,33 @@ This function is partially copied from
   (require 'pdf-sync)
 
   (with-current-buffer (get-file-buffer tex-file)
-   (cl-destructuring-bind (pdf page _x1 y1 _x2 _y2)
-       (let* ((column 1)
-              (pdf (expand-file-name (with-no-warnings pdf-file)))
-              (sfilename (pdf-sync-synctex-file-name
-                          (buffer-file-name) pdf)))
-         (cons pdf
-               (condition-case error
-                   (let-alist (pdf-info-synctex-forward-search
-                               (or sfilename
-                                   (buffer-file-name))
-                               line column pdf)
-                     (cons .page .edges))
-                 (error
-                  (message "%s" (error-message-string error))
-                  (list nil nil nil nil nil)))))
-     (let ((buffer (or (find-buffer-visiting pdf)
-                       (find-file-noselect pdf))))
-       (with-selected-window (display-buffer
-                              buffer pdf-sync-forward-display-action)
-         (pdf-util-assert-pdf-window)
-         (when page
-           (pdf-view-goto-page page)
-           (when y1
-             (let ((top (* y1 (cdr (pdf-view-image-size)))))
-               (pdf-util-tooltip-arrow (round top))))))
-       (with-current-buffer buffer
-         (run-hooks 'pdf-sync-forward-hook))))))
+    (cl-destructuring-bind (pdf page _x1 y1 _x2 _y2)
+        (let* ((column 1)
+               (pdf (expand-file-name (with-no-warnings pdf-file)))
+               (sfilename (pdf-sync-synctex-file-name
+                           (buffer-file-name) pdf)))
+          (cons pdf
+                (condition-case error
+                    (let-alist (pdf-info-synctex-forward-search
+                                (or sfilename
+                                    (buffer-file-name))
+                                line column pdf)
+                      (cons .page .edges))
+                  (error
+                   (message "%s" (error-message-string error))
+                   (list nil nil nil nil nil)))))
+      (let ((buffer (or (find-buffer-visiting pdf)
+                        (find-file-noselect pdf))))
+        (with-selected-window (display-buffer
+                               buffer pdf-sync-forward-display-action)
+          (pdf-util-assert-pdf-window)
+          (when page
+            (pdf-view-goto-page page)
+            (when y1
+              (let ((top (* y1 (cdr (pdf-view-image-size)))))
+                (pdf-util-tooltip-arrow (round top))))))
+        (with-current-buffer buffer
+          (run-hooks 'pdf-sync-forward-hook))))))
 
 (lsp-defun lsp-latex--message-forward-search ((&texlab:ForwardSearchResult :status))
   "Message unless STATUS means success."
