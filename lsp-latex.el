@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.6.3
+;; Version: 3.6.4
 
 ;; Package-Requires: ((emacs "27.1") (lsp-mode "6.0") (consult "0.35"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -987,7 +987,7 @@ PARAMS progress report notification data."
 
 
 ;;; Interface
-(eval-when-compile
+(eval-and-compile
   (lsp-interface
    (texlab:BuildTextDocumentParams
     (:textDocument) (:position?))
