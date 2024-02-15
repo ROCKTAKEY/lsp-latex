@@ -964,8 +964,10 @@ PARAMS progress report notification data."
                   (lsp-stdio-connection
                    #'lsp-latex-new-connection)
                   :major-modes '(tex-mode
+                                 TeX-mode ;; AUCTeX 14+ has renamed tex-mode to TeX-mode
                                  yatex-mode
                                  latex-mode
+                                 LaTeX-mode  ;; AUCTeX 14+ has renamed latex-mode to LaTeX-mode
                                  bibtex-mode)
                   :server-id 'texlab2
                   :priority 2
