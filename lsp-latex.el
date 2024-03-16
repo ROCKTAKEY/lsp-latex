@@ -696,11 +696,19 @@ This variable is obsoleted since Texlab 3.0.0.")
 (defcustom lsp-latex-build-aux-directory "."
   "Directory to which built file is put.
 Note that you should change `lsp-latex-build-args' to change output directory.
-If you use latexmk, use \"-outdir\" flag."
+
+If you use latexmk, it is automatically determined by Texlab."
   :group 'lsp-latex
   :type 'string
   :risky t
   :version "2.0.0")
+
+(defcustom lsp-latex-build-log-directory "."
+  "Log directory for build without latexmk."
+  :group 'lsp-latex
+  :type 'string
+  :risky t
+  :version "3.7.0")
 
 (make-obsolete-variable
  'lsp-latex-build-is-continuous
@@ -921,7 +929,8 @@ should be vector."
      ("texlab.build.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-build-args))
      ("texlab.build.forwardSearchAfter" lsp-latex-build-forward-search-after t)
      ("texlab.build.onSave" lsp-latex-build-on-save t)
-     ("texlab.auxDirectory" lsp-latex-build-aux-directory)
+     ("texlab.build.auxDirectory" lsp-latex-build-aux-directory)
+     ("texlab.build.logDirectory" lsp-latex-build-log-directory)
      ("texlab.forwardSearch.executable" lsp-latex-forward-search-executable)
      ("texlab.forwardSearch.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-forward-search-args))
      ("texlab.chktex.onOpenAndSave" lsp-latex-chktex-on-open-and-save t)
