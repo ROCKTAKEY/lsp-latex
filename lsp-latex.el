@@ -895,6 +895,18 @@ which means the matcher should be case insensitive."
                  (const "prefix-ignore-case"))
   :version "3.5.0")
 
+(defcustom lsp-latex-inlay-hints-label-definitions '()
+  "When non-nil, inlay hints for \"\\label\"-like commands are displayed."
+  :group 'lsp-latex
+  :type 'boolean
+  :version "3.7.0")
+
+(defcustom lsp-latex-inlay-hints-label-references '()
+  "When non-nil, inlay hints for \"\\ref\"-like commands are displayed."
+  :group 'lsp-latex
+  :type 'boolean
+  :version "3.7.0")
+
 (defcustom lsp-latex-experimental-math-environments '()
   "List of environment name regarded as math environment, such as \"align\"."
   :group 'lsp-latex
@@ -952,7 +964,7 @@ should be vector."
      ("texlab.build.pdfDirectory" lsp-latex-build-pdf-directory)
      ("texlab.forwardSearch.executable" lsp-latex-forward-search-executable)
      ("texlab.forwardSearch.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-forward-search-args))
-     ("texlab.chktex.additionalArgs" ,(apply-partially #'lsp-latex--getter-vectorize-list, 'lsp-latex-chktex-additional-args))
+     ("texlab.chktex.additionalArgs" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-chktex-additional-args))
      ("texlab.chktex.onOpenAndSave" lsp-latex-chktex-on-open-and-save t)
      ("texlab.chktex.onEdit" lsp-latex-chktex-on-edit t)
      ("texlab.diagnosticsDelay" lsp-latex-diagnostics-delay)
@@ -966,6 +978,8 @@ should be vector."
      ("texlab.latexindent.local" lsp-latex-latexindent-local)
      ("texlab.latexindent.modifyLineBreaks" lsp-latex-latexindent-modify-line-breaks)
      ("texlab.completion.matcher" lsp-latex-completion-matcher)
+     ("texlab.inlayHints.labelDefinitions" lsp-latex-inlay-hints-label-definitions t)
+     ("texlab.inlayHints.labelReferences" lsp-latex-inlay-hints-label-references t)
      ("texlab.experimental.mathEnvironments" lsp-latex-experimental-math-environments)
      ("texlab.experimental.enumEnvironments"lsp-latex-experimental-enum-environments)
      ("texlab.experimental.verbatimEnvironments" lsp-latex-experimental-verbatim-environments)
