@@ -754,6 +754,12 @@ Placeholders
 
 This variable is obsoleted since Texlab 3.0.0.")
 
+(defcustom lsp-latex-chktex-additional-args nil
+  "Additional arguments passed to ChkTeX."
+  :group 'lsp-latex
+  :type '(repeat string)
+  :version "3.7.0")
+
 (defcustom lsp-latex-chktex-on-open-and-save nil
   "Lint using chktex after opening and saving a file."
   :group 'lsp-latex
@@ -946,6 +952,7 @@ should be vector."
      ("texlab.build.pdfDirectory" lsp-latex-build-pdf-directory)
      ("texlab.forwardSearch.executable" lsp-latex-forward-search-executable)
      ("texlab.forwardSearch.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-forward-search-args))
+     ("texlab.chktex.additionalArgs" ,(apply-partially #'lsp-latex--getter-vectorize-list, 'lsp-latex-chktex-additional-args))
      ("texlab.chktex.onOpenAndSave" lsp-latex-chktex-on-open-and-save t)
      ("texlab.chktex.onEdit" lsp-latex-chktex-on-edit t)
      ("texlab.diagnosticsDelay" lsp-latex-diagnostics-delay)
