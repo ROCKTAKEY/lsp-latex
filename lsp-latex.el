@@ -704,7 +704,19 @@ If you use latexmk, it is automatically determined by Texlab."
   :version "2.0.0")
 
 (defcustom lsp-latex-build-log-directory "."
-  "Log directory for build without latexmk."
+  "Directory containing log for build without latexmk.
+
+If you use latexmk, it is automatically determined by Texlab."
+  :group 'lsp-latex
+  :type 'string
+  :risky t
+  :version "3.7.0")
+
+(defcustom lsp-latex-build-pdf-directory "."
+  "Directory containing PDF for build without latexmk.
+Note that you should change `lsp-latex-build-args' to change output directory.
+
+If you use latexmk, it is automatically determined by Texlab."
   :group 'lsp-latex
   :type 'string
   :risky t
@@ -931,6 +943,7 @@ should be vector."
      ("texlab.build.onSave" lsp-latex-build-on-save t)
      ("texlab.build.auxDirectory" lsp-latex-build-aux-directory)
      ("texlab.build.logDirectory" lsp-latex-build-log-directory)
+     ("texlab.build.pdfDirectory" lsp-latex-build-pdf-directory)
      ("texlab.forwardSearch.executable" lsp-latex-forward-search-executable)
      ("texlab.forwardSearch.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-forward-search-args))
      ("texlab.chktex.onOpenAndSave" lsp-latex-chktex-on-open-and-save t)
