@@ -936,6 +936,13 @@ For example, \"cite\" is meet the condition. Note that backslash is not needed."
   :type '(repeat string)
   :version "3.5.0")
 
+(defcustom lsp-latex-experimental-label-reference-commands '()
+  "List of command name which should be regarded as \"\\ref\"-like command.
+For example, \"ref\" is meet the condition. Note that backslash is not needed."
+  :group 'lsp-latex
+  :type '(repeat string)
+  :version "3.7.0")
+
 (defun lsp-latex--getter-vectorize-list (symbol)
   "Make list in SYMBOL into vector.
 This function is thoughted to be used with `apply-partially'.
@@ -983,7 +990,8 @@ should be vector."
      ("texlab.experimental.mathEnvironments" lsp-latex-experimental-math-environments)
      ("texlab.experimental.enumEnvironments"lsp-latex-experimental-enum-environments)
      ("texlab.experimental.verbatimEnvironments" lsp-latex-experimental-verbatim-environments)
-     ("texlab.experimental.citationCommands" lsp-latex-experimental-citation-commands))))
+     ("texlab.experimental.citationCommands" lsp-latex-experimental-citation-commands)
+     ("texlab.experimental.labelReferenceCommands" lsp-latex-experimental-label-reference-commands))))
 
 (lsp-latex-setup-variables)
 
