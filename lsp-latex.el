@@ -762,7 +762,9 @@ Placeholders
 This variable is obsoleted since Texlab 3.0.0.")
 
 (defcustom lsp-latex-chktex-additional-args nil
-  "Additional arguments passed to ChkTeX."
+  "Additional arguments passed to ChkTeX.
+Note that redefining -I and -f flags is not allowed.
+These are set by Texlab server."
   :group 'lsp-latex
   :type '(repeat string)
   :version "3.7.0")
