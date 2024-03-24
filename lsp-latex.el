@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.7.0
+;; Version: 3.7.1
 
 ;; Package-Requires: ((emacs "27.1") (lsp-mode "6.0") (consult "0.35"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -996,11 +996,11 @@ should be vector."
      ("texlab.completion.matcher" lsp-latex-completion-matcher)
      ("texlab.inlayHints.labelDefinitions" lsp-latex-inlay-hints-label-definitions t)
      ("texlab.inlayHints.labelReferences" lsp-latex-inlay-hints-label-references t)
-     ("texlab.experimental.mathEnvironments" lsp-latex-experimental-math-environments)
-     ("texlab.experimental.enumEnvironments"lsp-latex-experimental-enum-environments)
-     ("texlab.experimental.verbatimEnvironments" lsp-latex-experimental-verbatim-environments)
-     ("texlab.experimental.citationCommands" lsp-latex-experimental-citation-commands)
-     ("texlab.experimental.labelReferenceCommands" lsp-latex-experimental-label-reference-commands))))
+     ("texlab.experimental.mathEnvironments" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-math-environments))
+     ("texlab.experimental.enumEnvironments" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-enum-environments))
+     ("texlab.experimental.verbatimEnvironments" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-verbatim-environments))
+     ("texlab.experimental.citationCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-citation-commands))
+     ("texlab.experimental.labelReferenceCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-reference-commands)))))
 
 (lsp-latex-setup-variables)
 
