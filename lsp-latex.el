@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.7.1
+;; Version: 3.8.0
 
 ;; Package-Requires: ((emacs "27.1") (lsp-mode "6.0") (consult "0.35"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -85,7 +85,7 @@
 
 ;;   While `lsp-tex.el', included by [lsp-mode], provides minimal setting
 ;;   for [Texlab], `lsp-latex.el' provides full features of [Texlab]
-;;   v5.13.1.
+;;   v5.19.0.
 
 
 ;; [lsp-mode] <https://github.com/emacs-lsp/lsp-mode>

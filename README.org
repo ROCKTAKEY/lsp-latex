@@ -4,7 +4,7 @@
 [[https://melpa.org/#/lsp-latex][file:https://melpa.org/packages/lsp-latex-badge.svg]]
 * lsp-mode client for Texlab.
 While =lsp-tex.el=, included by [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]], provides minimal setting for [[https://github.com/latex-lsp/texlab][Texlab]],
-=lsp-latex.el= provides full features of [[https://github.com/latex-lsp/texlab][Texlab]] v5.13.1.
+=lsp-latex.el= provides full features of [[https://github.com/latex-lsp/texlab][Texlab]] v5.19.0.
 
 * How to Use?
   - First, you have to install Texlab.
