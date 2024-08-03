@@ -28,5 +28,19 @@
 
 (require 'lsp-latex)
 
+(ert-deftest lsp-latex--vectorize-recursive-simple ()
+  (should (equal (lsp-latex--vectorize-recursive '())
+                 []))
+  (should (equal (lsp-latex--vectorize-recursive '(a b c))
+                 [a b c])))
+
+(ert-deftest lsp-latex--vectorize-recursive-recursive ()
+  (should (equal (lsp-latex--vectorize-recursive '(a (b) (c)))
+                 [a [b] [c]]))
+  (should (equal (lsp-latex--vectorize-recursive '((a b) c))
+                 [[a b] c]))
+  (should (equal (lsp-latex--vectorize-recursive '((a (b d (e f g))) c))
+                 [[a [b d [e f g]]] c])))
+
 (provide 'lsp-latex-test)
 ;;; lsp-latex-test.el ends here

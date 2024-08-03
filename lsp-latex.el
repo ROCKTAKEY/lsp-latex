@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.7.1
+;; Version: 3.8.0
 
 ;; Package-Requires: ((emacs "27.1") (lsp-mode "6.0") (consult "0.35"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -85,7 +85,7 @@
 
 ;;   While `lsp-tex.el', included by [lsp-mode], provides minimal setting
 ;;   for [Texlab], `lsp-latex.el' provides full features of [Texlab]
-;;   v5.13.1.
+;;   v5.19.0.
 
 
 ;; [lsp-mode] <https://github.com/emacs-lsp/lsp-mode>
@@ -148,39 +148,42 @@
 
 ;;   These variables are connected to Texlab configuration variables.  See
 ;;   also [Texlab official wiki].
-;;    Custom variable in Emacs                         Configuration provided by Texlab
-;;   ---------------------------------------------------------------------------------------------
-;;    lsp-latex-root-directory                         texlab.rootDirectory
-;;    lsp-latex-build-executable                       texlab.build.executable
-;;    lsp-latex-build-args                             texlab.build.args
-;;    lsp-latex-build-forward-search-after             texlab.build.forwardSearchAfter
-;;    lsp-latex-build-on-save                          texlab.build.onSave
-;;    lsp-latex-build-aux-directory                    texlab.build.auxDirectory
-;;    lsp-latex-build-log-directory                    texlab.build.logDirectory
-;;    lsp-latex-build-pdf-directory                    texlab.build.pdfDirectory
-;;    lsp-latex-forward-search-executable              texlab.forwardSearch.executable
-;;    lsp-latex-forward-search-args                    texlab.forwardSearch.args
-;;    lsp-latex-chktex-additional-args                 texlab.chktex.additionalArgs
-;;    lsp-latex-chktex-on-open-and-save                texlab.chktex.onOpenAndSave
-;;    lsp-latex-chktex-on-edit                         texlab.chktex.onEdit
-;;    lsp-latex-diagnostics-delay                      texlab.diagnosticsDelay
-;;    lsp-latex-diagnostics-allowed-patterns           texlab.diagnostics.allowedPatterns
-;;    lsp-latex-diagnostics-ignored-patterns           texlab.diagnostics.ignoredPatterns
-;;    lsp-latex-symbol-allowed-patterns                texlab.symbol.allowedPatterns
-;;    lsp-latex-symbol-ignored-patterns                texlab.symbol.ignoredPatterns
-;;    lsp-latex-bibtex-formatter-line-length           texlab.formatterLineLength
-;;    lsp-latex-bibtex-formatter                       texlab.bibtexFormatter
-;;    lsp-latex-latex-formatter                        texlab.latexFormatter
-;;    lsp-latex-latexindent-local                      texlab.latexindent.local
-;;    lsp-latex-latexindent-modify-line-breaks         texlab.latexindent.modifyLineBreaks
-;;    lsp-latex-completion-matcher                     texlab.completion.matcher
-;;    lsp-latex-inlay-hints-label-definitions          texlab.inlayHints.labelDefinitions
-;;    lsp-latex-inlay-hints-label-references           texlab.inlayHints.labelReferences
-;;    lsp-latex-experimental-math-environments         texlab.experimental.mathEnvironments
-;;    lsp-latex-experimental-enum-environments         texlab.experimental.enumEnvironments
-;;    lsp-latex-experimental-verbatim-environments     texlab.experimental.verbatimEnvironments
-;;    lsp-latex-experimental-citation-commands         texlab.experimental.citationCommands
-;;    lsp-latex-experimental-label-reference-commands  texlab.experimental.labelReferenceCommands
+;;    Custom variable in Emacs                          Configuration provided by Texlab
+;;   -----------------------------------------------------------------------------------------------
+;;    lsp-latex-build-executable                        texlab.build.executable
+;;    lsp-latex-build-args                              texlab.build.args
+;;    lsp-latex-build-forward-search-after              texlab.build.forwardSearchAfter
+;;    lsp-latex-build-on-save                           texlab.build.onSave
+;;    lsp-latex-build-use-file-list                     texlab.build.useFileList
+;;    lsp-latex-build-aux-directory                     texlab.build.auxDirectory
+;;    lsp-latex-build-log-directory                     texlab.build.logDirectory
+;;    lsp-latex-build-pdf-directory                     texlab.build.pdfDirectory
+;;    lsp-latex-forward-search-executable               texlab.forwardSearch.executable
+;;    lsp-latex-forward-search-args                     texlab.forwardSearch.args
+;;    lsp-latex-chktex-additional-args                  texlab.chktex.additionalArgs
+;;    lsp-latex-chktex-on-open-and-save                 texlab.chktex.onOpenAndSave
+;;    lsp-latex-chktex-on-edit                          texlab.chktex.onEdit
+;;    lsp-latex-diagnostics-delay                       texlab.diagnosticsDelay
+;;    lsp-latex-diagnostics-allowed-patterns            texlab.diagnostics.allowedPatterns
+;;    lsp-latex-diagnostics-ignored-patterns            texlab.diagnostics.ignoredPatterns
+;;    lsp-latex-symbol-allowed-patterns                 texlab.symbol.allowedPatterns
+;;    lsp-latex-symbol-ignored-patterns                 texlab.symbol.ignoredPatterns
+;;    lsp-latex-bibtex-formatter-line-length            texlab.formatterLineLength
+;;    lsp-latex-bibtex-formatter                        texlab.bibtexFormatter
+;;    lsp-latex-latex-formatter                         texlab.latexFormatter
+;;    lsp-latex-latexindent-local                       texlab.latexindent.local
+;;    lsp-latex-latexindent-modify-line-breaks          texlab.latexindent.modifyLineBreaks
+;;    lsp-latex-completion-matcher                      texlab.completion.matcher
+;;    lsp-latex-inlay-hints-label-definitions           texlab.inlayHints.labelDefinitions
+;;    lsp-latex-inlay-hints-label-references            texlab.inlayHints.labelReferences
+;;    lsp-latex-experimental-math-environments          texlab.experimental.mathEnvironments
+;;    lsp-latex-experimental-enum-environments          texlab.experimental.enumEnvironments
+;;    lsp-latex-experimental-verbatim-environments      texlab.experimental.verbatimEnvironments
+;;    lsp-latex-experimental-citation-commands          texlab.experimental.citationCommands
+;;    lsp-latex-experimental-label-reference-commands   texlab.experimental.labelReferenceCommands
+;;    lsp-latex-experimental-label-definition-commands  texlab.experimental.labelDefinitionCommands
+;;    lsp-latex-experimental-label-reference-prefixes   texlab.experimental.labelReferencePrefixes
+;;    lsp-latex-experimental-label-definition-prefixes  texlab.experimental.labelDefinitionPrefixes
 
 
 ;; [Texlab official wiki]
@@ -659,6 +662,7 @@ See also `lsp-completion-sort-initial-results'."
   :risky t
   :type '(choice string
                  (const nil)))
+(make-obsolete-variable 'lsp-latex-root-directory "Texlab 5.16.1 and more ignore this variable." "3.8.0")
 
 (defcustom lsp-latex-build-executable "latexmk"
   "Build command used on `lsp-latex-build'."
@@ -699,6 +703,12 @@ Note that you should change `lsp-latex-build-args' to change output directory.
 If you use latexmk, use \"-outdir\" flag.
 
 This variable is obsoleted since Texlab 3.0.0.")
+
+(defcustom lsp-latex-build-use-file-list nil
+  "Whether to use \".fls\" file for project detection or not."
+  :group 'lsp-latex
+  :type 'boolean
+  :version "3.8.0")
 
 (defcustom lsp-latex-build-aux-directory "."
   "Directory to which built file is put.
@@ -945,6 +955,13 @@ For example, \"cite\" is meet the condition. Note that backslash is not needed."
   :type '(repeat string)
   :version "3.5.0")
 
+(defcustom lsp-latex-experimental-label-definition-commands '()
+  "List of command name which should be regarded as \"\\label\"-like command.
+For example, \"label\" is meet the condition. Note that backslash is not needed."
+  :group 'lsp-latex
+  :type '(repeat string)
+  :version "3.8.0")
+
 (defcustom lsp-latex-experimental-label-reference-commands '()
   "List of command name which should be regarded as \"\\ref\"-like command.
 For example, \"ref\" is meet the condition. Note that backslash is not needed."
@@ -952,13 +969,38 @@ For example, \"ref\" is meet the condition. Note that backslash is not needed."
   :type '(repeat string)
   :version "3.7.0")
 
+(defcustom lsp-latex-experimental-label-definition-prefixes '()
+  "List of prefix for the label name for definition.
+Each element should be (COMMAND PREFIX), where COMMAND is string regarded as
+reference like \"label\", and where PREFIX should be string like \"fig:\"."
+  :group 'lsp-latex
+  :type '(repeat (list string string))
+  :version "3.8.0")
+
+(defcustom lsp-latex-experimental-label-reference-prefixes '()
+  "List of prefix for the label name for reference.
+Same as `lsp-latex-experimental-label-definition-prefixes'
+except COMMAND should be  string regarded as definition, like \"ref\"."
+  :group 'lsp-latex
+  :type '(repeat (list string string))
+  :version "3.8.0")
+
+
+(defun lsp-latex--vectorize-recursive (list-or-atom)
+  "Transform recursive list LIST-OR-ATOM to recursive vector.
+When LIST-OR-ATOM is atom, this function returns it as-is."
+  (if (listp list-or-atom)
+      (apply #'vector
+             (mapcar #'lsp-latex--vectorize-recursive list-or-atom))
+    list-or-atom))
+
 (defun lsp-latex--getter-vectorize-list (symbol)
   "Make list in SYMBOL into vector.
 This function is thoughted to be used with `apply-partially'.
 
 This function is used for the treatment before `json-serialize',
 because `json-serialize' cannot recognize normal list as array of json."
-  (vconcat (eval symbol)))
+  (lsp-latex--vectorize-recursive (eval symbol)))
 
 (defun lsp-latex--diagnostics-allowed-patterns ()
   "Get `lsp-latex-build-args' with changing to vector.
@@ -975,6 +1017,7 @@ should be vector."
      ("texlab.build.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-build-args))
      ("texlab.build.forwardSearchAfter" lsp-latex-build-forward-search-after t)
      ("texlab.build.onSave" lsp-latex-build-on-save t)
+     ("texlab.build.useFileList" lsp-latex-build-use-file-list t)
      ("texlab.build.auxDirectory" lsp-latex-build-aux-directory)
      ("texlab.build.logDirectory" lsp-latex-build-log-directory)
      ("texlab.build.pdfDirectory" lsp-latex-build-pdf-directory)
@@ -1000,7 +1043,10 @@ should be vector."
      ("texlab.experimental.enumEnvironments" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-enum-environments))
      ("texlab.experimental.verbatimEnvironments" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-verbatim-environments))
      ("texlab.experimental.citationCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-citation-commands))
-     ("texlab.experimental.labelReferenceCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-reference-commands)))))
+     ("texlab.experimental.labelDefinitionCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-definition-commands))
+     ("texlab.experimental.labelReferenceCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-reference-commands))
+     ("texlab.experimental.labelDefinitionPrefixes" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-definition-prefixes))
+     ("texlab.experimental.labelReferencePrefixes" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-reference-prefixes)))))
 
 (lsp-latex-setup-variables)
 
