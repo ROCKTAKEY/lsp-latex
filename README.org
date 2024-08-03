@@ -46,6 +46,7 @@ See also [[https://github.com/latex-lsp/texlab/wiki/Configuration][Texlab offici
 | lsp-latex-build-args                             | texlab.build.args                           |
 | lsp-latex-build-forward-search-after             | texlab.build.forwardSearchAfter             |
 | lsp-latex-build-on-save                          | texlab.build.onSave                         |
+| lsp-latex-build-use-file-list                    | texlab.build.useFileList                    |
 | lsp-latex-build-aux-directory                    | texlab.build.auxDirectory                   |
 | lsp-latex-build-log-directory                    | texlab.build.logDirectory                   |
 | lsp-latex-build-pdf-directory                    | texlab.build.pdfDirectory                   |

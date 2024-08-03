@@ -154,6 +154,7 @@
 ;;    lsp-latex-build-args                              texlab.build.args
 ;;    lsp-latex-build-forward-search-after              texlab.build.forwardSearchAfter
 ;;    lsp-latex-build-on-save                           texlab.build.onSave
+;;    lsp-latex-build-use-file-list                     texlab.build.useFileList
 ;;    lsp-latex-build-aux-directory                     texlab.build.auxDirectory
 ;;    lsp-latex-build-log-directory                     texlab.build.logDirectory
 ;;    lsp-latex-build-pdf-directory                     texlab.build.pdfDirectory
@@ -703,6 +704,12 @@ If you use latexmk, use \"-outdir\" flag.
 
 This variable is obsoleted since Texlab 3.0.0.")
 
+(defcustom lsp-latex-build-use-file-list nil
+  "Whether to use \".fls\" file for project detection or not."
+  :group 'lsp-latex
+  :type 'boolean
+  :version "3.8.0")
+
 (defcustom lsp-latex-build-aux-directory "."
   "Directory to which built file is put.
 Note that you should change `lsp-latex-build-args' to change output directory.
@@ -1010,6 +1017,7 @@ should be vector."
      ("texlab.build.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-build-args))
      ("texlab.build.forwardSearchAfter" lsp-latex-build-forward-search-after t)
      ("texlab.build.onSave" lsp-latex-build-on-save t)
+     ("texlab.build.useFileList" lsp-latex-build-use-file-list t)
      ("texlab.build.auxDirectory" lsp-latex-build-aux-directory)
      ("texlab.build.logDirectory" lsp-latex-build-log-directory)
      ("texlab.build.pdfDirectory" lsp-latex-build-pdf-directory)
