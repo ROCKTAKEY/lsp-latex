@@ -181,6 +181,8 @@
 ;;    lsp-latex-experimental-citation-commands          texlab.experimental.citationCommands
 ;;    lsp-latex-experimental-label-reference-commands   texlab.experimental.labelReferenceCommands
 ;;    lsp-latex-experimental-label-definition-commands  texlab.experimental.labelDefinitionCommands
+;;    lsp-latex-experimental-label-reference-prefixes   texlab.experimental.labelReferencePrefixes
+;;    lsp-latex-experimental-label-definition-prefixes  texlab.experimental.labelDefinitionPrefixes
 
 
 ;; [Texlab official wiki]
@@ -960,13 +962,38 @@ For example, \"ref\" is meet the condition. Note that backslash is not needed."
   :type '(repeat string)
   :version "3.7.0")
 
+(defcustom lsp-latex-experimental-label-definition-prefixes '()
+  "List of prefix for the label name for definition.
+Each element should be (COMMAND PREFIX), where COMMAND is string regarded as
+reference like \"label\", and where PREFIX should be string like \"fig:\"."
+  :group 'lsp-latex
+  :type '(repeat (list string string))
+  :version "3.8.0")
+
+(defcustom lsp-latex-experimental-label-reference-prefixes '()
+  "List of prefix for the label name for reference.
+Same as `lsp-latex-experimental-label-definition-prefixes'
+except COMMAND should be  string regarded as definition, like \"ref\"."
+  :group 'lsp-latex
+  :type '(repeat (list string string))
+  :version "3.8.0")
+
+
+(defun lsp-latex--vectorize-recursive (list-or-atom)
+  "Transform recursive list LIST-OR-ATOM to recursive vector.
+When LIST-OR-ATOM is atom, this function returns it as-is."
+  (if (listp list-or-atom)
+      (apply #'vector
+             (mapcar #'lsp-latex--vectorize-recursive list-or-atom))
+    list-or-atom))
+
 (defun lsp-latex--getter-vectorize-list (symbol)
   "Make list in SYMBOL into vector.
 This function is thoughted to be used with `apply-partially'.
 
 This function is used for the treatment before `json-serialize',
 because `json-serialize' cannot recognize normal list as array of json."
-  (vconcat (eval symbol)))
+  (lsp-latex--vectorize-recursive (eval symbol)))
 
 (defun lsp-latex--diagnostics-allowed-patterns ()
   "Get `lsp-latex-build-args' with changing to vector.
@@ -1010,6 +1037,8 @@ should be vector."
      ("texlab.experimental.citationCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-citation-commands))
      ("texlab.experimental.labelDefinitionCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-definition-commands))
      ("texlab.experimental.labelReferenceCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-reference-commands))
+     ("texlab.experimental.labelDefinitionPrefixes" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-definition-prefixes))
+     ("texlab.experimental.labelReferencePrefixes" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-reference-prefixes)))))
 
 (lsp-latex-setup-variables)
 

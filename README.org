@@ -73,6 +73,8 @@ See also [[https://github.com/latex-lsp/texlab/wiki/Configuration][Texlab offici
 | lsp-latex-experimental-citation-commands         | texlab.experimental.citationCommands        |
 | lsp-latex-experimental-label-reference-commands  | texlab.experimental.labelReferenceCommands  |
 | lsp-latex-experimental-label-definition-commands | texlab.experimental.labelDefinitionCommands |
+| lsp-latex-experimental-label-reference-prefixes  | texlab.experimental.labelReferencePrefixes  |
+| lsp-latex-experimental-label-definition-prefixes | texlab.experimental.labelDefinitionPrefixes |
 
 * Build
 ** ~lsp-latex-build~
