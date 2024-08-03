@@ -150,7 +150,6 @@
 ;;   also [Texlab official wiki].
 ;;    Custom variable in Emacs                          Configuration provided by Texlab
 ;;   -----------------------------------------------------------------------------------------------
-;;    lsp-latex-root-directory                          texlab.rootDirectory
 ;;    lsp-latex-build-executable                        texlab.build.executable
 ;;    lsp-latex-build-args                              texlab.build.args
 ;;    lsp-latex-build-forward-search-after              texlab.build.forwardSearchAfter
@@ -660,6 +659,7 @@ See also `lsp-completion-sort-initial-results'."
   :risky t
   :type '(choice string
                  (const nil)))
+(make-obsolete-variable 'lsp-latex-root-directory "Texlab 5.16.1 and more ignore this variable." "3.8.0")
 
 (defcustom lsp-latex-build-executable "latexmk"
   "Build command used on `lsp-latex-build'."

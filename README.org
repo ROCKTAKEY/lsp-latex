@@ -42,7 +42,6 @@ These variables are connected to Texlab configuration variables.
 See also [[https://github.com/latex-lsp/texlab/wiki/Configuration][Texlab official wiki]].
 | Custom variable in Emacs                         | Configuration provided by Texlab            |
 |--------------------------------------------------+---------------------------------------------|
-| lsp-latex-root-directory                         | texlab.rootDirectory                        |
 | lsp-latex-build-executable                       | texlab.build.executable                     |
 | lsp-latex-build-args                             | texlab.build.args                           |
 | lsp-latex-build-forward-search-after             | texlab.build.forwardSearchAfter             |
