@@ -1,11 +1,11 @@
 ;;; lsp-latex.el --- LSP-mode client for LaTeX, on texlab     -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2019-2023  ROCKTAKEY
+;; Copyright (C) 2019-2024  ROCKTAKEY
 
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.8.0
+;; Version: 3.8.1
 
 ;; Package-Requires: ((emacs "27.1") (lsp-mode "6.0") (consult "0.35"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -1053,13 +1053,6 @@ should be vector."
 (add-to-list 'lsp-language-id-configuration '(".*\\.tex$" . "latex"))
 (add-to-list 'lsp-language-id-configuration '(".*\\.bib$" . "bibtex"))
 
-(defun lsp-latex-new-connection ()
-  "Create new connection of lsp-latex."
-  (if (locate-file lsp-latex-texlab-executable exec-path)
-      (cons lsp-latex-texlab-executable
-            lsp-latex-texlab-executable-argument-list)
-    (error "\"texlab\" executable is not found")))
-
 ;; Copied from `lsp-clients--rust-window-progress' in `lsp-rust'.
 (defun lsp-latex-window-progress (_workspace params)
   "Progress report handling.
@@ -1069,8 +1062,7 @@ PARAMS progress report notification data."
 
 (lsp-register-client
  (make-lsp-client :new-connection
-                  (lsp-stdio-connection
-                   #'lsp-latex-new-connection)
+                  (lsp-stdio-connection lsp-latex-texlab-executable)
                   :major-modes '(tex-mode
                                  TeX-mode ;; AUCTeX 14+ has renamed tex-mode to TeX-mode
                                  yatex-mode
