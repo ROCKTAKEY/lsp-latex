@@ -926,6 +926,13 @@ which means the matcher should be case insensitive."
   :type 'boolean
   :version "3.7.0")
 
+
+(defcustom lsp-latex-inlay-hints-max-length nil
+  "When non-nil, inlay hints is truncated to the length."
+  :group 'lsp-latex
+  :type '(choice int (const nil))
+  :version "3.9.0")
+
 (defcustom lsp-latex-experimental-math-environments '()
   "List of environment name regarded as math environment, such as \"align\"."
   :group 'lsp-latex
@@ -1039,6 +1046,7 @@ should be vector."
      ("texlab.completion.matcher" lsp-latex-completion-matcher)
      ("texlab.inlayHints.labelDefinitions" lsp-latex-inlay-hints-label-definitions t)
      ("texlab.inlayHints.labelReferences" lsp-latex-inlay-hints-label-references t)
+     ("texlab.inlayHints.maxLength" lsp-latex-inlay-hints-max-length t)
      ("texlab.experimental.mathEnvironments" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-math-environments))
      ("texlab.experimental.enumEnvironments" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-enum-environments))
      ("texlab.experimental.verbatimEnvironments" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-verbatim-environments))
