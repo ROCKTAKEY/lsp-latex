@@ -901,6 +901,17 @@ The root directory is used by default."
   :type 'boolean
   :version "2.0.0")
 
+(defcustom lsp-latex-latexindent-replacement nil
+  "Additional indent flag passed to latexindent."
+  :group 'lsp-latex
+  :type '(choice
+          string
+          (const :tag "Indentation and replacements (not respect verbatim code blocks)" "-r")
+          (const :tag "Indentation and replacements (respect verbatim code blocks)" "-rv")
+          (const :tag "Only replacements (not respect verbatim code blocks)" "-rr")
+          (const :tag "Only indentation" nil))
+  :version "3.9.0")
+
 (defcustom lsp-latex-completion-matcher "fuzzy-ignore-case"
   "Algorithm used to filter the completion by Texlab.
 \"fuzzy\", which means fuzzy matching, or \"prefix\",
@@ -1043,6 +1054,7 @@ should be vector."
      ("texlab.latexFormatter" lsp-latex-latex-formatter)
      ("texlab.latexindent.local" lsp-latex-latexindent-local)
      ("texlab.latexindent.modifyLineBreaks" lsp-latex-latexindent-modify-line-breaks)
+     ("texlab.latexindent.replacement" lsp-latex-latexindent-replacement)
      ("texlab.completion.matcher" lsp-latex-completion-matcher)
      ("texlab.inlayHints.labelDefinitions" lsp-latex-inlay-hints-label-definitions t)
      ("texlab.inlayHints.labelReferences" lsp-latex-inlay-hints-label-references t)
