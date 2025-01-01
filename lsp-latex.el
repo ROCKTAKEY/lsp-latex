@@ -1074,10 +1074,10 @@ PARAMS progress report notification data."
                   :initialized-fn
                   (lambda (workspace)
                     (with-lsp-workspace workspace
-                      (lsp--set-configuration
-                       (lsp-configuration-section "latex"))
-                      (lsp--set-configuration
-                       (lsp-configuration-section "bibtex"))))
+                                        (lsp--set-configuration
+                                         (lsp-configuration-section "latex"))
+                                        (lsp--set-configuration
+                                         (lsp-configuration-section "bibtex"))))
                   :notification-handlers
                   (lsp-ht
                    ("window/progress"
@@ -1106,17 +1106,17 @@ PARAMS progress report notification data."
 ;;; Build
 
 (lsp-defun lsp-latex--message-result-build ((&texlab:BuildResult :status))
-  "Message STATUS means success or not."
-  (message
-   (cl-case status
-     ((0)                             ;Success
-      "Build succeeded.")
-     ((1)                             ;Error
-      "Build error.")
-     ((2)                             ;Failure
-      "Build failed.")
-     ((3)                             ;Cancelled
-      "Build cancelled."))))
+           "Message STATUS means success or not."
+           (message
+            (cl-case status
+              ((0)                             ;Success
+               "Build succeeded.")
+              ((1)                             ;Error
+               "Build error.")
+              ((2)                             ;Failure
+               "Build failed.")
+              ((3)                             ;Cancelled
+               "Build cancelled."))))
 
 (defun lsp-latex-build (&optional sync)
   "Build current tex file with latexmk, through Texlab.
@@ -1186,15 +1186,15 @@ This function is partially copied from
           (run-hooks 'pdf-sync-forward-hook))))))
 
 (lsp-defun lsp-latex--message-forward-search ((&texlab:ForwardSearchResult :status))
-  "Message unless STATUS means success."
-  (message
-   (cl-case status
-     ((1)                             ;Error
-      "Forward search do not succeeded.")
-     ((2)                             ;Failure
-      "Forward search failed.")
-     ((3)                             ;Unconfigured
-      "Forward search has not been configured."))))
+           "Message unless STATUS means success."
+           (message
+            (cl-case status
+              ((1)                             ;Error
+               "Forward search do not succeeded.")
+              ((2)                             ;Failure
+               "Forward search failed.")
+              ((3)                             ;Unconfigured
+               "Forward search has not been configured."))))
 
 (defun lsp-latex-forward-search ()
   "Forward search on preview."
