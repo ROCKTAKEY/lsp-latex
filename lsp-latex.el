@@ -166,8 +166,8 @@
 ;;    lsp-latex-diagnostics-delay                       texlab.diagnosticsDelay
 ;;    lsp-latex-diagnostics-allowed-patterns            texlab.diagnostics.allowedPatterns
 ;;    lsp-latex-diagnostics-ignored-patterns            texlab.diagnostics.ignoredPatterns
-;;    lsp-latex-symbol-allowed-patterns                 texlab.symbol.allowedPatterns
-;;    lsp-latex-symbol-ignored-patterns                 texlab.symbol.ignoredPatterns
+;;    lsp-latex-symbols-allowed-patterns                texlab.symbols.allowedPatterns
+;;    lsp-latex-symbols-ignored-patterns                texlab.symbols.ignoredPatterns
 ;;    lsp-latex-bibtex-formatter-line-length            texlab.formatterLineLength
 ;;    lsp-latex-bibtex-formatter                        texlab.bibtexFormatter
 ;;    lsp-latex-latex-formatter                         texlab.latexFormatter
@@ -829,23 +829,31 @@ so this variable is priored."
   :type '(repeat string)
   :version "3.0.0")
 
-(defcustom lsp-latex-symbol-allowed-patterns '()
+(define-obsolete-variable-alias 'lsp-latex-symbol-allowed-patterns
+  'lsp-latex-symbols-allowed-patterns
+  "lsp-latex 3.10.0")
+
+(defcustom lsp-latex-symbols-allowed-patterns '()
   "Regexp whitelist for document symbol.
 It should be a list of regular expression.
 Only document symbol that match at least one of the elemnt is shown.
 
-Note that this is applied before `lsp-latex-symbol-ignored-patterns',
+Note that this is applied before `lsp-latex-symbols-ignored-patterns',
 so `lsp-latex-symbol-ignored-patterns' is priored."
   :group 'lsp-latex
   :type '(repeat string)
   :version "3.5.0")
+
+(define-obsolete-variable-alias 'lsp-latex-symbol-ignored-patterns
+  'lsp-latex-symbols-ignored-patterns
+  "lsp-latex 3.10.0")
 
 (defcustom lsp-latex-symbol-ignored-patterns '()
   "Regexp blacklist for document symbol.
 It should be a list of regular expression.
 Only document symbol that do NOT match at least one of the elemnt is shown.
 
-Note that this is applied after `lsp-latex-symbol-allowed-patterns',
+Note that this is applied after `lsp-latex-symbols-allowed-patterns',
 so this variable is priored."
   :group 'lsp-latex
   :type '(repeat string)
@@ -1049,8 +1057,8 @@ should be vector."
      ("texlab.diagnosticsDelay" lsp-latex-diagnostics-delay)
      ("texlab.diagnostics.allowedPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-diagnostics-allowed-patterns))
      ("texlab.diagnostics.ignoredPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-diagnostics-ignored-patterns))
-     ("texlab.symbol.allowedPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-symbol-allowed-patterns))
-     ("texlab.symbol.ignoredPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-symbol-ignored-patterns))
+     ("texlab.symbols.allowedPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-symbol-allowed-patterns))
+     ("texlab.symbols.ignoredPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-symbol-ignored-patterns))
      ("texlab.formatterLineLength" lsp-latex-bibtex-formatter-line-length)
      ("texlab.bibtexFormatter" lsp-latex-bibtex-formatter)
      ("texlab.latexFormatter" lsp-latex-latex-formatter)
