@@ -997,6 +997,15 @@ For example, \"ref\" is meet the condition. Note that backslash is not needed."
   :type '(repeat string)
   :version "3.7.0")
 
+(defcustom lsp-latex-experimental-label-reference-range-commands '()
+  "List of command name which should be regarded as \"\\crefrange\"-like command.
+
+Same as `lsp-latex-experimental-label-reference-commands' except the target is
+\"\\cfrange\"-like command."
+  :group 'lsp-latex
+  :type '(repeat string)
+  :version "3.10.0")
+
 (defcustom lsp-latex-experimental-label-definition-prefixes '()
   "List of prefix for the label name for definition.
 Each element should be (COMMAND PREFIX), where COMMAND is string regarded as
@@ -1075,6 +1084,7 @@ should be vector."
      ("texlab.experimental.citationCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-citation-commands))
      ("texlab.experimental.labelDefinitionCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-definition-commands))
      ("texlab.experimental.labelReferenceCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-reference-commands))
+     ("texlab.experimental.labelReferenceRangeCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-reference-range-commands))
      ("texlab.experimental.labelDefinitionPrefixes" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-definition-prefixes))
      ("texlab.experimental.labelReferencePrefixes" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-reference-prefixes)))))
 
