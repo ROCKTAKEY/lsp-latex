@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.9.0
+;; Version: 3.9.1
 
 ;; Package-Requires: ((emacs "28.1") (lsp-mode "6.0") (consult "0.35"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -166,8 +166,8 @@
 ;;    lsp-latex-diagnostics-delay                       texlab.diagnosticsDelay
 ;;    lsp-latex-diagnostics-allowed-patterns            texlab.diagnostics.allowedPatterns
 ;;    lsp-latex-diagnostics-ignored-patterns            texlab.diagnostics.ignoredPatterns
-;;    lsp-latex-symbol-allowed-patterns                 texlab.symbol.allowedPatterns
-;;    lsp-latex-symbol-ignored-patterns                 texlab.symbol.ignoredPatterns
+;;    lsp-latex-symbols-allowed-patterns                texlab.symbols.allowedPatterns
+;;    lsp-latex-symbols-ignored-patterns                texlab.symbols.ignoredPatterns
 ;;    lsp-latex-bibtex-formatter-line-length            texlab.formatterLineLength
 ;;    lsp-latex-bibtex-formatter                        texlab.bibtexFormatter
 ;;    lsp-latex-latex-formatter                         texlab.latexFormatter
@@ -829,23 +829,31 @@ so this variable is priored."
   :type '(repeat string)
   :version "3.0.0")
 
-(defcustom lsp-latex-symbol-allowed-patterns '()
+(define-obsolete-variable-alias 'lsp-latex-symbol-allowed-patterns
+  'lsp-latex-symbols-allowed-patterns
+  "lsp-latex 3.10.0")
+
+(defcustom lsp-latex-symbols-allowed-patterns '()
   "Regexp whitelist for document symbol.
 It should be a list of regular expression.
 Only document symbol that match at least one of the elemnt is shown.
 
-Note that this is applied before `lsp-latex-symbol-ignored-patterns',
+Note that this is applied before `lsp-latex-symbols-ignored-patterns',
 so `lsp-latex-symbol-ignored-patterns' is priored."
   :group 'lsp-latex
   :type '(repeat string)
   :version "3.5.0")
+
+(define-obsolete-variable-alias 'lsp-latex-symbol-ignored-patterns
+  'lsp-latex-symbols-ignored-patterns
+  "lsp-latex 3.10.0")
 
 (defcustom lsp-latex-symbol-ignored-patterns '()
   "Regexp blacklist for document symbol.
 It should be a list of regular expression.
 Only document symbol that do NOT match at least one of the elemnt is shown.
 
-Note that this is applied after `lsp-latex-symbol-allowed-patterns',
+Note that this is applied after `lsp-latex-symbols-allowed-patterns',
 so this variable is priored."
   :group 'lsp-latex
   :type '(repeat string)
@@ -1037,7 +1045,7 @@ should be vector."
      ("texlab.build.args" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-build-args))
      ("texlab.build.forwardSearchAfter" lsp-latex-build-forward-search-after t)
      ("texlab.build.onSave" lsp-latex-build-on-save t)
-     ("texlab.build.useFileList" lsp-latex-build-use-file-list t)
+     ("texlab.build.useFileList" lsp-latex-build-use-file-list)
      ("texlab.build.auxDirectory" lsp-latex-build-aux-directory)
      ("texlab.build.logDirectory" lsp-latex-build-log-directory)
      ("texlab.build.pdfDirectory" lsp-latex-build-pdf-directory)
@@ -1049,8 +1057,8 @@ should be vector."
      ("texlab.diagnosticsDelay" lsp-latex-diagnostics-delay)
      ("texlab.diagnostics.allowedPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-diagnostics-allowed-patterns))
      ("texlab.diagnostics.ignoredPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-diagnostics-ignored-patterns))
-     ("texlab.symbol.allowedPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-symbol-allowed-patterns))
-     ("texlab.symbol.ignoredPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-symbol-ignored-patterns))
+     ("texlab.symbols.allowedPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-symbol-allowed-patterns))
+     ("texlab.symbols.ignoredPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-symbol-ignored-patterns))
      ("texlab.formatterLineLength" lsp-latex-bibtex-formatter-line-length)
      ("texlab.bibtexFormatter" lsp-latex-bibtex-formatter)
      ("texlab.latexFormatter" lsp-latex-latex-formatter)
@@ -1060,7 +1068,7 @@ should be vector."
      ("texlab.completion.matcher" lsp-latex-completion-matcher)
      ("texlab.inlayHints.labelDefinitions" lsp-latex-inlay-hints-label-definitions t)
      ("texlab.inlayHints.labelReferences" lsp-latex-inlay-hints-label-references t)
-     ("texlab.inlayHints.maxLength" lsp-latex-inlay-hints-max-length t)
+     ("texlab.inlayHints.maxLength" lsp-latex-inlay-hints-max-length)
      ("texlab.experimental.mathEnvironments" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-math-environments))
      ("texlab.experimental.enumEnvironments" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-enum-environments))
      ("texlab.experimental.verbatimEnvironments" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-verbatim-environments))
@@ -1096,10 +1104,10 @@ PARAMS progress report notification data."
                   :initialized-fn
                   (lambda (workspace)
                     (with-lsp-workspace workspace
-                                        (lsp--set-configuration
-                                         (lsp-configuration-section "latex"))
-                                        (lsp--set-configuration
-                                         (lsp-configuration-section "bibtex"))))
+                      (lsp--set-configuration
+                       (lsp-configuration-section "latex"))
+                      (lsp--set-configuration
+                       (lsp-configuration-section "bibtex"))))
                   :notification-handlers
                   (lsp-ht
                    ("window/progress"
@@ -1128,17 +1136,17 @@ PARAMS progress report notification data."
 ;;; Build
 
 (lsp-defun lsp-latex--message-result-build ((&texlab:BuildResult :status))
-           "Message STATUS means success or not."
-           (message
-            (cl-case status
-              ((0)                             ;Success
-               "Build succeeded.")
-              ((1)                             ;Error
-               "Build error.")
-              ((2)                             ;Failure
-               "Build failed.")
-              ((3)                             ;Cancelled
-               "Build cancelled."))))
+  "Message STATUS means success or not."
+  (message
+   (cl-case status
+     ((0)                             ;Success
+      "Build succeeded.")
+     ((1)                             ;Error
+      "Build error.")
+     ((2)                             ;Failure
+      "Build failed.")
+     ((3)                             ;Cancelled
+      "Build cancelled."))))
 
 (defun lsp-latex-build (&optional sync)
   "Build current tex file with latexmk, through Texlab.
@@ -1208,15 +1216,15 @@ This function is partially copied from
           (run-hooks 'pdf-sync-forward-hook))))))
 
 (lsp-defun lsp-latex--message-forward-search ((&texlab:ForwardSearchResult :status))
-           "Message unless STATUS means success."
-           (message
-            (cl-case status
-              ((1)                             ;Error
-               "Forward search do not succeeded.")
-              ((2)                             ;Failure
-               "Forward search failed.")
-              ((3)                             ;Unconfigured
-               "Forward search has not been configured."))))
+  "Message unless STATUS means success."
+  (message
+   (cl-case status
+     ((1)                             ;Error
+      "Forward search do not succeeded.")
+     ((2)                             ;Failure
+      "Forward search failed.")
+     ((3)                             ;Unconfigured
+      "Forward search has not been configured."))))
 
 (defun lsp-latex-forward-search ()
   "Forward search on preview."

@@ -58,8 +58,8 @@ See also [[https://github.com/latex-lsp/texlab/wiki/Configuration][Texlab offici
 | lsp-latex-diagnostics-delay                      | texlab.diagnosticsDelay                     |
 | lsp-latex-diagnostics-allowed-patterns           | texlab.diagnostics.allowedPatterns          |
 | lsp-latex-diagnostics-ignored-patterns           | texlab.diagnostics.ignoredPatterns          |
-| lsp-latex-symbol-allowed-patterns                | texlab.symbol.allowedPatterns               |
-| lsp-latex-symbol-ignored-patterns                | texlab.symbol.ignoredPatterns               |
+| lsp-latex-symbols-allowed-patterns               | texlab.symbols.allowedPatterns              |
+| lsp-latex-symbols-ignored-patterns               | texlab.symbols.ignoredPatterns              |
 | lsp-latex-bibtex-formatter-line-length           | texlab.formatterLineLength                  |
 | lsp-latex-bibtex-formatter                       | texlab.bibtexFormatter                      |
 | lsp-latex-latex-formatter                        | texlab.latexFormatter                       |
