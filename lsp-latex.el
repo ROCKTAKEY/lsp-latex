@@ -859,6 +859,17 @@ so this variable is priored."
   :type '(repeat string)
   :version "3.5.0")
 
+(defcustom lsp-latex-symbols-custom-environments '()
+  "Extend symbols for environments which is displayed as document symbols.
+
+See also `lsp-latex-symbol-allowed-patterns'."
+  :group 'lsp-latex
+  :type '(repeat (cons (cons (const name) string)
+                       (set
+                        (cons (const displayName) string)
+                        (cons (const label) boolean))))
+  :version "3.10.0")
+
 (define-obsolete-variable-alias 'lsp-latex-bibtex-formatting-line-length
   'lsp-latex-bibtex-formatter-line-length
   "Maximum amount of line on formatting BibTeX files.
@@ -1068,6 +1079,7 @@ should be vector."
      ("texlab.diagnostics.ignoredPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-diagnostics-ignored-patterns))
      ("texlab.symbols.allowedPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-symbol-allowed-patterns))
      ("texlab.symbols.ignoredPatterns" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-symbol-ignored-patterns))
+     ("texlab.symbols.customEnvironments" (lambda () (apply #'vector lsp-latex-symbols-custom-environments)))
      ("texlab.formatterLineLength" lsp-latex-bibtex-formatter-line-length)
      ("texlab.bibtexFormatter" lsp-latex-bibtex-formatter)
      ("texlab.latexFormatter" lsp-latex-latex-formatter)
