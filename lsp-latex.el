@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.10.1
+;; Version: 3.11.0
 
 ;; Package-Requires: ((emacs "29.1") (lsp-mode "6.0") (consult "0.35"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -85,7 +85,7 @@
 
 ;;   While `lsp-tex.el', included by [lsp-mode], provides minimal setting
 ;;   for [Texlab], `lsp-latex.el' provides full features of [Texlab]
-;;   v5.21.0.
+;;   v5.24.0.
 
 
 ;; [lsp-mode] <https://github.com/emacs-lsp/lsp-mode>
@@ -176,6 +176,7 @@
 ;;    lsp-latex-latexindent-modify-line-breaks               texlab.latexindent.modifyLineBreaks
 ;;    lsp-latex-latexindent-replacement                      texlab.latexindent.replacement
 ;;    lsp-latex-completion-matcher                           texlab.completion.matcher
+;;    lsp-latex-hover-symbols                                texlab.hover.symbols
 ;;    lsp-latex-inlay-hints-label-definitions                texlab.inlayHints.labelDefinitions
 ;;    lsp-latex-inlay-hints-label-references                 texlab.inlayHints.labelReferences
 ;;    lsp-latex-inlay-hints-max-length                       texlab.inlayHints.maxLength
@@ -188,6 +189,7 @@
 ;;    lsp-latex-experimental-label-definition-commands       texlab.experimental.labelReferenceCommands
 ;;    lsp-latex-experimental-label-reference-prefixes        texlab.experimental.labelReferencePrefixes
 ;;    lsp-latex-experimental-label-definition-prefixes       texlab.experimental.labelDefinitionPrefixes
+;;    lsp-latex-experimental-glossary-reference-commands     texlab.experimental.glossaryReferenceCommands
 
 
 ;; [Texlab official wiki]
@@ -948,6 +950,16 @@ which means the matcher should be case insensitive."
                  (const "prefix-ignore-case"))
   :version "3.5.0")
 
+(defcustom lsp-latex-hover-symbols "image"
+  "Whether tooltip is shown when hovering on symbol-like commands (e.g. \\epsilon).
+
+This variable is valid since Texlab 5.24.0."
+  :group 'lsp-latex
+  :type '(choice (const :tag "No hover is shown" "none")
+                 (const :tag "If available, the command is shown using a unicode character" "glyph")
+                 (const :tag "If available, a markdown image preview is returned. If not, the glyph method is tried next" "image"))
+  :version "3.11.0")
+
 (defcustom lsp-latex-inlay-hints-label-definitions '()
   "When non-nil, inlay hints for \"\\label\"-like commands are displayed."
   :group 'lsp-latex
@@ -1035,6 +1047,15 @@ except COMMAND should be  string regarded as definition, like \"ref\"."
   :type '(repeat (list string string))
   :version "3.8.0")
 
+(defcustom lsp-latex-experimental-glossary-reference-commands '()
+  "Glossary commands like \"\\gls\".
+Note that backslash should not be included (e.g. \"gls\" rather than \"\\gls\").
+
+This variable is valid since Texlab 5.24.0."
+  :group 'lsp-latex
+  :type '(repeat (list string))
+  :version "3.11.0")
+
 
 (defun lsp-latex--vectorize-recursive (list-or-atom)
   "Transform recursive list LIST-OR-ATOM to recursive vector.
@@ -1089,6 +1110,7 @@ should be vector."
      ("texlab.latexindent.modifyLineBreaks" lsp-latex-latexindent-modify-line-breaks)
      ("texlab.latexindent.replacement" lsp-latex-latexindent-replacement)
      ("texlab.completion.matcher" lsp-latex-completion-matcher)
+     ("texlab.hover.symbols" lsp-latex-hover-symbols)
      ("texlab.inlayHints.labelDefinitions" lsp-latex-inlay-hints-label-definitions t)
      ("texlab.inlayHints.labelReferences" lsp-latex-inlay-hints-label-references t)
      ("texlab.inlayHints.maxLength" lsp-latex-inlay-hints-max-length)
@@ -1100,7 +1122,8 @@ should be vector."
      ("texlab.experimental.labelReferenceCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-reference-commands))
      ("texlab.experimental.labelReferenceRangeCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-reference-range-commands))
      ("texlab.experimental.labelDefinitionPrefixes" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-definition-prefixes))
-     ("texlab.experimental.labelReferencePrefixes" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-reference-prefixes)))))
+     ("texlab.experimental.labelReferencePrefixes" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-label-reference-prefixes))
+     ("texlab.experimental.glossaryReferenceCommands" ,(apply-partially #'lsp-latex--getter-vectorize-list 'lsp-latex-experimental-glossary-reference-commands)))))
 
 (lsp-latex-setup-variables)
 
