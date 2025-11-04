@@ -7,7 +7,7 @@
 
 ;; Version: 3.10.0
 
-;; Package-Requires: ((emacs "28.1") (lsp-mode "6.0") (consult "0.35"))
+;; Package-Requires: ((emacs "29.1") (lsp-mode "6.0") (consult "0.35"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
 
 ;; This program is free software; you can redistribute it and/or modify
