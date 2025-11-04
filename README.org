@@ -4,7 +4,7 @@
 [[https://melpa.org/#/lsp-latex][file:https://melpa.org/packages/lsp-latex-badge.svg]]
 * lsp-mode client for Texlab.
 While =lsp-tex.el=, included by [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]], provides minimal setting for [[https://github.com/latex-lsp/texlab][Texlab]],
-=lsp-latex.el= provides full features of [[https://github.com/latex-lsp/texlab][Texlab]] v5.22.0.
+=lsp-latex.el= provides full features of [[https://github.com/latex-lsp/texlab][Texlab]] v5.24.0.
 
 * How to Use?
   - First, you have to install Texlab.
@@ -68,6 +68,7 @@ See also [[https://github.com/latex-lsp/texlab/wiki/Configuration][Texlab offici
 | lsp-latex-latexindent-modify-line-breaks              | texlab.latexindent.modifyLineBreaks             |
 | lsp-latex-latexindent-replacement                     | texlab.latexindent.replacement                  |
 | lsp-latex-completion-matcher                          | texlab.completion.matcher                       |
+| lsp-latex-hover-symbols                               | texlab.hover.symbols                            |
 | lsp-latex-inlay-hints-label-definitions               | texlab.inlayHints.labelDefinitions              |
 | lsp-latex-inlay-hints-label-references                | texlab.inlayHints.labelReferences               |
 | lsp-latex-inlay-hints-max-length                      | texlab.inlayHints.maxLength                     |
@@ -80,6 +81,7 @@ See also [[https://github.com/latex-lsp/texlab/wiki/Configuration][Texlab offici
 | lsp-latex-experimental-label-definition-commands      | texlab.experimental.labelReferenceCommands      |
 | lsp-latex-experimental-label-reference-prefixes       | texlab.experimental.labelReferencePrefixes      |
 | lsp-latex-experimental-label-definition-prefixes      | texlab.experimental.labelDefinitionPrefixes     |
+| lsp-latex-experimental-glossary-reference-commands    | texlab.experimental.glossaryReferenceCommands   |
 
 * Build
 ** ~lsp-latex-build~
