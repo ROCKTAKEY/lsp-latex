@@ -5,7 +5,7 @@
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
 
-;; Version: 3.10.0
+;; Version: 3.10.1
 
 ;; Package-Requires: ((emacs "29.1") (lsp-mode "6.0") (consult "0.35"))
 ;; URL: https://github.com/ROCKTAKEY/lsp-latex
@@ -806,7 +806,7 @@ This variable is obsoleted since Texlab 3.0.0.")
   "Delay time before reporting diagnostics.
 The value is in milliseconds."
   :group 'lsp-latex
-  :type 'integerp
+  :type 'integer
   :version "2.0.0")
 
 (defcustom lsp-latex-diagnostics-allowed-patterns '()
@@ -883,7 +883,7 @@ This variable is obsoleted since Texlab 3.0.0.")
   "Maximum amount of line on formatting BibTeX files.
 0 means disable."
   :group 'lsp-latex
-  :type 'integerp
+  :type 'integer
   :version "2.0.0")
 
 (define-obsolete-variable-alias 'lsp-latex-bibtex-formatting-formatter
