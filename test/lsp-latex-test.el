@@ -1,6 +1,6 @@
 ;;; lsp-latex-test.el --- test for lsp-latex.        -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2019  ROCKTAKEY
+;; Copyright (C) 2019, 2026  ROCKTAKEY
 
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords:
