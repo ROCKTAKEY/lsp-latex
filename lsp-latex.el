@@ -1398,7 +1398,6 @@ Same as `consult-mark' except PROMPT is used as prompt for `consult--read'."
   (consult--read
    (consult--mark-candidates markers)
    :prompt prompt
-   :annotate (consult--line-prefix)
    :category 'consult-location
    :sort nil
    :require-match t
