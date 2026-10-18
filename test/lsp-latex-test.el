@@ -86,5 +86,49 @@
           (should (eq (current-buffer) buffer))
           (should (= (point) 8)))))))
 
+(ert-deftest lsp-latex-complete-environment-in-another-buffer ()
+  (with-temp-buffer
+    (setq buffer-file-name "/tmp/lsp-latex-environment.tex")
+    (insert "before\n\\begin{equation}\nx\n\\end{equation}\n")
+    (goto-char (point-min))
+    (forward-line 2)
+    (let* ((buffer (current-buffer))
+           (origin (point))
+           (document (lsp-text-document-identifier))
+           (requested nil))
+      (with-temp-buffer
+        (insert (make-string origin ?x))
+        (let ((caller (current-buffer)))
+          (cl-letf (((symbol-function 'lsp-workspace-command-execute)
+                     (lambda (command arguments)
+                       (setq requested t)
+                       (should (equal command "texlab.findEnvironments"))
+                       (should
+                        (equal arguments
+                               (vector
+                                (list :textDocument document
+                                      :position '(:line 2 :character 0)))))
+                       (should (eq (current-buffer) buffer))
+                       (lsp-latex-test--environment-response)))
+                    ((symbol-function 'lsp-latex--consult-mark-return)
+                     (lambda (prompt markers)
+                       (should (equal prompt "Choose environment: "))
+                       (should (eq (marker-buffer (car markers)) buffer))
+                       (should (= (marker-position (car markers)) 15))
+                       (copy-marker (car markers)))))
+            (let ((environment
+                   (lsp-latex-complete-environment
+                    buffer origin "Choose environment: ")))
+              (should requested)
+              (should (equal (lsp-latex-environment-location-name environment)
+                             "equation"))
+              (should (equal (lsp-latex-environment-location-name-region environment)
+                             '(15 . 23)))
+              (should (equal (lsp-latex-environment-location-full-region environment)
+                             '(8 . 41)))
+              (should (eq (current-buffer) caller))
+              (should (= (point) (1+ origin)))
+              (should (= (with-current-buffer buffer (point)) origin)))))))))
+
 (provide 'lsp-latex-test)
 ;;; lsp-latex-test.el ends here
