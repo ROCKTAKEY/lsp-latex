@@ -27,6 +27,8 @@
 ;;; Code:
 
 (require 'lsp-latex)
+(require 'ert)
+(require 'json)
 
 (ert-deftest lsp-latex--vectorize-recursive-simple ()
   (should (equal (lsp-latex--vectorize-recursive '())
@@ -41,6 +43,48 @@
                  [[a b] c]))
   (should (equal (lsp-latex--vectorize-recursive '((a (b d (e f g))) c))
                  [[a [b d [e f g]]] c])))
+
+(defun lsp-latex-test--environment-response ()
+  "Return a Texlab response for the equation environment in the test buffer."
+  (json-parse-string
+   "[{\"name\": {\"text\": \"equation\",
+               \"range\": {\"start\": {\"line\": 1, \"character\": 7},
+                         \"end\": {\"line\": 1, \"character\": 15}}},
+      \"fullRange\": {\"start\": {\"line\": 1, \"character\": 0},
+                    \"end\": {\"line\": 3, \"character\": 14}}}]"
+   :array-type 'list))
+
+(ert-deftest lsp-latex-goto-environment-interactively ()
+  (save-window-excursion
+    (with-temp-buffer
+      (setq buffer-file-name "/tmp/lsp-latex-environment.tex")
+      (insert "before\n\\begin{equation}\nx\n\\end{equation}\n")
+      (goto-char (point-min))
+      (forward-line 2)
+      (let ((buffer (current-buffer))
+            (requested nil))
+        (cl-letf (((symbol-function 'lsp-workspace-command-execute)
+                   (lambda (command arguments)
+                     (setq requested t)
+                     (should (equal command "texlab.findEnvironments"))
+                     (should (eq (current-buffer) buffer))
+                     (should
+                      (equal arguments
+                             (vector
+                              (list :textDocument (lsp-text-document-identifier)
+                                    :position '(:line 2 :character 0)))))
+                     (lsp-latex-test--environment-response)))
+                  ((symbol-function 'lsp-latex--consult-mark-return)
+                   (lambda (prompt markers)
+                     (should (equal prompt "Goto environment: "))
+                     (should (= (length markers) 1))
+                     (should (eq (marker-buffer (car markers)) buffer))
+                     (should (= (marker-position (car markers)) 15))
+                     (copy-marker (car markers)))))
+          (call-interactively #'lsp-latex-goto-environment)
+          (should requested)
+          (should (eq (current-buffer) buffer))
+          (should (= (point) 8)))))))
 
 (provide 'lsp-latex-test)
 ;;; lsp-latex-test.el ends here

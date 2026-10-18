@@ -1448,12 +1448,8 @@ In interactive use, jump to selected environment containing current point."
   (interactive
    (list
     (current-buffer)
-    (let* ((text-document-identifier (lsp-text-document-identifier))
-           (position (lsp--point-to-position (point)))
-           (environment-location
-            (lsp-latex-complete-environment text-document-identifier position
-                                            "Goto environment: ")))
-      environment-location)))
+    (lsp-latex-complete-environment
+     (current-buffer) (point) "Goto environment: ")))
   (switch-to-buffer buffer)
   (goto-char (car (lsp-latex-environment-location-full-region environment-location))))
 
