@@ -1,6 +1,6 @@
 ;;; lsp-latex.el --- LSP-mode client for LaTeX, on texlab     -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2019-2024  ROCKTAKEY
+;; Copyright (C) 2019-2024, 2026  ROCKTAKEY
 
 ;; Author: ROCKTAKEY <rocktakey@gmail.com>
 ;; Keywords: languages, tex
@@ -1398,7 +1398,6 @@ Same as `consult-mark' except PROMPT is used as prompt for `consult--read'."
   (consult--read
    (consult--mark-candidates markers)
    :prompt prompt
-   :annotate (consult--line-prefix)
    :category 'consult-location
    :sort nil
    :require-match t
@@ -1419,27 +1418,25 @@ Similar to `consult-mark', but there are some differences:
       (point-marker))))
 
 (defun lsp-latex-complete-environment (buffer point prompt)
-  "Complition environment containing POINT in BUFFER with previewing.
+  "Select an environment containing integer POINT in BUFFER with preview.
 
 PROMPT is used as prompt for `consult--read'."
-  (let* ((text-document-identifier (with-current-buffer buffer
-                                     (lsp-text-document-identifier)))
-         (position (lsp-point-to-position point))
-         (environment-location-list
-          (lsp-latex-find-environments text-document-identifier position))
-         (markers
-          (with-current-buffer buffer
+  (with-current-buffer buffer
+    (let* ((environment-location-list
+            (lsp-latex-find-environments
+             (lsp-text-document-identifier) (lsp-point-to-position point)))
+           (markers
             (save-excursion
               (mapcar
                (lambda (environment-location)
                  (goto-char (car (lsp-latex-environment-location-name-region environment-location)))
                  (point-marker))
-               environment-location-list))))
-         (markers-alist
-          (cl-mapcar #'cons markers environment-location-list))
-         (selected-marker
-          (lsp-latex--consult-mark-return prompt markers)))
-    (cdr (assoc selected-marker markers-alist))))
+               environment-location-list)))
+           (markers-alist
+            (cl-mapcar #'cons markers environment-location-list))
+           (selected-marker
+            (lsp-latex--consult-mark-return prompt markers)))
+      (cdr (assoc selected-marker markers-alist)))))
 
 (defun lsp-latex-goto-environment (buffer environment-location)
   "Jump to environment expressed by ENVIRONMENT-LOCATION in BUFFER.
@@ -1448,12 +1445,8 @@ In interactive use, jump to selected environment containing current point."
   (interactive
    (list
     (current-buffer)
-    (let* ((text-document-identifier (lsp-text-document-identifier))
-           (position (lsp--point-to-position (point)))
-           (environment-location
-            (lsp-latex-complete-environment text-document-identifier position
-                                            "Goto environment: ")))
-      environment-location)))
+    (lsp-latex-complete-environment
+     (current-buffer) (point) "Goto environment: ")))
   (switch-to-buffer buffer)
   (goto-char (car (lsp-latex-environment-location-full-region environment-location))))
 
